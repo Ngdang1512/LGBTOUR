@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="LGBTOUR.Api/LGBTOUR.Api.csproj" />
+  <Project Path="LGBTOUR.Mobile/LGBTOUR.Mobile.csproj" />
+</Solution>
