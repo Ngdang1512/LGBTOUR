@@ -1,0 +1,43 @@
+﻿﻿CREATE TABLE POI(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(200),
+    Description NVARCHAR(MAX),
+    Lat FLOAT,
+    Lng FLOAT,
+    Radius INT,
+    Image NVARCHAR(255),
+    AudioPath NVARCHAR(255)
+)
+CREATE TABLE Tour(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(200),
+    Description NVARCHAR(MAX),
+    Price DECIMAL(10,2)
+)
+CREATE TABLE Tour_POI(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    TourId INT,
+    POI_Id INT,
+    DisplayOrder INT,
+    
+    FOREIGN KEY (TourId) REFERENCES Tour(Id),
+    FOREIGN KEY (POI_Id) REFERENCES POI(Id)
+)
+CREATE TABLE Narration(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    POI_Id INT,
+    LanguageCode NVARCHAR(10),
+    Content NVARCHAR(MAX),
+
+    FOREIGN KEY (POI_Id) REFERENCES POI(Id)
+)
+CREATE TABLE Logs(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UserId NVARCHAR(100),
+    POI_Id INT,
+    ListenTime DATETIME,
+    Lat FLOAT,
+    Lng FLOAT,
+
+    FOREIGN KEY (POI_Id) REFERENCES POI(Id)
+)

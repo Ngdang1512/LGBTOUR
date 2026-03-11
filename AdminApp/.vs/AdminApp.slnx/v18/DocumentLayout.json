@@ -1,0 +1,275 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\controllers\\poiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\controllers\\poiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\models\\tourdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\models\\tourdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\models\\poi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\models\\poi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\models\\tour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\models\\tour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\models\\narration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\models\\narration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\adminapp\\adminapp\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{774E6A44-67CA-4CFE-AFF9-804C9E15AB19}|AdminApp\\AdminApp.csproj|solutionrelative:adminapp\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "AdminApp\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "AdminApp\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T09:48:35.406Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Error.cshtml",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\Shared\\Error.cshtml",
+              "RelativeDocumentMoniker": "AdminApp\\Views\\Shared\\Error.cshtml",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\Shared\\Error.cshtml",
+              "RelativeToolTip": "AdminApp\\Views\\Shared\\Error.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-10T09:17:13.384Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "_ValidationScriptsPartial.cshtml",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "RelativeDocumentMoniker": "AdminApp\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "RelativeToolTip": "AdminApp\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-10T09:17:09.248Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "AdminApp\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "AdminApp\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-10T09:14:54.692Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PoisController.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Controllers\\PoisController.cs",
+              "RelativeDocumentMoniker": "AdminApp\\Controllers\\PoisController.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Controllers\\PoisController.cs",
+              "RelativeToolTip": "AdminApp\\Controllers\\PoisController.cs",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAmwJwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T09:07:49.332Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Poi.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\Poi.cs",
+              "RelativeDocumentMoniker": "AdminApp\\Models\\Poi.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\Poi.cs",
+              "RelativeToolTip": "AdminApp\\Models\\Poi.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T08:39:19.999Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TourDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\TourDbContext.cs",
+              "RelativeDocumentMoniker": "AdminApp\\Models\\TourDbContext.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\TourDbContext.cs",
+              "RelativeToolTip": "AdminApp\\Models\\TourDbContext.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T08:35:15.617Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Program.cs",
+              "RelativeDocumentMoniker": "AdminApp\\Program.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Program.cs",
+              "RelativeToolTip": "AdminApp\\Program.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T08:48:25.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "AdminApp\\Views\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "AdminApp\\Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-10T09:16:14.591Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "AdminApp\\Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "AdminApp\\Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-10T09:16:23.786Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "AdminApp\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "AdminApp\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-03-10T09:16:06.859Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Tour.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\Tour.cs",
+              "RelativeDocumentMoniker": "AdminApp\\Models\\Tour.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\Tour.cs",
+              "RelativeToolTip": "AdminApp\\Models\\Tour.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAzwBEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T09:11:25.083Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\appsettings.json",
+              "RelativeDocumentMoniker": "AdminApp\\appsettings.json",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\appsettings.json",
+              "RelativeToolTip": "AdminApp\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-10T08:52:33.113Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Narration.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\Narration.cs",
+              "RelativeDocumentMoniker": "AdminApp\\Models\\Narration.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\Narration.cs",
+              "RelativeToolTip": "AdminApp\\Models\\Narration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T08:37:55.983Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ErrorViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\ErrorViewModel.cs",
+              "RelativeDocumentMoniker": "AdminApp\\Models\\ErrorViewModel.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminApp\\AdminApp\\Models\\ErrorViewModel.cs",
+              "RelativeToolTip": "AdminApp\\Models\\ErrorViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T08:37:53.383Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
