@@ -1,0 +1,6 @@
+@LGBTOUR.Api_HostAddress = http://localhost:5022
+
+GET {{LGBTOUR.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
