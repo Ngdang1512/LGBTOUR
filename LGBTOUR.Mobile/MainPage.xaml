@@ -30,9 +30,9 @@
             <VerticalStackLayout Spacing="15">
                 <Label Text="Danh mục" FontSize="20" FontAttributes="Bold" TextColor="#111827" />
                 
-                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="False">
+                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                     <HorizontalStackLayout Spacing="12">
-                        
+          
                         <Border Padding="18,12" BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Popular"/>

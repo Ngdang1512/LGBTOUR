@@ -10,10 +10,10 @@
             <Grid HeightRequest="240" BackgroundColor="#4F46E5" Padding="20, 60, 20, 20">
                 <VerticalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
                     <Border WidthRequest="90" HeightRequest="90" StrokeShape="RoundRectangle 45" StrokeThickness="3" Stroke="White">
-                        <Image Source="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&amp;fit=crop&amp;w=200&amp;q=80" Aspect="AspectFill" />
+                        <Image Source="{Binding CurrentUser.AvatarUrl}" Aspect="AspectFill" />
                     </Border>
-                    <Label Text="Du khách VIP" FontSize="22" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
-                    <Label Text="thanhvien@lgbtour.vn" TextColor="#E0E7FF" FontSize="14" HorizontalOptions="Center"/>
+                    <Label Text="{Binding CurrentUser.FullName}" FontSize="22" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="{Binding CurrentUser.Email}" TextColor="#E0E7FF" FontSize="14" HorizontalOptions="Center"/>
                 </VerticalStackLayout>
             </Grid>
 
