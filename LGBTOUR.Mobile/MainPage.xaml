@@ -23,73 +23,51 @@
                 <Border.Shadow><Shadow Brush="#9CA3AF" Offset="0, 8" Radius="15" Opacity="0.1" /></Border.Shadow>
                 <Grid ColumnDefinitions="Auto, *">
                     <Label Text="🔍" VerticalOptions="Center" FontSize="18" Margin="0,0,10,0" />
-                    <Entry Grid.Column="1" Placeholder="Tìm kiếm điểm đến..." PlaceholderColor="#9CA3AF" TextColor="#111827" BackgroundColor="Transparent" />
+                    
+                    <Entry Grid.Column="1" 
+                           Placeholder="Tìm kiếm điểm đến..." 
+                           PlaceholderColor="#9CA3AF" 
+                           TextColor="#111827" 
+                           BackgroundColor="Transparent"
+                           TextChanged="OnSearchTextChanged" /> 
                 </Grid>
             </Border>
 
             <VerticalStackLayout Spacing="15">
                 <Label Text="Danh mục" FontSize="20" FontAttributes="Bold" TextColor="#111827" />
-                
                 <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                     <HorizontalStackLayout Spacing="12">
-          
+                        
                         <Border Padding="18,12" BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Popular"/>
-                            </Border.GestureRecognizers>
+                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Popular"/></Border.GestureRecognizers>
                             <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
                             <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Popular">
-                                    <Setter Property="BackgroundColor" Value="#4F46E5" />
-                                    <Setter Property="Stroke" Value="Transparent" />
-                                </DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Popular"><Setter Property="BackgroundColor" Value="#4F46E5" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
                             </Border.Triggers>
                             <Label Text="🔥 Phổ biến" TextColor="#4B5563" FontAttributes="Bold">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Popular">
-                                        <Setter Property="TextColor" Value="White" />
-                                    </DataTrigger>
-                                </Label.Triggers>
+                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Popular"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
                             </Label>
                         </Border>
 
                         <Border Padding="18,12" BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Food"/>
-                            </Border.GestureRecognizers>
+                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Food"/></Border.GestureRecognizers>
                             <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
                             <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Food">
-                                    <Setter Property="BackgroundColor" Value="#4F46E5" />
-                                    <Setter Property="Stroke" Value="Transparent" />
-                                </DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Food"><Setter Property="BackgroundColor" Value="#4F46E5" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
                             </Border.Triggers>
                             <Label Text="🍜 Ẩm thực" TextColor="#4B5563" FontAttributes="Bold">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Food">
-                                        <Setter Property="TextColor" Value="White" />
-                                    </DataTrigger>
-                                </Label.Triggers>
+                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Food"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
                             </Label>
                         </Border>
 
                         <Border Padding="18,12" BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Shopping"/>
-                            </Border.GestureRecognizers>
+                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Shopping"/></Border.GestureRecognizers>
                             <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
                             <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Shopping">
-                                    <Setter Property="BackgroundColor" Value="#4F46E5" />
-                                    <Setter Property="Stroke" Value="Transparent" />
-                                </DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Shopping"><Setter Property="BackgroundColor" Value="#4F46E5" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
                             </Border.Triggers>
                             <Label Text="🛍️ Mua sắm" TextColor="#4B5563" FontAttributes="Bold">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Shopping">
-                                        <Setter Property="TextColor" Value="White" />
-                                    </DataTrigger>
-                                </Label.Triggers>
+                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Shopping"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
                             </Label>
                         </Border>
 
@@ -111,17 +89,17 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border WidthRequest="270" HeightRequest="320" BackgroundColor="White" StrokeThickness="0">
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnCardTapped" />
-                                </Border.GestureRecognizers>
+                                <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCardTapped" /></Border.GestureRecognizers>
                                 <Border.StrokeShape><RoundRectangle CornerRadius="24" /></Border.StrokeShape>
                                 <Border.Shadow><Shadow Brush="#9CA3AF" Offset="0,15" Radius="25" Opacity="0.15" /></Border.Shadow>
                                 
                                 <Grid RowDefinitions="*, Auto">
+                                    
                                     <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
                                     
                                     <Grid Grid.Row="1" Padding="20">
                                         <VerticalStackLayout Spacing="5">
+                                            
                                             <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" TextColor="#111827"/>
                                             <HorizontalStackLayout Spacing="5">
                                                 <Label Text="📍" FontSize="12" VerticalOptions="Center"/>

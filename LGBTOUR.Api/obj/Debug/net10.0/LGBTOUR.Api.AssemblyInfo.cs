@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LGBTOUR.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+31fa645d0c80d8dbe07245dde46292337ec4ef1c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+957957b96407c7685673f0661fcfceb6f87c651a")]
 [assembly: System.Reflection.AssemblyProductAttribute("LGBTOUR.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LGBTOUR.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

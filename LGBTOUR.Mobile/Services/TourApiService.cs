@@ -11,7 +11,7 @@ public class TourApiService
     {
         _httpClient = new HttpClient();
         // Giả sử chạy trên máy ảo Android kết nối với API ở localhost
-        _httpClient.BaseAddress = new Uri("http://10.0.2.2:5000/"); 
+        _httpClient.BaseAddress = new Uri("http://10.0.2.2:5100/"); 
     }
 
     // 1. Dành cho MapPage (Đã làm)
