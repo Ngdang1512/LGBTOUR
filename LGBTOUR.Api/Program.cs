@@ -19,6 +19,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();//// Thêm dòng này để công khai thư mục wwwroot
 app.MapControllers();
 
 app.Run();
