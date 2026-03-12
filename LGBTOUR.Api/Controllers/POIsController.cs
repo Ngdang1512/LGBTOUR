@@ -1,6 +1,7 @@
-﻿using LGBTOUR.Api.Entities;
-using LGBTOUR.Api.Interfaces;
+﻿using LGBTOUR.Api.Data;
+using LGBTOUR.Api.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LGBTOUR.Api.Controllers
 {
@@ -8,37 +9,59 @@ namespace LGBTOUR.Api.Controllers
     [ApiController]
     public class POIsController : ControllerBase
     {
-        private readonly IPOIRepository _poiRepository;
+        private readonly ApplicationDbContext _context;
 
-        // Inject Repository vào để dùng
-        public POIsController(IPOIRepository poiRepository)
+        public POIsController(ApplicationDbContext context)
         {
-            _poiRepository = poiRepository;
+            _context = context;
         }
 
-        // GET: api/POIs
+        // 1. Lấy danh sách tất cả địa điểm (GET)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<POI>>> GetPOIs()
         {
-            var pois = await _poiRepository.GetAllAsync();
-            return Ok(pois);
+            return await _context.POIs.ToListAsync();
         }
 
-        // GET: api/POIs/5
+        // 2. Lấy chi tiết 1 địa điểm theo ID (GET)
         [HttpGet("{id}")]
         public async Task<ActionResult<POI>> GetPOI(int id)
         {
-            var poi = await _poiRepository.GetByIdAsync(id);
+            var poi = await _context.POIs.FindAsync(id);
             if (poi == null) return NotFound();
-            return Ok(poi);
+            return poi;
         }
 
-        // POST: api/POIs
+        // 3. Thêm địa điểm mới (POST)
         [HttpPost]
         public async Task<ActionResult<POI>> CreatePOI(POI poi)
         {
-            await _poiRepository.AddAsync(poi);
+            _context.POIs.Add(poi);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetPOI), new { id = poi.Id }, poi);
+        }
+
+        // 4. Sửa thông tin địa điểm (PUT)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePOI(int id, POI poi)
+        {
+            if (id != poi.Id) return BadRequest("ID không khớp!");
+
+            _context.Entry(poi).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // 5. Xóa địa điểm (DELETE)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePOI(int id)
+        {
+            var poi = await _context.POIs.FindAsync(id);
+            if (poi == null) return NotFound("Không tìm thấy địa điểm để xóa!");
+
+            _context.POIs.Remove(poi);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
