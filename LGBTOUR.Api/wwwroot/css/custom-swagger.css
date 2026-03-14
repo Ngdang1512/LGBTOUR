@@ -1,0 +1,38 @@
+﻿/* header swagger */
+.swagger-ui .topbar {
+    background-color: #4f46e5;
+}
+
+/* title api */
+.swagger-ui .info .title {
+    color: #4f46e5;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+/* description */
+.swagger-ui .info {
+    margin: 30px;
+}
+
+/* bo góc api */
+.swagger-ui .opblock {
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+    /* hover api */
+    .swagger-ui .opblock:hover {
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+/* nút execute */
+.swagger-ui .btn.execute {
+    background-color: #10b981;
+    border-radius: 6px;
+}
+
+/* font */
+.swagger-ui {
+    font-family: Segoe UI, sans-serif;
+}

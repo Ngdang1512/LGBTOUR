@@ -1,10 +1,115 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "LGBTOUR.Api",
-    "version": "1.0"
+    "title": "LGBTour API",
+    "description": "API quản lý Tour du lịch, POI và lịch trình",
+    "contact": {
+      "name": "Vo Minh Vy",
+      "email": "vominhvy0410@gmail.com"
+    },
+    "version": "v1"
   },
   "paths": {
+    "/api/Analytics/poi-stats": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Content/get-media": {
+      "get": {
+        "tags": [
+          "Content"
+        ],
+        "parameters": [
+          {
+            "name": "poiId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "langCode",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "vi"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Location/check-nearby": {
+      "get": {
+        "tags": [
+          "Location"
+        ],
+        "parameters": [
+          {
+            "name": "userLat",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "userLng",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/POIs": {
       "get": {
         "tags": [
@@ -190,6 +295,18 @@
         }
       }
     },
+    "/api/Sync/offline-data": {
+      "get": {
+        "tags": [
+          "Sync"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Tours": {
       "get": {
         "tags": [
@@ -365,6 +482,42 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tracking/log-action": {
+      "post": {
+        "tags": [
+          "Tracking"
+        ],
+        "parameters": [
+          {
+            "name": "poiId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eventType",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -588,10 +741,28 @@
   },
   "tags": [
     {
+      "name": "Analytics"
+    },
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Content"
+    },
+    {
+      "name": "Location"
+    },
+    {
       "name": "POIs"
     },
     {
+      "name": "Sync"
+    },
+    {
       "name": "Tours"
+    },
+    {
+      "name": "Tracking"
     },
     {
       "name": "Uploads"

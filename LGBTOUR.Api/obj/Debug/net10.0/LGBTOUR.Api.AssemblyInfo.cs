@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LGBTOUR.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f3dbf9691d9963ce6b269338459411d32d5f4a9f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d9ef02a9cba355fa3d651e9631776412b135199")]
 [assembly: System.Reflection.AssemblyProductAttribute("LGBTOUR.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LGBTOUR.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

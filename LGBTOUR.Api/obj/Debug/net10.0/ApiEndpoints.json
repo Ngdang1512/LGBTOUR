@@ -1,5 +1,78 @@
 [
   {
+    "ContainingType": "LGBTOUR.Api.Controllers.AnalyticsController",
+    "Method": "GetPoiStats",
+    "RelativePath": "api/Analytics/poi-stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LGBTOUR.Api.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "password",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LGBTOUR.Api.Controllers.ContentController",
+    "Method": "GetMedia",
+    "RelativePath": "api/Content/get-media",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "poiId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "langCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LGBTOUR.Api.Controllers.LocationController",
+    "Method": "CheckNearby",
+    "RelativePath": "api/Location/check-nearby",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userLat",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "userLng",
+        "Type": "System.Double",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "LGBTOUR.Api.Controllers.POIsController",
     "Method": "GetPOIs",
     "RelativePath": "api/POIs",
@@ -109,6 +182,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "LGBTOUR.Api.Controllers.SyncController",
+    "Method": "GetOfflineData",
+    "RelativePath": "api/Sync/offline-data",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "LGBTOUR.Api.Controllers.ToursController",
     "Method": "GetTours",
     "RelativePath": "api/Tours",
@@ -213,6 +296,32 @@
         "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LGBTOUR.Api.Controllers.TrackingController",
+    "Method": "LogUserAction",
+    "RelativePath": "api/Tracking/log-action",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "poiId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "eventType",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

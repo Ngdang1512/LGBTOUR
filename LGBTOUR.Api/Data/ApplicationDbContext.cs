@@ -15,6 +15,7 @@ namespace LGBTOUR.Api.Data
         public DbSet<Audio> Audios { get; set; }
         public DbSet<UserLog> UserLogs { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Thiết lập quan hệ n-n cho bảng trung gian TourPOI
