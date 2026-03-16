@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "GQhdwyr7K3c=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\dell\\source\\repos\\Đồ an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dell\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.23.0\\microsoft.visualstudio.azure.containers.tools.targets.1.23.0.nupkg.sha512"
+  ],
+  "logs": []
+}

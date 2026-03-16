@@ -3,36 +3,100 @@
   "WorkspaceRootPath": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.adminweb\\views\\pois\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|solutionrelative:lgbtour.adminweb\\views\\pois\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.adminweb\\views\\pois\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|solutionrelative:lgbtour.adminweb\\views\\pois\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\lgbtour.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
-      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\lgbtour.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+      "AbsoluteMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.adminweb\\controllers\\poiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|solutionrelative:lgbtour.adminweb\\controllers\\poiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\entities\\userlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\entities\\userlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.adminweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|solutionrelative:lgbtour.adminweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\controllers\\contentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\controllers\\contentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.adminweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|solutionrelative:lgbtour.adminweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\entities\\poi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\entities\\poi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.adminweb\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|solutionrelative:lgbtour.adminweb\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.adminweb\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|solutionrelative:lgbtour.adminweb\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.adminweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E96A315-BBEB-D5A7-E0E0-6E6E1559AB62}|LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj|solutionrelative:lgbtour.adminweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\entities\\tour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\entities\\tour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\.editorconfig||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.editorconfig||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\entities\\narration \u0026 audio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\entities\\narration \u0026 audio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\entities\\userlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\entities\\userlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\entities\\tourpoi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\entities\\tourpoi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\entities\\poi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\entities\\poi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\lgbtour.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\lgbtour.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\NewFile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:AdminWeb\\NewFile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\dashboard.html||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:AdminWeb\\dashboard.html||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\POI.html||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:AdminWeb\\POI.html||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\js\\POI.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:AdminWeb\\js\\POI.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\controllers\\contentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\controllers\\contentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|solutionrelative:lgbtour.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AE9AD78A-D34B-46F8-AD62-34C6D8348A38}|LGBTOUR.Api\\LGBTOUR.Api.csproj|c:\\users\\dell\\source\\repos\\\u0111\u1ED3 an c#\\lgbtour\\lgbtour.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -79,19 +143,160 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "WeatherForecast.cs",
-              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\WeatherForecast.cs",
-              "RelativeDocumentMoniker": "LGBTOUR.Api\\WeatherForecast.cs",
-              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\WeatherForecast.cs",
-              "RelativeToolTip": "LGBTOUR.Api\\WeatherForecast.cs",
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Views\\POIs\\Create.cshtml",
+              "RelativeDocumentMoniker": "LGBTOUR.AdminWeb\\Views\\POIs\\Create.cshtml",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Views\\POIs\\Create.cshtml",
+              "RelativeToolTip": "LGBTOUR.AdminWeb\\Views\\POIs\\Create.cshtml",
+              "ViewState": "AgIAADMAAAAAAAAAAAAAAEQAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-16T18:35:52.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Views\\POIs\\Index.cshtml",
+              "RelativeDocumentMoniker": "LGBTOUR.AdminWeb\\Views\\POIs\\Index.cshtml",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Views\\POIs\\Index.cshtml",
+              "RelativeToolTip": "LGBTOUR.AdminWeb\\Views\\POIs\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-16T18:35:01.802Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.AdminWeb\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "LGBTOUR.AdminWeb\\Controllers\\HomeController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T00:59:24.416Z",
+              "WhenOpened": "2026-03-16T18:31:29.162Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "POIsController.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Controllers\\POIsController.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.AdminWeb\\Controllers\\POIsController.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Controllers\\POIsController.cs",
+              "RelativeToolTip": "LGBTOUR.AdminWeb\\Controllers\\POIsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T18:31:19.389Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "LGBTOUR.AdminWeb\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "LGBTOUR.AdminWeb\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-16T18:29:24.886Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.AdminWeb\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "LGBTOUR.AdminWeb\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAgwC8AAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T18:22:09.32Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Program.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.AdminWeb\\Program.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Program.cs",
+              "RelativeToolTip": "LGBTOUR.AdminWeb\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T18:21:01.71Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "LGBTOUR.AdminWeb\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.AdminWeb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "LGBTOUR.AdminWeb\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAmwF4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-16T18:17:48.6Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": ".editorconfig",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\.editorconfig",
+              "RelativeDocumentMoniker": ".editorconfig",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\.editorconfig",
+              "RelativeToolTip": ".editorconfig",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABEAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-03-16T14:34:29.838Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "TourPOI.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\TourPOI.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.Api\\Entities\\TourPOI.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\TourPOI.cs",
+              "RelativeToolTip": "LGBTOUR.Api\\Entities\\TourPOI.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T14:24:40.907Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Tour.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\Tour.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.Api\\Entities\\Tour.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\Tour.cs",
+              "RelativeToolTip": "LGBTOUR.Api\\Entities\\Tour.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T14:24:21.479Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Dockerfile",
+              "RelativeDocumentMoniker": "LGBTOUR.Api\\Dockerfile",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Dockerfile",
+              "RelativeToolTip": "LGBTOUR.Api\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-03-16T09:11:31.502Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "LGBTOUR.Api.http",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\LGBTOUR.Api.http",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\LGBTOUR.Api.http",
@@ -103,19 +308,115 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 11,
               "Title": "UserLog.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\UserLog.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Entities\\UserLog.cs",
               "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\UserLog.cs",
               "RelativeToolTip": "LGBTOUR.Api\\Entities\\UserLog.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAgwBsAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-14T07:25:23.885Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 10,
+              "Title": "Narration \u0026 Audio.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\Narration \u0026 Audio.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.Api\\Entities\\Narration \u0026 Audio.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\Narration \u0026 Audio.cs",
+              "RelativeToolTip": "LGBTOUR.Api\\Entities\\Narration \u0026 Audio.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-14T07:10:10.529Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "POI.html",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\POI.html",
+              "RelativeDocumentMoniker": "AdminWeb\\POI.html",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\POI.html",
+              "RelativeToolTip": "AdminWeb\\POI.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-03-16T09:02:45.726Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "POI.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\POI.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.Api\\Entities\\POI.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\POI.cs",
+              "RelativeToolTip": "LGBTOUR.Api\\Entities\\POI.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-14T07:11:47.519Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "WeatherForecast.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\WeatherForecast.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.Api\\WeatherForecast.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\WeatherForecast.cs",
+              "RelativeToolTip": "LGBTOUR.Api\\WeatherForecast.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T00:59:24.416Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "dashboard.html",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\dashboard.html",
+              "RelativeDocumentMoniker": "AdminWeb\\dashboard.html",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\dashboard.html",
+              "RelativeToolTip": "AdminWeb\\dashboard.html",
+              "ViewState": "AgIAAJAAAAAAAAAAAAAAABQAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-03-16T03:29:41.253Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "POI.js",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\js\\POI.js",
+              "RelativeDocumentMoniker": "AdminWeb\\js\\POI.js",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\js\\POI.js",
+              "RelativeToolTip": "AdminWeb\\js\\POI.js",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwBIAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-03-16T09:04:23.923Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "LGBTOUR.Api\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "LGBTOUR.Api\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAzwBAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-14T07:27:35.067Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "NewFile",
+              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\NewFile",
+              "RelativeDocumentMoniker": "AdminWeb\\NewFile",
+              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\AdminWeb\\NewFile",
+              "RelativeToolTip": "AdminWeb\\NewFile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-03-16T09:07:50.54Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
               "Title": "ContentController.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Controllers\\ContentController.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Controllers\\ContentController.cs",
@@ -127,31 +428,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "POI.cs",
-              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\POI.cs",
-              "RelativeDocumentMoniker": "LGBTOUR.Api\\Entities\\POI.cs",
-              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\POI.cs",
-              "RelativeToolTip": "LGBTOUR.Api\\Entities\\POI.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-14T07:11:47.519Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Narration \u0026 Audio.cs",
-              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\Narration \u0026 Audio.cs",
-              "RelativeDocumentMoniker": "LGBTOUR.Api\\Entities\\Narration \u0026 Audio.cs",
-              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Entities\\Narration \u0026 Audio.cs",
-              "RelativeToolTip": "LGBTOUR.Api\\Entities\\Narration \u0026 Audio.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAA9wBYAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-14T07:10:10.529Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 23,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Program.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Program.cs",
@@ -159,24 +436,11 @@
               "RelativeToolTip": "LGBTOUR.Api\\Program.cs",
               "ViewState": "AgIAACcAAAAAAAAAAAAAADIAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-12T09:03:37.529Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-12T09:03:37.529Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Data\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "LGBTOUR.Api\\Data\\ApplicationDbContext.cs",
-              "ToolTip": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Data\\ApplicationDbContext.cs",
-              "RelativeToolTip": "LGBTOUR.Api\\Data\\ApplicationDbContext.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAxwBAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-14T07:27:35.067Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 24,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Controllers\\AuthController.cs",
@@ -188,7 +452,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 25,
               "Title": "TrackingController.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Controllers\\TrackingController.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Controllers\\TrackingController.cs",
@@ -200,7 +464,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 26,
               "Title": "AnalyticsController.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Controllers\\AnalyticsController.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Controllers\\AnalyticsController.cs",
@@ -212,7 +476,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 27,
               "Title": "LocationController.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Controllers\\LocationController.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Controllers\\LocationController.cs",
@@ -224,7 +488,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 28,
               "Title": "SyncController.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Controllers\\SyncController.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Controllers\\SyncController.cs",
@@ -236,7 +500,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 29,
               "Title": "custom-swagger.css",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\wwwroot\\css\\custom-swagger.css",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\wwwroot\\css\\custom-swagger.css",
@@ -248,7 +512,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 30,
               "Title": "UploadsController.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Controllers\\UploadsController.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Controllers\\UploadsController.cs",
@@ -260,7 +524,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 31,
               "Title": "ToursController.cs",
               "DocumentMoniker": "C:\\Users\\dell\\source\\repos\\\u0110\u1ED3 an C#\\LGBTOUR\\LGBTOUR.Api\\Controllers\\ToursController.cs",
               "RelativeDocumentMoniker": "LGBTOUR.Api\\Controllers\\ToursController.cs",

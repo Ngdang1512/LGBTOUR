@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "LGBTOUR.Api\\LGBTOUR.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "LGBTOUR.AdminWeb\\LGBTOUR.AdminWeb.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

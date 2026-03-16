@@ -1,0 +1,85 @@
+﻿@* chứa bản đồ *@
+@{
+    ViewData["Title"] = "Thêm Điểm Tham Quan Mới";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 450px; width: 100%; border-radius: 5px; border: 1px solid #ccc; }
+    </style>
+}
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Nhập thông tin địa điểm</h3>
+    </div>
+
+    <form action="/POIs/Create" method="post">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Tên địa điểm</label>
+                        <input type="text" class="form-control" name="Name" placeholder="VD: Bưu điện Thành phố" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Bán kính kích hoạt (Radius - mét)</label>
+                        <input type="number" class="form-control" name="Radius" value="50" required>
+                        <small class="text-muted">Khoảng cách để App tự động phát Audio.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Vĩ độ (Lat)</label>
+                        <input type="text" class="form-control" id="latInput" name="Lat" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Kinh độ (Lng)</label>
+                        <input type="text" class="form-control" id="lngInput" name="Lng" readonly>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <label>Click vào bản đồ để ghim tọa độ chính xác:</label>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Lưu Địa Điểm</button>
+            <a href="/POIs" class="btn btn-default">Quay lại</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Khởi tạo bản đồ ở trung tâm Quận 1
+        var map = L.map('map').setView([10.7725, 106.6980], 15);
+
+        // Load hình ảnh bản đồ
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker;
+
+        // Bắt sự kiện Click
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+
+            // Đặt ghim đỏ xuống bản đồ
+            if (marker) {
+                marker.setLatLng(e.latlng);
+            } else {
+                marker = L.marker(e.latlng).addTo(map);
+            }
+
+            // Bắn số tọa độ vào 2 ô input bên trái
+            document.getElementById('latInput').value = lat.toFixed(6);
+            document.getElementById('lngInput').value = lng.toFixed(6);
+        });
+    </script>
+}
