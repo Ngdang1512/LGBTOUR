@@ -1,7 +1,6 @@
 using LGBTOUR.Api.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
-using Microsoft.OpenApi.Models; // Dòng này cực kỳ quan trọng, thay cho dòng cũ bị lỗi
+using Microsoft.OpenApi.Models; // CHỈ giữ dòng này, ĐÃ XÓA using Microsoft.OpenApi;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,14 +17,14 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 
-// CẤU HÌNH SWAGGER CÓ Ổ KHÓA BẢO MẬT
+// CẤU HÌNH SWAGGER CÓ Ổ KHÓA BẢO MẬT (Đã tối ưu cho Swashbuckle 7.0)
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "LGBTour API",
         Version = "v1",
-        Description = "Hệ thống tích hợp Bảo mật JWT cho HeriStepAI",
+        Description = "Hệ thống tích hợp Bảo mật JWT",
         Contact = new OpenApiContact
         {
             Name = "Vo Minh Vy",
@@ -52,9 +51,12 @@ builder.Services.AddSwaggerGen(c =>
                 {
                     Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
-                }
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
             },
-            new string[] {}
+            new List<string>()
         }
     });
 });

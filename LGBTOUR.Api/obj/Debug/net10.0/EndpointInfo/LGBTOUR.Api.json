@@ -1,8 +1,8 @@
 {
-  "openapi": "3.0.4",
+  "openapi": "3.0.1",
   "info": {
     "title": "LGBTour API",
-    "description": "API quản lý Tour du lịch, POI và lịch trình",
+    "description": "Hệ thống tích hợp Bảo mật JWT",
     "contact": {
       "name": "Vo Minh Vy",
       "email": "vominhvy0410@gmail.com"
@@ -737,35 +737,19 @@
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Nhập Token theo định dạng: **Bearer {your_token}**",
+        "name": "Authorization",
+        "in": "header"
+      }
     }
   },
-  "tags": [
+  "security": [
     {
-      "name": "Analytics"
-    },
-    {
-      "name": "Auth"
-    },
-    {
-      "name": "Content"
-    },
-    {
-      "name": "Location"
-    },
-    {
-      "name": "POIs"
-    },
-    {
-      "name": "Sync"
-    },
-    {
-      "name": "Tours"
-    },
-    {
-      "name": "Tracking"
-    },
-    {
-      "name": "Uploads"
+      "Bearer": [ ]
     }
   ]
 }
