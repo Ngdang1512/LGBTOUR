@@ -44,7 +44,7 @@
                             <Border.Triggers>
                                 <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Popular"><Setter Property="BackgroundColor" Value="#4F46E5" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
                             </Border.Triggers>
-                            <Label Text="🔥 Phổ biến" TextColor="#4B5563" FontAttributes="Bold">
+                            <Label Text="Phổ biến" TextColor="#4B5563" FontAttributes="Bold">
                                 <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Popular"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
                             </Label>
                         </Border>
@@ -55,7 +55,7 @@
                             <Border.Triggers>
                                 <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Food"><Setter Property="BackgroundColor" Value="#4F46E5" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
                             </Border.Triggers>
-                            <Label Text="🍜 Ẩm thực" TextColor="#4B5563" FontAttributes="Bold">
+                            <Label Text="Ẩm thực" TextColor="#4B5563" FontAttributes="Bold">
                                 <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Food"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
                             </Label>
                         </Border>
@@ -66,7 +66,7 @@
                             <Border.Triggers>
                                 <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Shopping"><Setter Property="BackgroundColor" Value="#4F46E5" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
                             </Border.Triggers>
-                            <Label Text="🛍️ Mua sắm" TextColor="#4B5563" FontAttributes="Bold">
+                            <Label Text="Mua sắm" TextColor="#4B5563" FontAttributes="Bold">
                                 <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Shopping"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
                             </Label>
                         </Border>

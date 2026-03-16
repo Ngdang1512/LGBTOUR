@@ -6,8 +6,7 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        // Thay vì bọc AppShell, chúng ta bọc LoginPage trong NavigationPage 
-        // để khởi chạy luồng xác thực (Authentication Flow) đầu tiên
-        MainPage = new NavigationPage(new LoginPage());
+        // Khởi động vào trang Splash có Animation trước
+        MainPage = new AnimatedSplashPage();
     }
 }

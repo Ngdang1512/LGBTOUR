@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LGBTOUR.Mobile.AnimatedSplashPage"
+             BackgroundColor="#4F46E5"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
+            
+            <Label x:Name="AirplaneIcon" Text="✈️" FontSize="80" 
+                   HorizontalOptions="Center" VerticalOptions="Center" 
+                   Opacity="0" />
+
+            <Label x:Name="BrandLabel" Text="LGBTOUR" FontSize="36" FontAttributes="Bold" 
+                   TextColor="White" HorizontalOptions="Center" Opacity="0"/>
+                   
+            <Label x:Name="SloganLabel" Text="Khám phá thế giới cùng chúng tôi..." FontSize="14" 
+                   TextColor="#E0E7FF" HorizontalOptions="Center" Opacity="0"/>
+                   
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
