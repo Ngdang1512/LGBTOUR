@@ -1,0 +1,42 @@
+﻿@model LGBTOUR.AdminWeb.Entities.Audio
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Audio</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.POI_Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.POI_Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LanguageCode)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LanguageCode)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AudioUrl)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AudioUrl)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

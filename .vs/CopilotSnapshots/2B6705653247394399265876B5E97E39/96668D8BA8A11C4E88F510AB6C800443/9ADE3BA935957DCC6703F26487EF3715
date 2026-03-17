@@ -1,0 +1,106 @@
+﻿@model LGBTOUR.AdminWeb.Entities.POI
+
+@{
+    ViewData["Title"] = "Thêm mới Địa điểm (POI)";
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<h2>Thêm mới Điểm đến (POI) - Quận 1</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div class="form-group mb-2">
+                <label asp-for="Name" class="control-label">Tên địa điểm</label>
+                <input asp-for="Name" class="form-control" placeholder="VD: Bưu điện trung tâm Sài Gòn" />
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="Description" class="control-label">Mô tả</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="Radius" class="control-label">Bán kính kích hoạt Audio (mét)</label>
+                <input asp-for="Radius" id="RadiusInput" class="form-control" value="50" type="number" />
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="Priority" class="control-label">Độ ưu tiên</label>
+                <input asp-for="Priority" class="form-control" value="1" type="number" />
+            </div>
+
+            <div class="form-group mb-2">
+                <label class="control-label">Ảnh đại diện (Sẽ lưu path vào trường Image)</label>
+                <input type="file" name="imageFile" class="form-control" accept="image/*" />
+            </div>
+
+            <input type="hidden" asp-for="Lat" id="LatInput" />
+            <input type="hidden" asp-for="Lng" id="LngInput" />
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Lưu Hệ Thống" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-8">
+        <div id="map" style="height: 600px; width: 100%; border-radius: 8px; border: 1px solid #ccc;"></div>
+        <small class="text-muted">* Click vào bản đồ để chọn tọa độ chính xác. Vòng tròn đỏ thể hiện bán kính kích hoạt.</small>
+    </div>
+</div>
+
+<script>
+    // 1. Khởi tạo bản đồ, mặc định trỏ về trung tâm Quận 1 (Chợ Bến Thành)
+    var map = L.map('map').setView([10.7725, 106.6980], 16);
+
+    // 2. Load gạch bản đồ từ OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap - LGBTOUR'
+    }).addTo(map);
+
+    var currentMarker = null;
+    var currentCircle = null;
+
+    // 3. Hàm vẽ điểm và vòng tròn bán kính
+    function drawMarkerAndCircle(lat, lng, radius) {
+        if (currentMarker) {
+            map.removeLayer(currentMarker);
+            map.removeLayer(currentCircle);
+        }
+
+        // Tạo Marker
+        currentMarker = L.marker([lat, lng]).addTo(map);
+
+        // Tạo vòng tròn thể hiện Radius (Geofence)
+        currentCircle = L.circle([lat, lng], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.2,
+            radius: radius // Bán kính tính bằng mét
+        }).addTo(map);
+
+        // Đổ dữ liệu vào input form
+        document.getElementById('LatInput').value = lat;
+        document.getElementById('LngInput').value = lng;
+    }
+
+    // 4. Lắng nghe sự kiện click trên bản đồ
+    map.on('click', function(e) {
+        var radius = parseInt(document.getElementById('RadiusInput').value) || 50;
+        drawMarkerAndCircle(e.latlng.lat, e.latlng.lng, radius);
+    });
+
+    // 5. Cập nhật vòng tròn trên map realtime nếu user tự gõ đổi số Radius trên form
+    document.getElementById('RadiusInput').addEventListener('input', function(e) {
+        if (currentMarker) {
+            var lat = currentMarker.getLatLng().lat;
+            var lng = currentMarker.getLatLng().lng;
+            var radius = parseInt(e.target.value) || 0;
+            drawMarkerAndCircle(lat, lng, radius);
+        }
+    });
+</script>

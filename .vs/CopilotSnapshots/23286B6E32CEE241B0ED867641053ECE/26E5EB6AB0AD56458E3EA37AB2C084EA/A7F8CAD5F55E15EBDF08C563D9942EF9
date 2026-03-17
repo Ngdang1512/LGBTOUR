@@ -1,0 +1,44 @@
+﻿using LGBTOUR.Api.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace LGBTOUR.Api.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AnalyticsController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+
+        public AnalyticsController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        // Chức năng: Thống kê số lượt tương tác của từng Địa điểm để vẽ biểu đồ
+        [HttpGet("poi-stats")]
+        public async Task<IActionResult> GetPoiStats()
+        {
+            // Tự động gom nhóm các lịch sử trùng POI_Id lại và đếm số lượng
+            var stats = await _context.UserLogs
+                .Include(l => l.POI) // Lôi bảng POI vào để lấy được Tên địa điểm
+                .GroupBy(l => new { l.POI_Id, l.POI.Name })
+                .Select(g => new
+                {
+                    poiId = g.Key.POI_Id,
+                    poiName = g.Key.Name ?? "Địa điểm không xác định",
+                    totalInteractions = g.Count(), // Đếm tổng số lượt
+                    lastActive = g.Max(l => l.CreatedAt) // Thời gian có người nghe gần nhất
+                })
+                .OrderByDescending(x => x.totalInteractions) // Địa điểm nào hot nhất xếp lên đầu
+                .ToListAsync();
+
+            return Ok(new
+            {
+                message = "Lấy dữ liệu thống kê thành công!",
+                totalLocations = stats.Count,
+                data = stats
+            });
+        }
+    }
+}

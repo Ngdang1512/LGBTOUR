@@ -13,10 +13,7 @@ C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Hum
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.Bcl.Cryptography.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.Build.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.Build.Framework.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.Build.Tasks.Core.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.Build.Utilities.Core.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.CodeAnalysis.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.CodeAnalysis.CSharp.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
@@ -38,7 +35,6 @@ C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Mic
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.NET.StringTools.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.OpenApi.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.SqlServer.Server.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Mono.TextTemplating.dll
@@ -54,14 +50,9 @@ C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Sys
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Composition.Runtime.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Composition.TypedParts.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Configuration.ConfigurationManager.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Formats.Nrbf.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Memory.Data.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Reflection.MetadataLoadContext.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Resources.Extensions.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Security.Permissions.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\System.Windows.Extensions.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\de\Microsoft.CodeAnalysis.resources.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\es\Microsoft.CodeAnalysis.resources.dll
@@ -145,7 +136,6 @@ C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\run
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\runtimes\win\lib\net9.0\System.Windows.Extensions.dll
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\obj\Debug\net10.0\LGBTOUR.Api.csproj.AssemblyReference.cache
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\obj\Debug\net10.0\rpswa.dswa.cache.json
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\obj\Debug\net10.0\LGBTOUR.Api.GeneratedMSBuildEditorConfig.editorconfig
@@ -172,3 +162,4 @@ C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\obj\Debug\net10.0\ref
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\obj\Debug\net10.0\LGBTOUR.Api.pdb
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\obj\Debug\net10.0\LGBTOUR.Api.genruntimeconfig.cache
 C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\obj\Debug\net10.0\ref\LGBTOUR.Api.dll
+C:\Users\dell\source\repos\Đồ an C#\LGBTOUR\LGBTOUR.Api\bin\Debug\net10.0\Microsoft.VisualStudio.SolutionPersistence.dll

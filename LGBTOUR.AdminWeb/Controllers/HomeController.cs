@@ -1,25 +1,56 @@
-using LGBTOUR.AdminWeb.Models;
+using LGBTOUR.AdminWeb.Data; 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace LGBTOUR.AdminWeb.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        // Tiêm DbContext vào để kết nối Database
+        public HomeController(ApplicationDbContext context)
         {
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            // 1. Lấy dữ liệu Tọa độ từ UserLog để vẽ Bản đồ nhiệt (Heatmap)
+            var heatMapData = await _context.UserLogs
+                .Where(log => log.Lat.HasValue && log.Lng.HasValue)
+                .Select(log => new {
+                    lat = log.Lat,
+                    lng = log.Lng,
+                    intensity = log.DurationSeconds > 60 ? 1.0 : 0.5 // Nghe lâu thì màu càng đậm
+                })
+                .ToListAsync();
+
+            // Truyền dữ liệu dạng chuỗi JSON sang View
+            ViewBag.HeatMapData = System.Text.Json.JsonSerializer.Serialize(heatMapData);
+
+            // 2. Lấy Top 5 địa điểm được nghe nhiều nhất để vẽ Biểu đồ (Chart)
+            var topPOIs = await _context.UserLogs
+                .Include(log => log.POI)
+                .Where(log => log.POI != null)
+                .GroupBy(log => log.POI.Name)
+                .Select(group => new {
+                    Name = group.Key,
+                    Count = group.Count()
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
+                .ToListAsync();
+
+            ViewBag.TopPOIsData = System.Text.Json.JsonSerializer.Serialize(topPOIs);
+
             return View();
         }
 
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

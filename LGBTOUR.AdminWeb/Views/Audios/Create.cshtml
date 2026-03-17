@@ -1,0 +1,49 @@
+﻿@model LGBTOUR.AdminWeb.Entities.Audio
+
+@{
+    ViewData["Title"] = "Thêm File Âm Thanh";
+}
+
+<div class="card card-primary shadow-sm border-0">
+    <div class="card-header">
+        <h3 class="card-title">Tải lên File Thuyết Minh (Audio)</h3>
+    </div>
+
+    <!-- QUAN TRỌNG: Phải có enctype="multipart/form-data" mới upload được file -->
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="POI_Id" class="control-label fw-bold">Chọn Địa Điểm (POI)</label>
+                <!-- Thẻ select này sẽ tự động lấy danh sách POI từ Database -->
+                <select asp-for="POI_Id" class="form-control" asp-items="ViewBag.POI_Id"></select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="LanguageCode" class="control-label fw-bold">Ngôn ngữ</label>
+                <select asp-for="LanguageCode" class="form-control">
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="en">Tiếng Anh</option>
+                    <option value="kr">Tiếng Hàn</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label fw-bold">File Âm Thanh (.mp3, .wav)</label>
+                <!-- Thẻ input file để chọn file từ máy tính -->
+                <input type="file" name="uploadFile" class="form-control" accept="audio/*" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Duration" class="control-label fw-bold">Thời lượng (Giây)</label>
+                <input asp-for="Duration" class="form-control" placeholder="VD: 120" type="number" />
+            </div>
+        </div>
+
+        <div class="card-footer bg-white">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Tải lên</button>
+            <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </form>
+</div>
