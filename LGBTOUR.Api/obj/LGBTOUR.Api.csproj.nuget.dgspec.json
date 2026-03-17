@@ -1,26 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/Users/admin/Code/LGBTOUR/LGBTOUR.Api/LGBTOUR.Api.csproj": {}
+    "C:\\Users\\dell\\source\\repos\\Đồ an C#\\LGBTOUR\\LGBTOUR.Api\\LGBTOUR.Api.csproj": {}
   },
   "projects": {
-    "/Users/admin/Code/LGBTOUR/LGBTOUR.Api/LGBTOUR.Api.csproj": {
+    "C:\\Users\\dell\\source\\repos\\Đồ an C#\\LGBTOUR\\LGBTOUR.Api\\LGBTOUR.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/admin/Code/LGBTOUR/LGBTOUR.Api/LGBTOUR.Api.csproj",
+        "projectUniqueName": "C:\\Users\\dell\\source\\repos\\Đồ an C#\\LGBTOUR\\LGBTOUR.Api\\LGBTOUR.Api.csproj",
         "projectName": "LGBTOUR.Api",
-        "projectPath": "/Users/admin/Code/LGBTOUR/LGBTOUR.Api/LGBTOUR.Api.csproj",
-        "packagesPath": "/Users/admin/.nuget/packages/",
-        "outputPath": "/Users/admin/Code/LGBTOUR/LGBTOUR.Api/obj/",
+        "projectPath": "C:\\Users\\dell\\source\\repos\\Đồ an C#\\LGBTOUR\\LGBTOUR.Api\\LGBTOUR.Api.csproj",
+        "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dell\\source\\repos\\Đồ an C#\\LGBTOUR\\LGBTOUR.Api\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/admin/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,9 +51,21 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             }
           },
           "imports": [
@@ -69,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.102/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

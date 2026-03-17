@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("40bf3772-1071-4756-8fe5-de7b37b1bfe8")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("LGBTOUR.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c61f40c0abd3ab45ccc834e4e2a8e9014e94dbfc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6a95f13102cc34aa6c1d05fb844b59114b35a686")]
 [assembly: System.Reflection.AssemblyProductAttribute("LGBTOUR.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LGBTOUR.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
