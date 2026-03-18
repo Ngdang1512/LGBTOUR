@@ -1,12 +1,10 @@
-using LGBTOUR.AdminWeb.Data;
-using Microsoft.AspNetCore.Authorization;
+﻿using LGBTOUR.AdminWeb.Data; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace LGBTOUR.AdminWeb.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;

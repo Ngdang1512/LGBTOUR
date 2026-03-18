@@ -1,12 +1,18 @@
 [
   {
     "ContainingType": "LGBTOUR.Api.Controllers.AnalyticsController",
-    "Method": "GetPoiStats",
-    "RelativePath": "api/Analytics/poi-stats",
-    "HttpMethod": "GET",
+    "Method": "LogAudioListen",
+    "RelativePath": "api/Analytics/log-audio",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LGBTOUR.Api.DTOs.UserLogDto",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -67,6 +73,37 @@
       {
         "Name": "userLng",
         "Type": "System.Double",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LGBTOUR.Api.Controllers.MobileAppController",
+    "Method": "GetTours",
+    "RelativePath": "api/MobileApp/tours",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LGBTOUR.Api.Controllers.MobileAppController",
+    "Method": "GetTourRoute",
+    "RelativePath": "api/MobileApp/tours/{tourId}/pois",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tourId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "lang",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],

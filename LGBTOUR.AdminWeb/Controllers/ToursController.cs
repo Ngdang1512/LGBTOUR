@@ -1,15 +1,17 @@
-﻿using System;
+﻿using LGBTOUR.AdminWeb.Data;
+using LGBTOUR.AdminWeb.Entities; // Hoặc LGBTOUR.Api.Entities tùy cấu trúc của bạn
+using LGBTOUR.AdminWeb.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LGBTOUR.AdminWeb.Data;
-using LGBTOUR.AdminWeb.Entities; // Hoặc LGBTOUR.Api.Entities tùy cấu trúc của bạn
-using LGBTOUR.AdminWeb.ViewModels;
 
 namespace LGBTOUR.AdminWeb.Controllers
 {
+    [Authorize]
     public class ToursController : Controller
     {
         private readonly ApplicationDbContext _context;

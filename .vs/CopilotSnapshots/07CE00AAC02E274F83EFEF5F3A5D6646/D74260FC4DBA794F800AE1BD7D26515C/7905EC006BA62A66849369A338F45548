@@ -1,12 +1,10 @@
-using LGBTOUR.AdminWeb.Data;
-using Microsoft.AspNetCore.Authorization;
+﻿using LGBTOUR.AdminWeb.Data; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace LGBTOUR.AdminWeb.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,9 +21,9 @@ namespace LGBTOUR.AdminWeb.Controllers
             var heatMapData = await _context.UserLogs
                 .Where(log => log.Lat.HasValue && log.Lng.HasValue)
                 .Select(log => new {
-                    lat = log.Lat!.Value,
-                    lng = log.Lng!.Value,
-                    intensity = log.DurationSeconds.GetValueOrDefault() > 60 ? 1.0 : 0.5 // Nghe lâu thì màu càng đậm
+                    lat = log.Lat,
+                    lng = log.Lng,
+                    intensity = log.DurationSeconds > 60 ? 1.0 : 0.5 // Nghe lâu thì màu càng đậm
                 })
                 .ToListAsync();
 
@@ -36,7 +34,7 @@ namespace LGBTOUR.AdminWeb.Controllers
             var topPOIs = await _context.UserLogs
                 .Include(log => log.POI)
                 .Where(log => log.POI != null)
-                .GroupBy(log => log.POI!.Name)
+                .GroupBy(log => log.POI.Name)
                 .Select(group => new {
                     Name = group.Key,
                     Count = group.Count()

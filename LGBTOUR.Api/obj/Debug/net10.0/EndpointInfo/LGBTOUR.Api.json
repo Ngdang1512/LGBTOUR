@@ -10,11 +10,30 @@
     "version": "v1"
   },
   "paths": {
-    "/api/Analytics/poi-stats": {
-      "get": {
+    "/api/Analytics/log-audio": {
+      "post": {
         "tags": [
           "Analytics"
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -100,6 +119,49 @@
             "schema": {
               "type": "number",
               "format": "double"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MobileApp/tours": {
+      "get": {
+        "tags": [
+          "MobileApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MobileApp/tours/{tourId}/pois": {
+      "get": {
+        "tags": [
+          "MobileApp"
+        ],
+        "parameters": [
+          {
+            "name": "tourId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "vi"
             }
           }
         ],
@@ -733,6 +795,32 @@
           },
           "poi": {
             "$ref": "#/components/schemas/POI"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserLogDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "poI_Id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lat": {
+            "type": "number",
+            "format": "double"
+          },
+          "lng": {
+            "type": "number",
+            "format": "double"
+          },
+          "durationSeconds": {
+            "type": "integer",
+            "format": "int64"
           }
         },
         "additionalProperties": false

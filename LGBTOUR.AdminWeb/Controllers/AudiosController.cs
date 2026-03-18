@@ -1,17 +1,20 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LGBTOUR.AdminWeb.Data;
+using LGBTOUR.AdminWeb.Entities; // Nhớ đổi lại thành LGBTOUR.Api.Entities nếu bạn vẫn dùng namespace cũ
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using LGBTOUR.AdminWeb.Data;
-using LGBTOUR.AdminWeb.Entities; // Nhớ đổi lại thành LGBTOUR.Api.Entities nếu bạn vẫn dùng namespace cũ
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LGBTOUR.AdminWeb.Controllers
 {
+    [Authorize]
+
     public class AudiosController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -1,16 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using LGBTOUR.AdminWeb.Data;
-
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Authentication.Cookies;
+var builder = WebApplication.CreateBuilder(args);   
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddAuthentication("AdminCookies")
-    .AddCookie("AdminCookies", options =>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
     {
-        options.LoginPath = "/Auth/Login"; // Đường dẫn tới trang đăng nhập
-        options.Cookie.Name = "LGBTOUR_Token";
+        options.LoginPath = "/Auth/Login"; // Nếu chưa đăng nhập sẽ bị đuổi về đây
+        options.ExpireTimeSpan = TimeSpan.FromDays(1); // Lưu đăng nhập 1 ngày
     });
 
 // Thêm HttpClient để gọi API
@@ -27,7 +27,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

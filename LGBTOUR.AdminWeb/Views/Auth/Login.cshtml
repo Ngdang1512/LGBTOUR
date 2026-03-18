@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null; // Tắt layout mặc định để trang Login đứng độc lập
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập | LGBTOUR ADMIN</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition login-page bg-dark">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#" class="text-white text-decoration-none"><b>LGBTOUR</b> Admin</a>
+        </div>
+        <div class="card shadow-lg">
+            <div class="card-body login-card-body rounded">
+                <p class="login-box-msg font-weight-bold">Đăng nhập hệ thống quản trị</p>
+
+                <!-- Hiển thị lỗi nếu sai mật khẩu -->
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger text-center px-2 py-1">@ViewBag.Error</div>
+                }
+
+                <form asp-action="Login" method="post">
+                    <div class="input-group mb-3">
+                        <input type="text" name="username" class="form-control" placeholder="Tài khoản (admin)" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text"><span class="fas fa-user"></span></div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Mật khẩu (123456)" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text"><span class="fas fa-lock"></span></div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block fw-bold"><i class="fas fa-sign-in-alt mr-2"></i> Đăng nhập</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

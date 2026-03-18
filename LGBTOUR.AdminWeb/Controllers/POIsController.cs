@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LGBTOUR.AdminWeb.Data;
+using LGBTOUR.AdminWeb.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using LGBTOUR.AdminWeb.Data;
-using LGBTOUR.AdminWeb.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LGBTOUR.AdminWeb.Controllers
 {
+    [Authorize]
     public class POIsController : Controller
     {
         private readonly ApplicationDbContext _context;
