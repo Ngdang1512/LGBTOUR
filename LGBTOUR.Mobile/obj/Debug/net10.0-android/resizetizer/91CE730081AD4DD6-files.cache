@@ -6,9 +6,6 @@ obj/Debug/net10.0-android/resizetizer/r/mipmap-hdpi/appiconfg.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-hdpi/appiconfg_round.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-hdpi/appiconfg_foreground.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-hdpi/appiconfg_background.png
-obj/Debug/net10.0-android/resizetizer/r/drawable/icon_profile.png
-obj/Debug/net10.0-android/resizetizer/r/drawable/icon_map.png
-obj/Debug/net10.0-android/resizetizer/r/drawable/icon_home.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xxxhdpi/appiconfg.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xxxhdpi/appiconfg_round.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xxxhdpi/appiconfg_foreground.png
@@ -17,14 +14,9 @@ obj/Debug/net10.0-android/resizetizer/r/mipmap-xxhdpi/appiconfg.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xxhdpi/appiconfg_round.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xxhdpi/appiconfg_foreground.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xxhdpi/appiconfg_background.png
-obj/Debug/net10.0-android/resizetizer/r/drawable-xhdpi/dotnet_bot.png
-obj/Debug/net10.0-android/resizetizer/r/drawable-xxhdpi/dotnet_bot.png
-obj/Debug/net10.0-android/resizetizer/r/drawable-hdpi/dotnet_bot.png
-obj/Debug/net10.0-android/resizetizer/r/drawable-mdpi/dotnet_bot.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xhdpi/appiconfg.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xhdpi/appiconfg_round.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xhdpi/appiconfg_foreground.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-xhdpi/appiconfg_background.png
-obj/Debug/net10.0-android/resizetizer/r/drawable-xxxhdpi/dotnet_bot.png
 obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg.xml
 obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg_round.xml

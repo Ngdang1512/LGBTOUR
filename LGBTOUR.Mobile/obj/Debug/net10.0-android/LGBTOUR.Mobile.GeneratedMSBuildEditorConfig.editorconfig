@@ -106,21 +106,21 @@ build_metadata.AdditionalFiles.NoWarn =
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
 
-[/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/Resources/Styles/Colors.xaml]
+[/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/Resources/Style/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LGBTOUR.Mobile.Resources.Styles.Colors.xaml
-build_metadata.AdditionalFiles.TargetPath = Resources/Styles/Colors.xaml
-build_metadata.AdditionalFiles.RelativePath = Resources/Styles/Colors.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = LGBTOUR.Mobile.Resources.Style.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources/Style/Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources/Style/Colors.xaml
 build_metadata.AdditionalFiles.Inflator = Runtime
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
 
-[/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/Resources/Styles/Styles.xaml]
+[/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/Resources/Style/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LGBTOUR.Mobile.Resources.Styles.Styles.xaml
-build_metadata.AdditionalFiles.TargetPath = Resources/Styles/Styles.xaml
-build_metadata.AdditionalFiles.RelativePath = Resources/Styles/Styles.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = LGBTOUR.Mobile.Resources.Style.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources/Style/Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources/Style/Styles.xaml
 build_metadata.AdditionalFiles.Inflator = Runtime
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 

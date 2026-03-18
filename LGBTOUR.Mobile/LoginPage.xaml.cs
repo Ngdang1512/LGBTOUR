@@ -10,7 +10,8 @@ public partial class LoginPage : ContentPage
     private void OnLoginClicked(object sender, EventArgs e)
     {
         // Khi gọi API thành công, ta sẽ tráo màn hình Đăng nhập thành màn hình AppShell (Trang chủ)
-        Application.Current.MainPage = new AppShell();
+        var mainPage = Handler.MauiContext.Services.GetService<MainPage>();
+        Application.Current.MainPage = new NavigationPage(mainPage);
     }
 
     private async void OnRegisterTapped(object sender, EventArgs e)
@@ -22,6 +23,7 @@ public partial class LoginPage : ContentPage
     private void OnSkipTapped(object sender, EventArgs e)
     {
         // Cho phép du khách vãng lai bay thẳng vào Trang chủ mà không cần tài khoản
-        Application.Current.MainPage = new AppShell();
+        var mainPage = Handler.MauiContext.Services.GetService<MainPage>();
+        Application.Current.MainPage = new NavigationPage(mainPage);
     }
 }

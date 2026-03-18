@@ -3,8 +3,6 @@ using LGBTOUR.Mobile.Models;
 
 namespace LGBTOUR.Mobile;
 
-// Khai báo để trang này biết cách nhận dữ liệu Place được truyền sang
-[QueryProperty(nameof(SelectedPlace), "placeInfo")]
 public partial class DetailPage : ContentPage
 {
     private Place _selectedPlace;
@@ -27,7 +25,8 @@ public partial class DetailPage : ContentPage
     private async void OnBackTapped(object sender, EventArgs e)
     {
         StopAudio(); // Tắt tiếng ngay lập tức nếu đang đọc dở mà thoát trang
-        await Shell.Current.GoToAsync("..");
+        // App đang chạy trong NavigationPage, nên dùng PopAsync thay vì Shell navigation.
+        await Navigation.PopAsync();
     }
 
     // Xử lý tính năng Đọc Thuyết minh (Text-To-Speech)
