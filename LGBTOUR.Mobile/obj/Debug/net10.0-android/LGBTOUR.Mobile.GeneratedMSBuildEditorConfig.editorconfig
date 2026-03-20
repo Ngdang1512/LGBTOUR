@@ -6,7 +6,7 @@ build_property.IncludeAllContentForSelfExtract =
 build_property.VerifyReferenceTrimCompatibility = 
 build_property.VerifyReferenceAotCompatibility = 
 build_property.MauiXamlNoWarn = 
-build_property.EnableMauiXamlDiagnostics = True
+build_property.EnableMauiXamlDiagnostics = true
 build_property.MauiXamlLineInfo = 
 build_property.Configuration = Debug
 build_property.TargetFramework = net10.0-android
@@ -131,6 +131,16 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LGBTOUR.Mobile.SettingsPage.xaml
 build_metadata.AdditionalFiles.TargetPath = SettingsPage.xaml
 build_metadata.AdditionalFiles.RelativePath = SettingsPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/SplashScreen.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = LGBTOUR.Mobile.SplashScreen.xaml
+build_metadata.AdditionalFiles.TargetPath = SplashScreen.xaml
+build_metadata.AdditionalFiles.RelativePath = SplashScreen.xaml
 build_metadata.AdditionalFiles.Inflator = Runtime
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 

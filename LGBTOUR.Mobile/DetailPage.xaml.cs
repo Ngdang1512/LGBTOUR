@@ -1,81 +1,81 @@
-using Microsoft.Maui.Media; // Thư viện đọc văn bản tích hợp sẵn
 using LGBTOUR.Mobile.Models;
+using Microsoft.Maui.Media;
 
 namespace LGBTOUR.Mobile;
 
 public partial class DetailPage : ContentPage
 {
-    private Place _selectedPlace;
-    public Place SelectedPlace
-    {
-        get => _selectedPlace;
-        set { _selectedPlace = value; OnPropertyChanged(); }
-    }
-
-    private bool _isPlaying = false;
+    public Place SelectedPlace { get; set; }
+    
+    // Biến dùng để dừng âm thanh ngay lập tức
     private CancellationTokenSource _cts;
 
-    public DetailPage()
+    public DetailPage(Place place)
     {
         InitializeComponent();
-        BindingContext = this;
+        SelectedPlace = place;
+        BindingContext = this; 
+
+        // Khởi tạo danh sách ngôn ngữ cho Picker
+        LanguagePicker.ItemsSource = new List<string> { "🇻🇳 Tiếng Việt", "🇺🇸 English" };
+        LanguagePicker.SelectedIndex = 0; // Mặc định chọn Tiếng Việt
     }
 
-    // Xử lý khi bấm nút Quay lại
-    private async void OnBackTapped(object sender, EventArgs e)
+    private async void OnPlayClicked(object sender, EventArgs e)
     {
-        StopAudio(); // Tắt tiếng ngay lập tức nếu đang đọc dở mà thoát trang
-        // App đang chạy trong NavigationPage, nên dùng PopAsync thay vì Shell navigation.
-        await Navigation.PopAsync();
-    }
-
-    // Xử lý tính năng Đọc Thuyết minh (Text-To-Speech)
-    private async void OnPlayAudioClicked(object sender, EventArgs e)
-    {
-        // 1. Nếu đang phát thì bấm vào sẽ Dừng lại
-        if (_isPlaying)
-        {
-            StopAudio();
-            return;
-        }
-
-        // 2. Kiểm tra xem địa điểm này có kịch bản chưa
-        if (SelectedPlace == null || string.IsNullOrWhiteSpace(SelectedPlace.TtsScript))
-        {
-            await DisplayAlert("Thông báo", "Chưa có kịch bản thuyết minh cho địa điểm này.", "OK");
-            return;
-        }
-
-        // 3. Bắt đầu phát âm thanh
-        _isPlaying = true;
-        PlayButton.Text = "⏹ ĐANG PHÁT... (BẤM ĐỂ DỪNG)";
-        PlayButton.BackgroundColor = Color.FromArgb("#EF4444"); // Đổi nút sang màu đỏ
+        // Đổi giao diện: Ẩn nút Nghe, Hiện nút Dừng
+        PlayButton.IsVisible = false;
+        StopButton.IsVisible = true;
 
         _cts = new CancellationTokenSource();
+        string textToRead = SelectedPlace.TtsScript;
+        string selectedLang = LanguagePicker.SelectedItem as string;
+
+        // TÍNH NĂNG MOCK TRANSLATION CHO DEMO
+        // Nếu user chọn tiếng Anh, ta tự động đổi kịch bản sang tiếng Anh để máy đọc chuẩn giọng
+        if (selectedLang != null && selectedLang.Contains("English"))
+        {
+            if (SelectedPlace.Name.Contains("Dinh"))
+                textToRead = "Welcome to Independence Palace, a historic architectural landmark of the city.";
+            else if (SelectedPlace.Name.Contains("Nhà thờ"))
+                textToRead = "In front of you is Notre Dame Cathedral, an architectural masterpiece over one hundred and forty years old.";
+            else
+                textToRead = "We are passing by Ben Thanh Market, the most bustling and famous market in the city.";
+        }
 
         try
         {
-            // Lệnh gọi hệ thống tự động đọc văn bản
-            await TextToSpeech.Default.SpeakAsync(SelectedPlace.TtsScript, cancelToken: _cts.Token);
+            // Ra lệnh cho thiết bị phát âm thanh
+            await TextToSpeech.Default.SpeakAsync(textToRead, cancelToken: _cts.Token);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Console.WriteLine($"Lỗi đọc văn bản: {ex.Message}");
+            // Bỏ qua lỗi nếu người dùng bấm nút Dừng giữa chừng
         }
         finally
         {
-            // Khi đọc xong (hoặc bị hủy), trả nút về trạng thái cũ
-            _isPlaying = false;
-            PlayButton.Text = "▶️ NGHE THUYẾT MINH";
-            PlayButton.BackgroundColor = Color.FromArgb("#4F46E5");
+            // Khi đọc xong, trả giao diện về như cũ
+            PlayButton.IsVisible = true;
+            StopButton.IsVisible = false;
         }
     }
 
-    private void StopAudio()
+    private void OnStopClicked(object sender, EventArgs e)
     {
-        if (_cts?.IsCancellationRequested == false)
+        // Hủy lệnh đọc ngay lập tức
+        if (_cts != null && !_cts.IsCancellationRequested)
         {
-            _cts.Cancel(); // Ra lệnh ngừng đọc
+            _cts.Cancel();
+        }
+    }
+
+    // Nếu người dùng đang nghe mà bấm nút Quay lại (Back), tự động tắt tiếng
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        if (_cts != null && !_cts.IsCancellationRequested)
+        {
+            _cts.Cancel();
         }
     }
 }

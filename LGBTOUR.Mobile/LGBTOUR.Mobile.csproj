@@ -40,10 +40,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->	
-		<MauiIcon Include="Resources\AppIcon\appiconfg.svg" Color="#4F46E5" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" Foreground="White" Color="#0F172A" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="						#4F46E5" BaseSize="200,200" />
+		<MauiSplashScreen Include="Resources\AppIcon\appicon.svg" Color="#0F172A" BaseSize="128,128" />
 		
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -59,6 +59,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls.Maps" Version="10.0.50" />
 	</ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using LGBTOUR.Mobile.Services; // Đảm bảo import đúng thư mục chứa TourApiService
+using LGBTOUR.Mobile.Services;
+using Microsoft.Maui.Controls.Hosting; // Đảm bảo import đúng thư mục chứa TourApiService
 
 namespace LGBTOUR.Mobile;
 

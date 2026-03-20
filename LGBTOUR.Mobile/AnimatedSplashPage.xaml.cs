@@ -44,6 +44,6 @@ public partial class AnimatedSplashPage : ContentPage
 
         // --- GIAI ĐOẠN 4: VÀO APP ---
         var mainPage = Handler.MauiContext.Services.GetService<MainPage>();
-        Application.Current.MainPage = new NavigationPage(mainPage);
+        Application.Current.MainPage = new NavigationPage(new LoginPage());
     }
 }

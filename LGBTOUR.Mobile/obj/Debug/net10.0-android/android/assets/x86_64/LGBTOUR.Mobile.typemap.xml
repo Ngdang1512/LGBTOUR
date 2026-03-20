@@ -1,4 +1,4 @@
-<api type="debug" assembly-name="LGBTOUR.Mobile" mvid="7d3a0c9462eb4fed9bbd806bc0a0d701">
+<api type="debug" assembly-name="LGBTOUR.Mobile" mvid="594d2ab2ffde4a229591e6802138963c">
   <java-to-managed>
     <entry java-name="crc64b5c7acde2cb42144/MainActivity" managed-name="LGBTOUR.Mobile.MainActivity, LGBTOUR.Mobile" managed-type-token-id="33554446" />
     <entry java-name="crc64b5c7acde2cb42144/MainApplication" managed-name="LGBTOUR.Mobile.MainApplication, LGBTOUR.Mobile" managed-type-token-id="33554447" />

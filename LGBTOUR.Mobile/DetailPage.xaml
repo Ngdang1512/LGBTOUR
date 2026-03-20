@@ -1,43 +1,60 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:LGBTOUR.Mobile"
              x:Class="LGBTOUR.Mobile.DetailPage"
-             Shell.NavBarIsVisible="False"
-             Shell.TabBarIsVisible="False"
-             BackgroundColor="White">
+             Title="Tổng quan"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="True"
+             Shell.NavBarHasShadow="False">
 
-    <ScrollView VerticalScrollBarVisibility="Never">
-        <Grid RowDefinitions="350, Auto">
-            
-            <Image Source="{Binding SelectedPlace.ImageUrl}" Aspect="AspectFill" Grid.Row="0" />
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+            <Image Source="{Binding SelectedPlace.ImageUrl}" 
+                   Aspect="AspectFill"
+                   HeightRequest="300"
+                   HorizontalOptions="Fill" />
 
-            <Border Grid.Row="0" Margin="20,50,0,0" WidthRequest="44" HeightRequest="44" 
-                    HorizontalOptions="Start" VerticalOptions="Start" BackgroundColor="#80000000" StrokeThickness="0">
-                <Border.StrokeShape><RoundRectangle CornerRadius="22"/></Border.StrokeShape>
-                <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnBackTapped"/></Border.GestureRecognizers>
-                <Label Text="←" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" TextColor="White"/>
-            </Border>
-
-            <Border Grid.Row="1" BackgroundColor="White" Margin="0,-40,0,0" Padding="25" StrokeThickness="0">
-                <Border.StrokeShape><RoundRectangle CornerRadius="40,40,0,0"/></Border.StrokeShape>
-                <VerticalStackLayout Spacing="15">
+            <VerticalStackLayout Padding="25, 30" Spacing="20">
+                
+                <Grid ColumnDefinitions="*, Auto">
+                    <Border BackgroundColor="#F1F5F9" StrokeThickness="0" HorizontalOptions="Start" Padding="10,4">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="6"/></Border.StrokeShape>
+                        <Label Text="{Binding SelectedPlace.Category}" FontSize="13" TextColor="#475569" FontAttributes="Bold"/>
+                    </Border>
                     
-                    <Label Text="{Binding SelectedPlace.Name}" FontSize="28" FontAttributes="Bold" TextColor="#111827"/>
-                    
-                    <HorizontalStackLayout Spacing="5">
-                        <Label Text="📍" FontSize="16" VerticalOptions="Center"/>
-                        <Label Text="{Binding SelectedPlace.Location}" FontSize="15" TextColor="#6B7280" VerticalOptions="Center"/>
+                    <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                        <Label Text="Đánh giá:" FontSize="13" TextColor="#94A3B8" />
+                        <Label Text="{Binding SelectedPlace.Rating}" FontSize="14" TextColor="#0F172A" FontAttributes="Bold" />
                     </HorizontalStackLayout>
+                </Grid>
 
-                    <Button x:Name="PlayButton" Text="▶️ NGHE THUYẾT MINH" BackgroundColor="#4F46E5" TextColor="White" 
-                            FontAttributes="Bold" CornerRadius="14" HeightRequest="55" Margin="0,15,0,15"
-                            Clicked="OnPlayAudioClicked" />
-
-                    <Label Text="Nội dung thuyết minh:" FontSize="18" FontAttributes="Bold" TextColor="#111827"/>
-                    <Label Text="{Binding SelectedPlace.TtsScript}" FontSize="16" LineHeight="1.6" TextColor="#4B5563"/>
-                    
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="{Binding SelectedPlace.Name}" FontSize="32" FontAttributes="Bold" TextColor="#0F172A" LineHeight="1.1" />
+                    <Label Text="{Binding SelectedPlace.Location}" FontSize="15" TextColor="#64748B" />
                 </VerticalStackLayout>
-            </Border>
-        </Grid>
+
+                <Border BackgroundColor="#F8FAFC" Stroke="#E2E8F0" StrokeThickness="1" Padding="15" Margin="0, 10">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                    <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="10" VerticalOptions="Center">
+                        
+                        <Picker x:Name="LanguagePicker" Grid.Column="0" 
+                                Title="Ngôn ngữ đọc" 
+                                TextColor="#0F172A" 
+                                FontSize="14"
+                                BackgroundColor="Transparent" />
+
+                        <Button x:Name="PlayButton" Grid.Column="1" Text="Phát Thuyết Minh" FontSize="13" FontAttributes="Bold" BackgroundColor="#0F172A" TextColor="White" CornerRadius="8" Padding="15,0" Clicked="OnPlayClicked" />
+                        <Button x:Name="StopButton" Grid.Column="2" Text="Dừng Phát" FontSize="13" FontAttributes="Bold" BackgroundColor="#EF4444" TextColor="White" CornerRadius="8" Padding="15,0" Clicked="OnStopClicked" IsVisible="False" />
+                    </Grid>
+                </Border>
+
+                <BoxView HeightRequest="1" BackgroundColor="#E2E8F0" Margin="0, 10" />
+
+                <Label Text="Giới thiệu chi tiết" FontSize="18" FontAttributes="Bold" TextColor="#0F172A"/>
+                <Label Text="{Binding SelectedPlace.TtsScript}" FontSize="16" LineHeight="1.6" TextColor="#334155" />
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

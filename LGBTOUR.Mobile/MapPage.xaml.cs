@@ -1,40 +1,35 @@
-using System.Collections.ObjectModel;
-using LGBTOUR.Mobile.Models;
-using LGBTOUR.Mobile.Services; // Nhúng thư mục Service vào
-
 namespace LGBTOUR.Mobile;
 
 public partial class MapPage : ContentPage
 {
-    public ObservableCollection<Place> RoutePlaces { get; set; } = new();
-    private readonly TourApiService _apiService;
-
     public MapPage()
     {
         InitializeComponent();
-        
-        // Khởi tạo dịch vụ API
-        _apiService = new TourApiService();
-        
-        BindingContext = this;
+        LoadMap();
     }
 
-    // Hàm này sẽ tự động chạy mỗi khi người dùng mở sang tab Khám phá
-    protected override async void OnAppearing()
+    private void LoadMap()
     {
-        base.OnAppearing();
+        // 1. Tạo một trang web mini bằng HTML, chứa thẻ iframe theo đúng yêu cầu của Google
+        var mapHtml = @"
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+            <style>
+                body { margin: 0; padding: 0; overflow: hidden; }
+                iframe { width: 100vw; height: 100vh; border: none; }
+            </style>
+        </head>
+        <body>
+            <iframe src='https://maps.google.com/maps?saddr=Dinh+Doc+Lap,Ho+Chi+Minh&daddr=Nha+Tho+Duc+Ba,Ho+Chi+Minh+to:Cho+Ben+Thanh,Ho+Chi+Minh&output=embed'></iframe>
+        </body>
+        </html>";
 
-        // 1. Gọi dịch vụ để đi lấy dữ liệu từ API của người bạn kia
-        var placesFromDatabase = await _apiService.GetRoutePlacesAsync();
-
-        // 2. Nếu lấy được dữ liệu, đưa nó lên màn hình
-        if (placesFromDatabase.Any())
+        // 2. Ép WebView đọc đoạn mã HTML này thay vì đọc link trực tiếp
+        MapWebView.Source = new HtmlWebViewSource
         {
-            RoutePlaces.Clear();
-            foreach (var place in placesFromDatabase)
-            {
-                RoutePlaces.Add(place);
-            }
-        }
+            Html = mapHtml
+        };
     }
 }

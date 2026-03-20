@@ -2,72 +2,69 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LGBTOUR.Mobile.MainPage"
-             BackgroundColor="#F4F6F8"
+             BackgroundColor="#F8FAFC"
              Shell.NavBarIsVisible="False">
 
     <ScrollView VerticalScrollBarVisibility="Never">
-        <VerticalStackLayout Padding="20, 50, 20, 40" Spacing="30">
+        <VerticalStackLayout Padding="20, 50, 20, 40" Spacing="35">
             
             <Grid ColumnDefinitions="*, Auto">
-                <VerticalStackLayout VerticalOptions="Center">
-                    <Label Text="Chào buổi sáng," TextColor="#8A92A6" FontSize="14" />
-                    <Label Text="Du khách VIP" TextColor="#111827" FontSize="26" FontAttributes="Bold" />
+                <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                    <Label Text="Khám phá thành phố," TextColor="#64748B" FontSize="15" LetterSpacing="0.5" />
+                    <Label Text="Du khách VIP" TextColor="#0F172A" FontSize="28" FontAttributes="Bold" />
                 </VerticalStackLayout>
-                <Border Grid.Column="1" WidthRequest="55" HeightRequest="55" StrokeShape="RoundRectangle 27.5" StrokeThickness="0">
+                <Border Grid.Column="1" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 25" StrokeThickness="1" Stroke="#E2E8F0">
                     <Image Source="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" Aspect="AspectFill" />
                 </Border>
             </Grid>
 
-            <Border Stroke="Transparent" BackgroundColor="White" Padding="15, 2">
-                <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
-                <Border.Shadow><Shadow Brush="#9CA3AF" Offset="0, 8" Radius="15" Opacity="0.1" /></Border.Shadow>
+            <Border Stroke="#E2E8F0" StrokeThickness="1" BackgroundColor="White" Padding="20, 5">
+                <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                <Border.Shadow><Shadow Brush="#94A3B8" Offset="0, 4" Radius="10" Opacity="0.05" /></Border.Shadow>
                 <Grid ColumnDefinitions="Auto, *">
-                    <Label Text="🔍" VerticalOptions="Center" FontSize="18" Margin="0,0,10,0" />
-                    
+                    <Label Text="Tìm kiếm" TextColor="#94A3B8" VerticalOptions="Center" FontSize="14" FontAttributes="Bold" Margin="0,0,15,0" />
                     <Entry Grid.Column="1" 
-                           Placeholder="Tìm kiếm điểm đến..." 
-                           PlaceholderColor="#9CA3AF" 
-                           TextColor="#111827" 
-                           BackgroundColor="Transparent"
-                           TextChanged="OnSearchTextChanged" /> 
+                           Placeholder="Nhập tên địa điểm..." 
+                           PlaceholderColor="#CBD5E1" 
+                           TextColor="#0F172A" 
+                           BackgroundColor="Transparent" /> 
                 </Grid>
             </Border>
 
             <VerticalStackLayout Spacing="15">
-                <Label Text="Danh mục" FontSize="20" FontAttributes="Bold" TextColor="#111827" />
                 <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-                    <HorizontalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="10">
                         
-                        <Border Padding="18,12" BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1">
-                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Popular"/></Border.GestureRecognizers>
-                            <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                        <Border Padding="20,10" BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1">
+                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Phổ biến"/></Border.GestureRecognizers>
+                            <Border.StrokeShape><RoundRectangle CornerRadius="20"/></Border.StrokeShape>
                             <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Popular"><Setter Property="BackgroundColor" Value="#4F46E5" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Phổ biến"><Setter Property="BackgroundColor" Value="#0F172A" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
                             </Border.Triggers>
-                            <Label Text="Phổ biến" TextColor="#4B5563" FontAttributes="Bold">
-                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Popular"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
+                            <Label Text="Phổ biến" TextColor="#64748B" FontSize="14" FontAttributes="Bold">
+                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Phổ biến"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
                             </Label>
                         </Border>
 
-                        <Border Padding="18,12" BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1">
-                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Food"/></Border.GestureRecognizers>
-                            <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                        <Border Padding="20,10" BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1">
+                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Ẩm thực"/></Border.GestureRecognizers>
+                            <Border.StrokeShape><RoundRectangle CornerRadius="20"/></Border.StrokeShape>
                             <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Food"><Setter Property="BackgroundColor" Value="#4F46E5" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Ẩm thực"><Setter Property="BackgroundColor" Value="#0F172A" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
                             </Border.Triggers>
-                            <Label Text="Ẩm thực" TextColor="#4B5563" FontAttributes="Bold">
-                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Food"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
+                            <Label Text="Ẩm thực" TextColor="#64748B" FontSize="14" FontAttributes="Bold">
+                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Ẩm thực"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
                             </Label>
                         </Border>
 
-                        <Border Padding="18,12" BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1">
-                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Shopping"/></Border.GestureRecognizers>
-                            <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                        <Border Padding="20,10" BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1">
+                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Mua sắm"/></Border.GestureRecognizers>
+                            <Border.StrokeShape><RoundRectangle CornerRadius="20"/></Border.StrokeShape>
                             <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Shopping"><Setter Property="BackgroundColor" Value="#4F46E5" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Mua sắm"><Setter Property="BackgroundColor" Value="#0F172A" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
                             </Border.Triggers>
-                            <Label Text="Mua sắm" TextColor="#4B5563" FontAttributes="Bold">
-                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Shopping"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
+                            <Label Text="Mua sắm" TextColor="#64748B" FontSize="14" FontAttributes="Bold">
+                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Mua sắm"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
                             </Label>
                         </Border>
 
@@ -75,43 +72,40 @@
                 </ScrollView>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="15">
+            <VerticalStackLayout Spacing="20">
                 <Grid ColumnDefinitions="*, Auto">
-                    <Label Text="Đề xuất cho bạn" FontSize="20" FontAttributes="Bold" TextColor="#111827" VerticalOptions="Center" />
-                    <Label Grid.Column="1" Text="Xem tất cả" TextColor="#4F46E5" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    <Label Text="Đề xuất hôm nay" FontSize="22" FontAttributes="Bold" TextColor="#0F172A" VerticalOptions="Center" />
                 </Grid>
                 
-                <CollectionView ItemsSource="{Binding DisplayPlaces}" HeightRequest="350" SelectionMode="None">
+                <CollectionView ItemsSource="{Binding DisplayPlaces}" 
+                                HeightRequest="340" 
+                                SelectionMode="Single"
+                                SelectionChanged="OnPlaceSelected">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
                     </CollectionView.ItemsLayout>
                     
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border WidthRequest="270" HeightRequest="320" BackgroundColor="White" StrokeThickness="0">
-                                <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCardTapped" /></Border.GestureRecognizers>
-                                <Border.StrokeShape><RoundRectangle CornerRadius="24" /></Border.StrokeShape>
-                                <Border.Shadow><Shadow Brush="#9CA3AF" Offset="0,15" Radius="25" Opacity="0.15" /></Border.Shadow>
+                            <Border WidthRequest="260" BackgroundColor="White" StrokeThickness="1" Stroke="#F1F5F9">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+                                <Border.Shadow><Shadow Brush="#64748B" Offset="0,12" Radius="20" Opacity="0.08" /></Border.Shadow>
                                 
-                                <Grid RowDefinitions="*, Auto">
+                                <Grid RowDefinitions="200, *">
+                                    <Image Grid.Row="0" Source="{Binding ImageUrl}" Aspect="AspectFill" />
                                     
-                                    <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
-                                    
-                                    <Grid Grid.Row="1" Padding="20">
-                                        <VerticalStackLayout Spacing="5">
-                                            
-                                            <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" TextColor="#111827"/>
-                                            <HorizontalStackLayout Spacing="5">
-                                                <Label Text="📍" FontSize="12" VerticalOptions="Center"/>
-                                                <Label Text="{Binding Location}" FontSize="13" TextColor="#6B7280" />
+                                    <VerticalStackLayout Grid.Row="1" Padding="15" Spacing="6" VerticalOptions="Center">
+                                        <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" TextColor="#0F172A" MaxLines="1" LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding Location}" FontSize="13" TextColor="#64748B" MaxLines="1" LineBreakMode="TailTruncation" />
+                                        
+                                        <Border BackgroundColor="#F8FAFC" StrokeThickness="0" HorizontalOptions="Start" Padding="8,4" Margin="0,5,0,0">
+                                            <Border.StrokeShape><RoundRectangle CornerRadius="6"/></Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="4">
+                                                <Label Text="{Binding Rating}" FontSize="12" TextColor="#0F172A" FontAttributes="Bold" />
+                                                <Label Text="/ 5.0" FontSize="12" TextColor="#94A3B8" />
                                             </HorizontalStackLayout>
-                                            
-                                            <HorizontalStackLayout Spacing="5" Margin="0,8,0,0">
-                                                <Label Text="⭐️" FontSize="12" VerticalOptions="Center"/>
-                                                <Label Text="{Binding Rating}" FontSize="14" TextColor="#F59E0B" FontAttributes="Bold" />
-                                            </HorizontalStackLayout>
-                                        </VerticalStackLayout>
-                                    </Grid>
+                                        </Border>
+                                    </VerticalStackLayout>
                                 </Grid>
                             </Border>
                         </DataTemplate>

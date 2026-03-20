@@ -135,3 +135,13 @@ build_metadata.AdditionalFiles.Inflator = Runtime
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
+
+[/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/SplashScreen.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = LGBTOUR.Mobile.SplashScreen.xaml
+build_metadata.AdditionalFiles.TargetPath = SplashScreen.xaml
+build_metadata.AdditionalFiles.RelativePath = SplashScreen.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 

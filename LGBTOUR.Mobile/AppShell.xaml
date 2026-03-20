@@ -4,30 +4,22 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:LGBTOUR.Mobile"
-    Shell.FlyoutBehavior="Disabled">
-
-    <Shell.Resources>
-        <ResourceDictionary>
-            <Style TargetType="TabBar">
-                <Setter Property="Shell.TabBarBackgroundColor" Value="#FFFFFF" />
-                <Setter Property="Shell.TabBarTitleColor" Value="#4F46E5" /> 
-                <Setter Property="Shell.TabBarUnselectedColor" Value="#9CA3AF" /> 
-            </Style>
-        </ResourceDictionary>
-    </Shell.Resources>
+    Shell.FlyoutBehavior="Disabled"
+    
+    Shell.TabBarBackgroundColor="White"
+    Shell.TabBarTitleColor="#0F172A"
+    Shell.TabBarUnselectedColor="#94A3B8">
 
     <TabBar>
-        <Tab Title="Trang chủ" Icon="icon_home.png">
-            <ShellContent 
-                ContentTemplate="{DataTemplate local:MainPage}" 
-                Route="MainPage" />
+        <Tab Title="Trang chủ">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
         </Tab>
-
-        <Tab Title="Khám phá" Icon="icon_map.png">
+        
+        <Tab Title="Khám phá">
             <ShellContent ContentTemplate="{DataTemplate local:MapPage}" />
         </Tab>
-
-        <Tab Title="Tài khoản" Icon="icon_profile.png">
+        
+        <Tab Title="Tài khoản">
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
     </TabBar>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LGBTOUR.Mobile.SplashScreen"
+             BackgroundColor="#0F172A"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+            
+            <Label Text="L" FontSize="70" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" />
+            
+            <Label Text="LGBTOUR" FontSize="28" FontAttributes="Bold" TextColor="White" LetterSpacing="2" HorizontalOptions="Center" />
+            <Label Text="Nền tảng du lịch thông minh" FontSize="14" TextColor="#94A3B8" HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>
