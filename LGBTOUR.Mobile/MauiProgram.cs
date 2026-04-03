@@ -20,9 +20,6 @@ public static class MauiProgram
         // 1. Đăng ký Service gọi API (Tồn tại duy nhất trong suốt vòng đời app)
         builder.Services.AddSingleton<TourApiService>();
 
-        // 2. Đăng ký các trang để .NET tự động bơm Service vào
-        builder.Services.AddTransient<MainPage>();
-
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

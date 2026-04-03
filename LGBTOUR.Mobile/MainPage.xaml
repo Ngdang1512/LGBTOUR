@@ -2,69 +2,118 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LGBTOUR.Mobile.MainPage"
-             BackgroundColor="#F8FAFC"
+             BackgroundColor="{StaticResource BgColor}"
              Shell.NavBarIsVisible="False">
 
     <ScrollView VerticalScrollBarVisibility="Never">
-        <VerticalStackLayout Padding="20, 50, 20, 40" Spacing="35">
+        <VerticalStackLayout Padding="20, 50, 20, 40" Spacing="30">
             
+            <!-- Header with Avatar -->
             <Grid ColumnDefinitions="*, Auto">
                 <VerticalStackLayout VerticalOptions="Center" Spacing="2">
-                    <Label Text="Khám phá thành phố," TextColor="#64748B" FontSize="15" LetterSpacing="0.5" />
-                    <Label Text="Du khách VIP" TextColor="#0F172A" FontSize="28" FontAttributes="Bold" />
+                    <Label Text="Chào mừng bạn! 👋" 
+                           TextColor="{StaticResource TextSecondary}" FontSize="14" 
+                           LetterSpacing="0.5" />
+                    <Label Text="Khám phá ẩm thực Q.4" 
+                           TextColor="{StaticResource TextColor}" FontSize="26" 
+                           FontAttributes="Bold" />
                 </VerticalStackLayout>
-                <Border Grid.Column="1" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 25" StrokeThickness="1" Stroke="#E2E8F0">
-                    <Image Source="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" Aspect="AspectFill" />
+                <Border Grid.Column="1" WidthRequest="50" HeightRequest="50" 
+                       StrokeShape="RoundRectangle 25" StrokeThickness="2" 
+                       Stroke="{StaticResource Primary}">
+                    <Label Text="👤" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Border>
             </Grid>
 
-            <Border Stroke="#E2E8F0" StrokeThickness="1" BackgroundColor="White" Padding="20, 5">
+            <!-- Search Bar -->
+            <Border Stroke="{StaticResource BorderColor}" StrokeThickness="1" 
+                   BackgroundColor="{StaticResource SurfaceColor}" Padding="16, 12">
                 <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                <Border.Shadow><Shadow Brush="#94A3B8" Offset="0, 4" Radius="10" Opacity="0.05" /></Border.Shadow>
+                <Border.Shadow><Shadow Brush="#94A3B8" Offset="0, 2" Radius="8" Opacity="0.05" /></Border.Shadow>
                 <Grid ColumnDefinitions="Auto, *">
-                    <Label Text="Tìm kiếm" TextColor="#94A3B8" VerticalOptions="Center" FontSize="14" FontAttributes="Bold" Margin="0,0,15,0" />
+                    <Label Text="🔍" FontSize="16" VerticalOptions="Center" Margin="0,0,10,0" />
                     <Entry Grid.Column="1" 
-                           Placeholder="Nhập tên địa điểm..." 
-                           PlaceholderColor="#CBD5E1" 
-                           TextColor="#0F172A" 
-                           BackgroundColor="Transparent" /> 
+                           Placeholder="Tìm quán ăn..." 
+                           PlaceholderColor="{StaticResource TextLight}" 
+                           TextColor="{StaticResource TextColor}" 
+                           BackgroundColor="Transparent"
+                           FontSize="14" /> 
                 </Grid>
             </Border>
 
-            <VerticalStackLayout Spacing="15">
+            <!-- Category Filter Chips -->
+            <VerticalStackLayout Spacing="12">
+                <Label Text="Danh Mục" FontSize="14" FontAttributes="Bold" 
+                       TextColor="{StaticResource TextColor}" />
                 <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                     <HorizontalStackLayout Spacing="10">
                         
-                        <Border Padding="20,10" BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1">
-                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Phổ biến"/></Border.GestureRecognizers>
-                            <Border.StrokeShape><RoundRectangle CornerRadius="20"/></Border.StrokeShape>
+                        <Border Padding="16, 10" BackgroundColor="{StaticResource SurfaceColor}" 
+                               Stroke="{StaticResource BorderColor}" StrokeThickness="1">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Phổ biến"/>
+                            </Border.GestureRecognizers>
+                            <Border.StrokeShape><RoundRectangle CornerRadius="16"/></Border.StrokeShape>
                             <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Phổ biến"><Setter Property="BackgroundColor" Value="#0F172A" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" 
+                                            Value="Phổ biến">
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
                             </Border.Triggers>
-                            <Label Text="Phổ biến" TextColor="#64748B" FontSize="14" FontAttributes="Bold">
-                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Phổ biến"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
+                            <Label Text="Phổ biến" TextColor="{StaticResource TextSecondary}" FontSize="13" FontAttributes="Bold">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" 
+                                               Value="Phổ biến">
+                                        <Setter Property="TextColor" Value="White" />
+                                    </DataTrigger>
+                                </Label.Triggers>
                             </Label>
                         </Border>
 
-                        <Border Padding="20,10" BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1">
-                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Ẩm thực"/></Border.GestureRecognizers>
-                            <Border.StrokeShape><RoundRectangle CornerRadius="20"/></Border.StrokeShape>
+                        <Border Padding="16, 10" BackgroundColor="{StaticResource SurfaceColor}" 
+                               Stroke="{StaticResource BorderColor}" StrokeThickness="1">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Ẩm thực"/>
+                            </Border.GestureRecognizers>
+                            <Border.StrokeShape><RoundRectangle CornerRadius="16"/></Border.StrokeShape>
                             <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Ẩm thực"><Setter Property="BackgroundColor" Value="#0F172A" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" 
+                                            Value="Ẩm thực">
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
                             </Border.Triggers>
-                            <Label Text="Ẩm thực" TextColor="#64748B" FontSize="14" FontAttributes="Bold">
-                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Ẩm thực"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
+                            <Label Text="Ẩm thực" TextColor="{StaticResource TextSecondary}" FontSize="13" FontAttributes="Bold">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" 
+                                               Value="Ẩm thực">
+                                        <Setter Property="TextColor" Value="White" />
+                                    </DataTrigger>
+                                </Label.Triggers>
                             </Label>
                         </Border>
 
-                        <Border Padding="20,10" BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1">
-                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Mua sắm"/></Border.GestureRecognizers>
-                            <Border.StrokeShape><RoundRectangle CornerRadius="20"/></Border.StrokeShape>
+                        <Border Padding="16, 10" BackgroundColor="{StaticResource SurfaceColor}" 
+                               Stroke="{StaticResource BorderColor}" StrokeThickness="1">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Mua sắm"/>
+                            </Border.GestureRecognizers>
+                            <Border.StrokeShape><RoundRectangle CornerRadius="16"/></Border.StrokeShape>
                             <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" Value="Mua sắm"><Setter Property="BackgroundColor" Value="#0F172A" /><Setter Property="Stroke" Value="Transparent" /></DataTrigger>
+                                <DataTrigger TargetType="Border" Binding="{Binding SelectedCategory}" 
+                                            Value="Mua sắm">
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
                             </Border.Triggers>
-                            <Label Text="Mua sắm" TextColor="#64748B" FontSize="14" FontAttributes="Bold">
-                                <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" Value="Mua sắm"><Setter Property="TextColor" Value="White" /></DataTrigger></Label.Triggers>
+                            <Label Text="Mua sắm" TextColor="{StaticResource TextSecondary}" FontSize="13" FontAttributes="Bold">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding SelectedCategory}" 
+                                               Value="Mua sắm">
+                                        <Setter Property="TextColor" Value="White" />
+                                    </DataTrigger>
+                                </Label.Triggers>
                             </Label>
                         </Border>
 
@@ -72,39 +121,56 @@
                 </ScrollView>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="20">
-                <Grid ColumnDefinitions="*, Auto">
-                    <Label Text="Đề xuất hôm nay" FontSize="22" FontAttributes="Bold" TextColor="#0F172A" VerticalOptions="Center" />
-                </Grid>
+            <!-- Recommendations -->
+            <VerticalStackLayout Spacing="16">
+                <Label Text="🔥 Gợi ý hôm nay" FontSize="16" FontAttributes="Bold" 
+                       TextColor="{StaticResource TextColor}" />
                 
                 <CollectionView ItemsSource="{Binding DisplayPlaces}" 
-                                HeightRequest="340" 
+                                HeightRequest="320" 
                                 SelectionMode="Single"
                                 SelectionChanged="OnPlaceSelected">
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="16" />
                     </CollectionView.ItemsLayout>
                     
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border WidthRequest="260" BackgroundColor="White" StrokeThickness="1" Stroke="#F1F5F9">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
-                                <Border.Shadow><Shadow Brush="#64748B" Offset="0,12" Radius="20" Opacity="0.08" /></Border.Shadow>
+                            <Border WidthRequest="240" BackgroundColor="{StaticResource SurfaceColor}" 
+                                   StrokeThickness="1" Stroke="{StaticResource BorderColor}">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="#64748B" Offset="0, 4" Radius="12" Opacity="0.08" />
+                                </Border.Shadow>
                                 
-                                <Grid RowDefinitions="200, *">
+                                <Grid RowDefinitions="140, *">
+                                    <!-- Image -->
                                     <Image Grid.Row="0" Source="{Binding ImageUrl}" Aspect="AspectFill" />
                                     
-                                    <VerticalStackLayout Grid.Row="1" Padding="15" Spacing="6" VerticalOptions="Center">
-                                        <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" TextColor="#0F172A" MaxLines="1" LineBreakMode="TailTruncation" />
-                                        <Label Text="{Binding Location}" FontSize="13" TextColor="#64748B" MaxLines="1" LineBreakMode="TailTruncation" />
+                                    <!-- Badge (Rating) -->
+                                    <Border Grid.Row="0" Margin="8" Padding="6, 4" 
+                                           BackgroundColor="{StaticResource Primary}"
+                                           Stroke="Transparent" HorizontalOptions="End"
+                                           VerticalOptions="Start">
+                                        <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                                        <Label Text="{Binding Rating, StringFormat='⭐ {0}'}" FontSize="11" 
+                                               TextColor="White" FontAttributes="Bold" />
+                                    </Border>
+                                    
+                                    <!-- Info Section -->
+                                    <VerticalStackLayout Grid.Row="1" Padding="12" Spacing="6" 
+                                                        VerticalOptions="SpaceAround">
+                                        <Label Text="{Binding Name}" FontSize="13" FontAttributes="Bold" 
+                                               TextColor="{StaticResource TextColor}" 
+                                               MaxLines="1" LineBreakMode="TailTruncation" />
                                         
-                                        <Border BackgroundColor="#F8FAFC" StrokeThickness="0" HorizontalOptions="Start" Padding="8,4" Margin="0,5,0,0">
-                                            <Border.StrokeShape><RoundRectangle CornerRadius="6"/></Border.StrokeShape>
-                                            <HorizontalStackLayout Spacing="4">
-                                                <Label Text="{Binding Rating}" FontSize="12" TextColor="#0F172A" FontAttributes="Bold" />
-                                                <Label Text="/ 5.0" FontSize="12" TextColor="#94A3B8" />
-                                            </HorizontalStackLayout>
-                                        </Border>
+                                        <Label Text="{Binding Location}" FontSize="11" 
+                                               TextColor="{StaticResource TextSecondary}" 
+                                               MaxLines="1" LineBreakMode="TailTruncation" />
+                                        
+                                        <Label Text="{Binding Category, StringFormat='📍 {0}'}" FontSize="10" 
+                                               TextColor="{StaticResource Accent}" 
+                                               MaxLines="1" LineBreakMode="TailTruncation" />
                                     </VerticalStackLayout>
                                 </Grid>
                             </Border>

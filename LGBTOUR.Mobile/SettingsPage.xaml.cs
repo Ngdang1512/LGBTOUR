@@ -8,7 +8,7 @@ public partial class SettingsPage : ContentPage
     private readonly TourApiService _apiService;
     
     // Biến lưu trữ dữ liệu User để giao diện lấy ra hiển thị
-    private UserProfile _currentUser;
+    private UserProfile _currentUser = new() { FullName = "User", Email = "user@example.com", AvatarUrl = "" };
     public UserProfile CurrentUser 
     { 
         get => _currentUser; 

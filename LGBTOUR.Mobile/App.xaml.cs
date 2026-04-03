@@ -6,7 +6,7 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        // Khởi động vào trang Splash có Animation trước
-        MainPage = new AnimatedSplashPage();
+        // Khởi động vào trang LoginPage
+        MainPage = new LoginPage();
     }
 }

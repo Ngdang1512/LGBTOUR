@@ -11,7 +11,8 @@ public partial class LoginPage : ContentPage
 
     private async void OnLoginClicked(object sender, EventArgs e)
     {
-        Application.Current.MainPage = new AppShell();
+        if (Application.Current != null)
+            Application.Current.MainPage = new AppShell();
     }
 
     private async void OnRegisterLabelTapped(object sender, EventArgs e)
@@ -23,6 +24,7 @@ public partial class LoginPage : ContentPage
     private void OnSkipClicked(object sender, EventArgs e)
     {
         // Vào thẳng màn hình chính không cần đăng nhập
-        Application.Current.MainPage = new AppShell();
+        if (Application.Current != null)
+            Application.Current.MainPage = new AppShell();
     }
 }

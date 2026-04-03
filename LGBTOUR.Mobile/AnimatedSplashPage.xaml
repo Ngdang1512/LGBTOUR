@@ -2,22 +2,48 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LGBTOUR.Mobile.AnimatedSplashPage"
-             BackgroundColor="#4F46E5"
+             BackgroundColor="{StaticResource Primary}"
              Shell.NavBarIsVisible="False">
 
-    <Grid>
-        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
-            
-            <Label x:Name="AirplaneIcon" Text="✈️" FontSize="80" 
-                   HorizontalOptions="Center" VerticalOptions="Center" 
-                   Opacity="0" />
+    <Grid RowDefinitions="*, Auto, *" Padding="20">
+        <!-- Top Spacer -->
+        <VerticalStackLayout Grid.Row="0" />
 
-            <Label x:Name="BrandLabel" Text="LGBTOUR" FontSize="36" FontAttributes="Bold" 
-                   TextColor="White" HorizontalOptions="Center" Opacity="0"/>
+        <!-- Center Content -->
+        <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center" Spacing="30">
+            
+            <!-- Animated Icon -->
+            <Label x:Name="FoodIcon" Text="🍜" FontSize="100" 
+                   HorizontalOptions="Center" VerticalOptions="Center" 
+                   Opacity="0" 
+                   Rotation="0"
+                   TranslationY="0" />
+
+            <!-- Brand Label -->
+            <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                <Label x:Name="BrandLabel" Text="LGBTOUR" FontSize="42" FontAttributes="Bold" 
+                       TextColor="White" HorizontalOptions="Center" Opacity="0"
+                       TranslationY="20"/>
+                       
+                <Label x:Name="SubtitleLabel" Text="Du Lịch Ẩm Thực Quận 4" FontSize="16" 
+                       TextColor="{StaticResource PrimaryLight}" HorizontalOptions="Center" Opacity="0"
+                       TranslationY="20" LetterSpacing="1"/>
+            </VerticalStackLayout>
+
+            <!-- Slogan -->
+            <Label x:Name="SloganLabel" Text="Khám phá ẩm thực đường phố cùng hướng dẫn âm thanh" 
+                   FontSize="14" TextColor="#E0E7FF" HorizontalOptions="Center" 
+                   Opacity="0" TranslationY="20"
+                   LineBreakMode="WordWrap" HorizontalTextAlignment="Center" />
                    
-            <Label x:Name="SloganLabel" Text="Khám phá thế giới cùng chúng tôi..." FontSize="14" 
-                   TextColor="#E0E7FF" HorizontalOptions="Center" Opacity="0"/>
-                   
+        </VerticalStackLayout>
+
+        <!-- Bottom Progress -->
+        <VerticalStackLayout Grid.Row="2" VerticalOptions="End" Spacing="15" HorizontalOptions="Fill">
+            <ProgressBar x:Name="ProgressIndicator" Progress="0" HeightRequest="3" 
+                         ProgressColor="{StaticResource PrimaryLight}" />
+            <Label x:Name="LoadingLabel" Text="Đang tải..." FontSize="12" 
+                   TextColor="#E0E7FF" HorizontalOptions="Center" Opacity="0" />
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

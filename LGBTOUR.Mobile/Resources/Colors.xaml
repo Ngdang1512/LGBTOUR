@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    
+    <!-- Primary Colors (Orange) -->
+    <Color x:Key="Primary">#e65100</Color>
+    <Color x:Key="PrimaryLight">#ff833a</Color>
+    <Color x:Key="PrimaryDark">#ac1900</Color>
+    
+    <!-- Accent Colors (Teal) -->
+    <Color x:Key="Accent">#00838f</Color>
+    <Color x:Key="AccentLight">#4fb3bf</Color>
+    
+    <!-- Background & Surface -->
+    <Color x:Key="BgColor">#fafafa</Color>
+    <Color x:Key="SurfaceColor">#ffffff</Color>
+    
+    <!-- Text Colors -->
+    <Color x:Key="TextColor">#212121</Color>
+    <Color x:Key="TextSecondary">#616161</Color>
+    <Color x:Key="TextLight">#9e9e9e</Color>
+    
+    <!-- Border & Divider -->
+    <Color x:Key="BorderColor">#e0e0e0</Color>
+    <Color x:Key="DividerColor">#e0e0e0</Color>
+    
+    <!-- Status Colors -->
+    <Color x:Key="SuccessColor">#2e7d32</Color>
+    <Color x:Key="WarningColor">#f57f17</Color>
+    <Color x:Key="InfoColor">#1565c0</Color>
+    <Color x:Key="ErrorColor">#c62828</Color>
+    
+    <!-- Geofence/Location -->
+    <Color x:Key="LocationDot">#2196F3</Color>
+    <Color x:Key="GeofenceActive">#4CAF50</Color>
+    <Color x:Key="GeofenceInactive">#9E9E9E</Color>
+    
+</ResourceDictionary>

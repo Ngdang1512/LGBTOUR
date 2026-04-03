@@ -11,39 +11,56 @@ public partial class AnimatedSplashPage : ContentPage
     {
         base.OnAppearing();
 
-        // --- GIAI ĐOẠN 1: CHUẨN BỊ CẤT CÁNH ---
-        // Giấu máy bay xuống góc dưới bên trái, thu nhỏ lại và chúi mũi lên trên (góc -45 độ)
-        AirplaneIcon.TranslationX = -200;
-        AirplaneIcon.TranslationY = 200;
-        AirplaneIcon.Rotation = -45;
-        AirplaneIcon.Scale = 0.5;
+        try
+        {
+            // === GIAI ĐOẠN 1: KHỞI ĐỘNG (Food Icon spin & fade) ===
+            FoodIcon.Opacity = 0;
+            FoodIcon.Rotation = 0;
+            
+            await Task.WhenAll(
+                FoodIcon.FadeToAsync(1, 600, Easing.SinOut),
+                FoodIcon.RotateToAsync(360, 1000, Easing.SinInOut)
+            );
 
-        // --- GIAI ĐOẠN 2: BAY LÊN ---
-        // Cho máy bay hiện ra thật nhanh (0.3 giây)
-        _ = AirplaneIcon.FadeTo(1, 300);
+            // === GIAI ĐOẠN 2: BRAND LABEL (Slide up & fade) ===
+            BrandLabel.TranslationY = 20;
+            BrandLabel.Opacity = 0;
+            SubtitleLabel.TranslationY = 20;
+            SubtitleLabel.Opacity = 0;
+            
+            await Task.WhenAll(
+                BrandLabel.FadeToAsync(1, 500, Easing.SinOut),
+                BrandLabel.TranslateToAsync(0, 0, 500, Easing.CubicOut),
+                SubtitleLabel.FadeToAsync(1, 300, Easing.SinOut)
+            );
 
-        // Kích hoạt 3 hành động cùng lúc trong 1.5 giây: 
-        // Bay vào giữa (Translate) + Thẳng lái lại (Rotate) + Phóng to ra (Scale)
-        await Task.WhenAll(
-            AirplaneIcon.TranslateTo(0, 0, 1500, Easing.CubicOut), 
-            AirplaneIcon.RotateTo(0, 1500, Easing.SpringOut), // SpringOut tạo độ rung nhẹ như phi cơ cản gió
-            AirplaneIcon.ScaleTo(1, 1500, Easing.CubicOut)
-        );
+            // === GIAI ĐOẠN 3: SLOGAN & LOADING ===
+            SloganLabel.TranslationY = 20;
+            SloganLabel.Opacity = 0;
+            LoadingLabel.Opacity = 0;
+            
+            await Task.WhenAll(
+                SloganLabel.FadeToAsync(1, 400, Easing.SinOut),
+                SloganLabel.TranslateToAsync(0, 0, 400, Easing.CubicOut),
+                LoadingLabel.FadeToAsync(1, 400, Easing.SinOut)
+            );
 
-        // --- GIAI ĐOẠN 3: HIỆN CHỮ ---
-        BrandLabel.TranslationY = 15; 
-        await Task.WhenAll(
-            BrandLabel.FadeTo(1, 600, Easing.CubicOut),
-            BrandLabel.TranslateTo(0, 0, 600, Easing.CubicOut)
-        );
+            // === GIAI ĐOẠN 4: PROGRESS BAR (Loading animation) ===
+            await ProgressIndicator.ProgressTo(1.0, 1500, Easing.SinInOut);
 
-        await SloganLabel.FadeTo(1, 600, Easing.Linear);
-
-        // Đợi 1.5 giây để du khách ngắm nghía
-        await Task.Delay(1500);
-
-        // --- GIAI ĐOẠN 4: VÀO APP ---
-        var mainPage = Handler.MauiContext.Services.GetService<MainPage>();
-        Application.Current.MainPage = new NavigationPage(new LoginPage());
+            // === GIAI ĐOẠN 5: CHUYỂN HƯỚNG ===
+            await Task.Delay(500);
+            
+            // Chuyển đến trang chủ Shell
+            if (Application.Current != null)
+                Application.Current.MainPage = new AppShell();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in AnimatedSplashPage: {ex.Message}");
+            // Nếu animation thất bại, vẫn chuyển đến Shell
+            if (Application.Current != null)
+                Application.Current.MainPage = new AppShell();
+        }
     }
 }

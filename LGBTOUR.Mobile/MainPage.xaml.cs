@@ -9,7 +9,7 @@ public partial class MainPage : ContentPage
     private List<Place> _allPlaces = new();
     public ObservableCollection<Place> DisplayPlaces { get; set; } = new();
 
-    private readonly TourApiService _apiService;
+    private TourApiService? _apiService;
     private string _selectedCategory = "Phổ biến";
 
     public string SelectedCategory
@@ -26,16 +26,19 @@ public partial class MainPage : ContentPage
         }
     }
 
-    public MainPage(TourApiService apiService)
+    public MainPage()
     {
         InitializeComponent();
-        _apiService = apiService;
-        BindingContext = this; 
+        BindingContext = this;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        
+        // Get API service from dependency injection
+        _apiService ??= IPlatformApplication.Current?.Services.GetService<TourApiService>();
+        
         if (_allPlaces.Count == 0)
         {
             await LoadDataAsync();
@@ -46,13 +49,19 @@ public partial class MainPage : ContentPage
     {
         try
         {
-            var places = await _apiService.GetAllPlacesAsync();
-            _allPlaces = places;
-            FilterPlaces();
+            if (_apiService == null)
+                _apiService = IPlatformApplication.Current?.Services.GetService<TourApiService>();
+                
+            if (_apiService != null)
+            {
+                var places = await _apiService.GetAllPlacesAsync();
+                _allPlaces = places;
+                FilterPlaces();
+            }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Lỗi", "Không thể tải dữ liệu: " + ex.Message, "OK");
+            await DisplayAlertAsync("Lỗi", "Không thể tải dữ liệu: " + ex.Message, "OK");
         }
     }
 

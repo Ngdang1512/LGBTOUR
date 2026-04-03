@@ -5,7 +5,19 @@ public partial class MapPage : ContentPage
     public MapPage()
     {
         InitializeComponent();
-        LoadMap();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        try
+        {
+            LoadMap();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading map: {ex.Message}");
+        }
     }
 
     private void LoadMap()
@@ -27,9 +39,12 @@ public partial class MapPage : ContentPage
         </html>";
 
         // 2. Ép WebView đọc đoạn mã HTML này thay vì đọc link trực tiếp
-        MapWebView.Source = new HtmlWebViewSource
+        if (MapWebView != null)
         {
-            Html = mapHtml
-        };
+            MapWebView.Source = new HtmlWebViewSource
+            {
+                Html = mapHtml
+            };
+        }
     }
 }

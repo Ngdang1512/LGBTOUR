@@ -4,8 +4,6 @@
 @string/appbar_scrolling_view_behavior;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/171/jl/res/layout/navigationlayout.xml
 adaptive-icon;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appicon_round.xml
 adaptive-icon;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appicon.xml
-adaptive-icon;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg_round.xml
-adaptive-icon;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg.xml
 alpha;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/169/jl/res/anim/enterfromleft.xml
 alpha;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/169/jl/res/anim/exittoleft.xml
 alpha;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/171/jl/res/anim/nav_default_enter_anim.xml
@@ -22,8 +20,6 @@ attr;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/180/j
 attr;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/182/jl/res/values/values.xml
 background;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appicon_round.xml
 background;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appicon.xml
-background;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg_round.xml
-background;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg.xml
 bitmap;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/180/jl/res/drawable/common_google_signin_btn_icon_dark_normal.xml
 bitmap;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/180/jl/res/drawable/common_google_signin_btn_icon_disabled.xml
 bitmap;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/180/jl/res/drawable/common_google_signin_btn_icon_light_normal.xml
@@ -214,8 +210,6 @@ external-cache-path;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-a
 external-path;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/172/jl/res/xml/microsoft_maui_essentials_fileprovider_file_paths.xml
 foreground;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appicon_round.xml
 foreground;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appicon.xml
-foreground;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg_round.xml
-foreground;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg.xml
 integer;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/181/jl/res/values/values.xml
 item;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/170/jl/res/values/values.xml
 item;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/171/jl/res/drawable/maui_splash.xml
@@ -254,8 +248,6 @@ layer-list;obj/Debug/net10.0-android/resizetizer/sp/drawable/maui_splash_image.x
 microsoft.maui.controls.platform.compatibility.ShellFlyoutLayout;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/169/jl/res/layout/flyoutcontent.xml
 monochrome;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appicon_round.xml
 monochrome;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appicon.xml
-monochrome;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg_round.xml
-monochrome;obj/Debug/net10.0-android/resizetizer/r/mipmap-anydpi-v26/appiconfg.xml
 padding;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/180/jl/res/drawable/common_google_signin_btn_icon_disabled.xml
 padding;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/180/jl/res/drawable/common_google_signin_btn_text_disabled.xml
 paths;/Users/admin/Code/LGBTOUR/LGBTOUR.Mobile/obj/Debug/net10.0-android/lp/172/jl/res/xml/microsoft_maui_essentials_fileprovider_file_paths.xml
