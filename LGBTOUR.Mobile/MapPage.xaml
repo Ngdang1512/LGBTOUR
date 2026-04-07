@@ -47,7 +47,7 @@
             </Border.Shadow>
 
             <maps:Map x:Name="MyMap"
-                      IsShowingUser="True"
+                      IsShowingUser="False"
                       MapType="Street" />
         </Border>
 
