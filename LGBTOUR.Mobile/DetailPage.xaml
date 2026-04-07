@@ -17,18 +17,7 @@
                    HeightRequest="300"
                    HorizontalOptions="Fill" />
 
-            <!-- Floating Back Button -->
-            <Button Text="← Quay Lại" 
-                   BackgroundColor="{StaticResource SurfaceColor}"
-                   TextColor="{StaticResource TextColor}"
-                   FontSize="13" FontAttributes="Bold"
-                   Padding="12, 8" CornerRadius="20"
-                   Margin="20, -30, 20, 0"
-                   HorizontalOptions="Start"
-                   Opacity="0.95"
-                   Clicked="OnBackClicked" />
-
-            <VerticalStackLayout Padding="20, 25" Spacing="20">
+            <VerticalStackLayout Padding="20, 20" Spacing="20">
                 
                 <!-- Category & Rating Badge -->
                 <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12">

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LGBTOUR.Mobile")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+cb6f8091d9e68e01868b15a37cf8b355d3c00d22")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+285169c3f00c24ff8c2064ba803bf0d742ce6689")]
 [assembly: System.Reflection.AssemblyProductAttribute("LGBTOUR.Mobile")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LGBTOUR.Mobile")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

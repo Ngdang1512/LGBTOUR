@@ -10,21 +10,6 @@ public partial class MainPage : ContentPage
     public ObservableCollection<Place> DisplayPlaces { get; set; } = new();
 
     private TourApiService? _apiService;
-    private string _selectedCategory = "Phổ biến";
-
-    public string SelectedCategory
-    {
-        get => _selectedCategory;
-        set
-        {
-            if (_selectedCategory != value)
-            {
-                _selectedCategory = value;
-                OnPropertyChanged();
-                FilterPlaces(); 
-            }
-        }
-    }
 
     public MainPage()
     {
@@ -35,13 +20,16 @@ public partial class MainPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        
-        // Get API service from dependency injection
+
         _apiService ??= IPlatformApplication.Current?.Services.GetService<TourApiService>();
-        
+
         if (_allPlaces.Count == 0)
         {
             await LoadDataAsync();
+        }
+        else
+        {
+            FilterPlaces();
         }
     }
 
@@ -49,54 +37,41 @@ public partial class MainPage : ContentPage
     {
         try
         {
-            if (_apiService == null)
-                _apiService = IPlatformApplication.Current?.Services.GetService<TourApiService>();
-                
+            _apiService ??= IPlatformApplication.Current?.Services.GetService<TourApiService>();
+
             if (_apiService != null)
             {
-                var places = await _apiService.GetAllPlacesAsync();
-                _allPlaces = places;
+                // dùng dữ liệu đúng PRD
+                var places = await _apiService.GetProjectPlacesAsync();
+
+                _allPlaces = (places ?? new List<Place>())
+                    .Where(p => p != null && p.Latitude != 0 && p.Longitude != 0)
+                    .OrderByDescending(p => p.Priority)
+                    .ToList();
+
                 FilterPlaces();
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlertAsync("Lỗi", "Không thể tải dữ liệu: " + ex.Message, "OK");
+            await DisplayAlert("Lỗi", "Không thể tải dữ liệu: " + ex.Message, "OK");
         }
     }
 
     private void FilterPlaces()
     {
         DisplayPlaces.Clear();
-        var filteredList = _allPlaces;
 
-        if (_selectedCategory != "Phổ biến")
-        {
-            filteredList = _allPlaces.Where(p => p.Category == _selectedCategory).ToList();
-        }
-
-        foreach (var place in filteredList)
-        {
+        foreach (var place in _allPlaces)
             DisplayPlaces.Add(place);
-        }
     }
 
-    // Hàm mới: Xử lý khi người dùng bấm vào các nút Danh mục (Phổ biến, Ẩm thực...)
-    private void OnCategoryTapped(object sender, TappedEventArgs e)
-    {
-        if (e.Parameter is string category)
-        {
-            SelectedCategory = category;
-        }
-    }
-
-    // Hàm chuyển trang khi bấm vào Thẻ địa điểm
     private async void OnPlaceSelected(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is Place selectedPlace)
         {
             await Navigation.PushAsync(new DetailPage(selectedPlace));
-            ((CollectionView)sender).SelectedItem = null; 
+            ((CollectionView)sender).SelectedItem = null;
         }
     }
 }
