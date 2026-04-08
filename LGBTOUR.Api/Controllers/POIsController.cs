@@ -1,67 +1,41 @@
-﻿using LGBTOUR.Api.Data;
-using LGBTOUR.Api.Entities;
+﻿using LGBTOUR.Api.DTOs.Pois;
+using LGBTOUR.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LGBTOUR.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class POIsController : ControllerBase
+    public class PoisController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPoiService _poiService;
 
-        public POIsController(ApplicationDbContext context)
+        // Tiêm (Inject) Service vào Controller
+        public PoisController(IPoiService poiService)
         {
-            _context = context;
+            _poiService = poiService;
         }
-
-        // 1. Lấy danh sách tất cả địa điểm (GET)
+        [Authorize]
+        // GET: api/pois
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<POI>>> GetPOIs()
+        public async Task<ActionResult<IEnumerable<PoiDto>>> GetAllPois()
         {
-            return await _context.POIs.ToListAsync();
+            var result = await _poiService.GetAllPoisAsync();
+            return Ok(result); // Trả về HTTP Status 200 kèm data
         }
-
-        // 2. Lấy chi tiết 1 địa điểm theo ID (GET)
-        [HttpGet("{id}")]
-        public async Task<ActionResult<POI>> GetPOI(int id)
-        {
-            var poi = await _context.POIs.FindAsync(id);
-            if (poi == null) return NotFound();
-            return poi;
-        }
-
-        // 3. Thêm địa điểm mới (POST)
+        [Authorize]
+        // POST: api/pois
         [HttpPost]
-        public async Task<ActionResult<POI>> CreatePOI(POI poi)
+        public async Task<ActionResult<PoiDto>> CreatePoi([FromBody] CreatePoiDto createDto)
         {
-            _context.POIs.Add(poi);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPOI), new { id = poi.Id }, poi);
-        }
+            // [ApiController] đã tự động kiểm tra [Required] trong DTO cho bạn rồi
+            var createdPoi = await _poiService.CreatePoiAsync(createDto);
 
-        // 4. Sửa thông tin địa điểm (PUT)
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePOI(int id, POI poi)
-        {
-            if (id != poi.Id) return BadRequest("ID không khớp!");
-
-            _context.Entry(poi).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-
-        // 5. Xóa địa điểm (DELETE)
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePOI(int id)
-        {
-            var poi = await _context.POIs.FindAsync(id);
-            if (poi == null) return NotFound("Không tìm thấy địa điểm để xóa!");
-
-            _context.POIs.Remove(poi);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            // Trả về HTTP Status 201 (Created)
+            return CreatedAtAction(nameof(GetAllPois), new { id = createdPoi.Id }, createdPoi);
         }
     }
 }

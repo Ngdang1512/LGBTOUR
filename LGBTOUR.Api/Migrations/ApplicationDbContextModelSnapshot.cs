@@ -17,12 +17,12 @@ namespace LGBTOUR.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.4")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LGBTOUR.Api.Entities.Audio", b =>
+            modelBuilder.Entity("LGBTOUR.Api.Entities.Admin", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,28 +30,21 @@ namespace LGBTOUR.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AudioUrl")
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LanguageCode")
+                    b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("POIId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("POI_Id")
-                        .HasColumnType("int");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("POIId");
-
-                    b.ToTable("Audios");
+                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("LGBTOUR.Api.Entities.Narration", b =>
@@ -62,23 +55,32 @@ namespace LGBTOUR.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Content")
+                    b.Property<string>("AudioUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ContentText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DurationSeconds")
+                        .HasColumnType("int");
 
                     b.Property<string>("LanguageCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("POIId")
-                        .HasColumnType("int");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("POI_Id")
                         .HasColumnType("int");
 
+                    b.Property<string>("VoiceType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("POIId");
+                    b.HasIndex("POI_Id");
 
                     b.ToTable("Narrations");
                 });
@@ -128,14 +130,17 @@ namespace LGBTOUR.Api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("EstimatedTimeMinutes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -179,23 +184,20 @@ namespace LGBTOUR.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DurationSeconds")
-                        .HasColumnType("int");
+                    b.Property<long?>("DurationSeconds")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("EventType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Lat")
+                    b.Property<double?>("Lat")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lng")
+                    b.Property<double?>("Lng")
                         .HasColumnType("float");
 
                     b.Property<int?>("POIId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("POI_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -209,20 +211,13 @@ namespace LGBTOUR.Api.Migrations
                     b.ToTable("UserLogs");
                 });
 
-            modelBuilder.Entity("LGBTOUR.Api.Entities.Audio", b =>
-                {
-                    b.HasOne("LGBTOUR.Api.Entities.POI", "POI")
-                        .WithMany("Audios")
-                        .HasForeignKey("POIId");
-
-                    b.Navigation("POI");
-                });
-
             modelBuilder.Entity("LGBTOUR.Api.Entities.Narration", b =>
                 {
                     b.HasOne("LGBTOUR.Api.Entities.POI", "POI")
                         .WithMany("Narrations")
-                        .HasForeignKey("POIId");
+                        .HasForeignKey("POI_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("POI");
                 });
@@ -249,19 +244,20 @@ namespace LGBTOUR.Api.Migrations
             modelBuilder.Entity("LGBTOUR.Api.Entities.UserLog", b =>
                 {
                     b.HasOne("LGBTOUR.Api.Entities.POI", "POI")
-                        .WithMany()
-                        .HasForeignKey("POIId");
+                        .WithMany("UserLogs")
+                        .HasForeignKey("POIId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("POI");
                 });
 
             modelBuilder.Entity("LGBTOUR.Api.Entities.POI", b =>
                 {
-                    b.Navigation("Audios");
-
                     b.Navigation("Narrations");
 
                     b.Navigation("TourPOIs");
+
+                    b.Navigation("UserLogs");
                 });
 
             modelBuilder.Entity("LGBTOUR.Api.Entities.Tour", b =>

@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\LGBTOUR.Api",
+    "\\LGBTOUR.Api\\Controllers"
   ],
-  "SelectedNode": "\\LGBTOUR.AdminWeb",
+  "SelectedNode": "\\LGBTOUR.slnx",
   "PreviewInSolutionExplorer": false
 }

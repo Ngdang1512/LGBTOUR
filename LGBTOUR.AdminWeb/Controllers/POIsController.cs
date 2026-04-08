@@ -141,13 +141,30 @@ namespace LGBTOUR.AdminWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pOI = await _context.POIs.FindAsync(id);
-            if (pOI != null)
+            // Bắt transaction để đảm bảo tính nhất quán
+            await using var tx = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                _context.POIs.Remove(pOI);
+                // Xóa trực tiếp trên DB để tránh materialization/mismatch kiểu
+                await _context.Database.ExecuteSqlRawAsync(
+                    "DELETE FROM dbo.UserLogs WHERE POIId = {0}", id);
+
+                var pOI = await _context.POIs.FindAsync(id);
+                if (pOI != null)
+                {
+                    _context.POIs.Remove(pOI);
+                    await _context.SaveChangesAsync();
+                }
+
+                await tx.CommitAsync();
+            }
+            catch
+            {
+                await tx.RollbackAsync();
+                throw;
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

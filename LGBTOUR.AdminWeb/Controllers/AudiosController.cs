@@ -1,5 +1,5 @@
 ﻿using LGBTOUR.AdminWeb.Data;
-using LGBTOUR.AdminWeb.Entities; // Nhớ đổi lại thành LGBTOUR.Api.Entities nếu bạn vẫn dùng namespace cũ
+using LGBTOUR.AdminWeb.Entities; 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

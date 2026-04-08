@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LGBTOUR.AdminWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54fdc18529d5a1f4a9826220572d7128cb9e46c6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1de87abcb6dca29967ee360afd0e6e2605e72a7a")]
 [assembly: System.Reflection.AssemblyProductAttribute("LGBTOUR.AdminWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LGBTOUR.AdminWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

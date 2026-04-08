@@ -1,7 +1,8 @@
-﻿using LGBTOUR.Api.Data;
-using LGBTOUR.Api.Entities;
+﻿using LGBTOUR.Api.DTOs.Tours;
+using LGBTOUR.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace LGBTOUR.Api.Controllers
 {
@@ -9,52 +10,40 @@ namespace LGBTOUR.Api.Controllers
     [ApiController]
     public class ToursController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ITourService _tourService;
 
-        public ToursController(ApplicationDbContext context)
+        public ToursController(ITourService tourService)
         {
-            _context = context;
+            _tourService = tourService;
         }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tour>>> GetTours()
-        {
-            return await _context.Tours.ToListAsync();
-        }
-
+        [Authorize]
+        // GET: api/tours/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tour>> GetTour(int id)
+        public async Task<ActionResult<TourDetailDto>> GetTour(int id)
         {
-            var tour = await _context.Tours.FindAsync(id);
-            if (tour == null) return NotFound();
-            return tour;
-        }
+            var tour = await _tourService.GetTourByIdAsync(id);
+            if (tour == null) return NotFound("Không tìm thấy Tour này.");
 
+            return Ok(tour);
+        }
+        [Authorize]
+        // POST: api/tours
         [HttpPost]
-        public async Task<ActionResult<Tour>> CreateTour(Tour tour)
+        public async Task<ActionResult<TourDetailDto>> CreateTour([FromBody] CreateTourDto dto)
         {
-            _context.Tours.Add(tour);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetTour), new { id = tour.Id }, tour);
+            var newTour = await _tourService.CreateTourAsync(dto);
+            return CreatedAtAction(nameof(GetTour), new { id = newTour.Id }, newTour);
         }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTour(int id, Tour tour)
+        [Authorize]
+        // POST: api/tours/5/pois
+        // API này dùng để "nhét" 1 quán ăn vào 1 tour cụ thể
+        [HttpPost("{tourId}/pois")]
+        public async Task<IActionResult> AddPoiToTour(int tourId, [FromBody] AddPoiToTourDto dto)
         {
-            if (id != tour.Id) return BadRequest("ID không khớp");
-            _context.Entry(tour).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
+            var success = await _tourService.AddPoiToTourAsync(tourId, dto);
+            if (!success) return BadRequest("Lỗi! Tour hoặc Điểm đến không tồn tại.");
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTour(int id)
-        {
-            var tour = await _context.Tours.FindAsync(id);
-            if (tour == null) return NotFound();
-            _context.Tours.Remove(tour);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok("Đã thêm điểm đến vào Tour thành công!");
         }
     }
 }

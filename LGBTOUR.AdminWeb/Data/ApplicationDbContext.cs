@@ -28,6 +28,11 @@ namespace LGBTOUR.AdminWeb.Data
                 .HasOne(tp => tp.POI)
                 .WithMany(p => p.TourPOIs)
                 .HasForeignKey(tp => tp.POI_Id);
+            modelBuilder.Entity<UserLog>()
+               .HasOne(ul => ul.POI)
+               .WithMany(p => p.UserLogs)
+               .HasForeignKey(ul => ul.POIId)
+               .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

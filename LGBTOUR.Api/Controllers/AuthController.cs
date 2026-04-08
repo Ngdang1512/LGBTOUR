@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LGBTOUR.Api.DTOs.Auth;
+using LGBTOUR.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace LGBTOUR.Api.Controllers
 {
@@ -11,39 +9,22 @@ namespace LGBTOUR.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        [HttpPost("login")]
-        public IActionResult Login(string username, string password)
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService)
         {
-            // Tạm thời fix cứng tài khoản Admin để làm Đồ án cho nhanh
-            if (username == "admin" && password == "admin123")
-            {
-                // 1. Ghi thông tin người dùng lên thẻ
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Name, username),
-                    new Claim(ClaimTypes.Role, "Admin")
-                };
+            _authService = authService;
+        }
 
-                // 2. Lấy con dấu xác nhận (Phải giống hệt chuỗi bên Program.cs)
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("LGBTOUR_Super_Secret_Key_For_Admin_Only_12345!"));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        {
+            var token = await _authService.LoginAsync(dto);
 
-                // 3. In Thẻ từ (Cài đặt hạn sử dụng thẻ là 1 ngày)
-                var token = new JwtSecurityToken(
-                    claims: claims,
-                    expires: DateTime.Now.AddDays(1),
-                    signingCredentials: creds
-                );
+            if (token == null)
+                return Unauthorized("Tài khoản hoặc mật khẩu không chính xác.");
 
-                // 4. Trả thẻ (chuỗi Token) về cho người dùng
-                return Ok(new
-                {
-                    message = "Đăng nhập thành công!",
-                    token = new JwtSecurityTokenHandler().WriteToken(token)
-                });
-            }
-
-            return Unauthorized(new { message = "Sai tài khoản hoặc mật khẩu!" });
+            return Ok(new { Token = token, Message = "Đăng nhập thành công!" });
         }
     }
 }
