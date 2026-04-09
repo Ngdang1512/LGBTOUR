@@ -6,18 +6,18 @@ namespace LGBTOUR.Api.DTOs.Narrations
     public class CreateNarrationDto
     {
         [Required]
-        public int PoiId { get; set; } // Biết thuyết minh này của quán nào
+        public int PoiId { get; set; } // Audio này thuộc trạm/địa danh nào
 
         [Required]
         [MaxLength(10)]
-        public string LanguageCode { get; set; } = string.Empty; // "vi" hoặc "en"
+        public string LanguageCode { get; set; } = string.Empty;
 
         [Required]
         public string ContentText { get; set; } = string.Empty;
 
-        public string? VoiceType { get; set; } // Vd: "Giọng AI Nữ"
+        public string? VoiceType { get; set; }
 
-        // IFormFile là kiểu dữ liệu đặc biệt của .NET để hứng file từ Request
+        // Dùng IFormFile để nhận file mp3 từ Frontend truyền lên
         public IFormFile? AudioFile { get; set; }
     }
 }

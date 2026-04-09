@@ -2,6 +2,7 @@
 using LGBTOUR.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LGBTOUR.Api.Controllers
@@ -16,34 +17,72 @@ namespace LGBTOUR.Api.Controllers
         {
             _tourService = tourService;
         }
-        [Authorize]
+
+        // --- DÀNH CHO KHÁCH DU LỊCH (MOBILE APP) ---
+
+        // GET: api/tours
+        [HttpGet]
+        [AllowAnonymous] // THÊM MỚI: Mobile App cần lấy danh sách các tuyến để chọn
+        public async Task<ActionResult<IEnumerable<TourDetailDto>>> GetAllTours()
+        {
+            var tours = await _tourService.GetAllToursAsync();
+            return Ok(tours);
+        }
+
         // GET: api/tours/5
         [HttpGet("{id}")]
+        [AllowAnonymous] // MỞ CỬA: Khách phải xem được chi tiết tuyến xe chứ!
         public async Task<ActionResult<TourDetailDto>> GetTour(int id)
         {
             var tour = await _tourService.GetTourByIdAsync(id);
-            if (tour == null) return NotFound("Không tìm thấy Tour này.");
+            if (tour == null) return NotFound(new { message = "Không tìm thấy Tuyến xe buýt này." });
 
             return Ok(tour);
         }
-        [Authorize]
+
+
+        // --- DÀNH CHO ADMIN CMS ---
+
         // POST: api/tours
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<TourDetailDto>> CreateTour([FromBody] CreateTourDto dto)
         {
             var newTour = await _tourService.CreateTourAsync(dto);
             return CreatedAtAction(nameof(GetTour), new { id = newTour.Id }, newTour);
         }
-        [Authorize]
+
         // POST: api/tours/5/pois
-        // API này dùng để "nhét" 1 quán ăn vào 1 tour cụ thể
         [HttpPost("{tourId}/pois")]
+        [Authorize]
         public async Task<IActionResult> AddPoiToTour(int tourId, [FromBody] AddPoiToTourDto dto)
         {
             var success = await _tourService.AddPoiToTourAsync(tourId, dto);
-            if (!success) return BadRequest("Lỗi! Tour hoặc Điểm đến không tồn tại.");
+            if (!success) return BadRequest(new { message = "Lỗi! Tuyến xe buýt hoặc Trạm đến không tồn tại." });
 
-            return Ok("Đã thêm điểm đến vào Tour thành công!");
+            return Ok(new { message = "Đã thêm trạm vào Tuyến xe buýt thành công!" });
+        }
+
+        // PUT: api/tours/{id}
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateTour(int id, [FromBody] UpdateTourDto dto)
+        {
+            var success = await _tourService.UpdateTourAsync(id, dto);
+            if (!success) return NotFound(new { message = "Không tìm thấy Tuyến xe buýt này." });
+
+            return Ok(new { message = "Đã cập nhật thông tin Tuyến xe buýt thành công!" });
+        }
+
+        // DELETE: api/tours/{id}
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteTour(int id)
+        {
+            var success = await _tourService.DeleteTourAsync(id);
+            if (!success) return NotFound(new { message = "Không tìm thấy Tuyến xe buýt này để xóa." });
+
+            return Ok(new { message = "Đã xóa Tuyến xe buýt thành công!" });
         }
     }
 }

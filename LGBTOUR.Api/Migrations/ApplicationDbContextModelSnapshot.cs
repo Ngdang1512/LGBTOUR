@@ -60,7 +60,6 @@ namespace LGBTOUR.Api.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("ContentText")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DurationSeconds")
@@ -73,6 +72,14 @@ namespace LGBTOUR.Api.Migrations
 
                     b.Property<int>("POI_Id")
                         .HasColumnType("int");
+
+                    b.Property<string>("TranslatedDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TranslatedName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("VoiceType")
                         .HasMaxLength(50)
@@ -98,6 +105,9 @@ namespace LGBTOUR.Api.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsStopStation")
+                        .HasColumnType("bit");
 
                     b.Property<double>("Lat")
                         .HasColumnType("float");
@@ -134,13 +144,18 @@ namespace LGBTOUR.Api.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<int>("EstimatedTimeMinutes")
-                        .HasMaxLength(1000)
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<double>("TicketPrice")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalDistanceKm")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

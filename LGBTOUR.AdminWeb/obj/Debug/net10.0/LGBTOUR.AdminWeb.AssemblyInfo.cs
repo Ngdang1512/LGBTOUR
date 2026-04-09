@@ -11,11 +11,10 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("daf2e146-a9b8-44be-98cb-192914c0d43f")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("LGBTOUR.AdminWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1de87abcb6dca29967ee360afd0e6e2605e72a7a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+972125f0cfc42b985be76aebb67dff8a8c5100fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("LGBTOUR.AdminWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LGBTOUR.AdminWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

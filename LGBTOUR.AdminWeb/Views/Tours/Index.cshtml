@@ -1,53 +1,56 @@
-﻿@model IEnumerable<LGBTOUR.AdminWeb.Entities.Tour>
-
+﻿@model IEnumerable<LGBTOUR.AdminWeb.Models.TourViewModel>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý Tuyến Xe Buýt";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                    <!-- Dưới thẻ td chứa các action -->
-                    <a asp-action="Itinerary" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">
-                        <i class="fas fa-route"></i> Lộ trình
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
-                    <!-- ... Details, Delete -->
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h3 class="card-title font-weight-bold m-0 text-warning">
+            <i class="fas fa-bus mr-2"></i> Danh Sách Tuyến Hop-on Hop-off
+        </h3>
+        <a asp-action="Create" class="btn btn-primary btn-sm ml-auto font-weight-bold">
+            <i class="fas fa-plus mr-1"></i> Tạo Tuyến Mới
+        </a>
+    </div>
+    <div class="card-body p-0 table-responsive">
+        <table class="table table-hover table-striped m-0">
+            <thead class="bg-light">
+                <tr>
+                    <th width="50" class="text-center">ID</th>
+                    <th>Tên Tuyến</th>
+                    <th class="text-center">Thời gian</th>
+                    <th class="text-center">Quãng đường</th>
+                    <th class="text-center">Giá vé</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="6" class="text-center py-4 text-muted">Chưa có tuyến xe nào.</td></tr>
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-middle text-center fw-bold">@item.Id</td>
+                        <td class="align-middle font-weight-bold text-primary">
+                            @item.Name
+                            <div class="text-muted font-weight-normal" style="font-size: 0.85rem;">@item.Description</div>
+                        </td>
+                        <td class="align-middle text-center"><span class="badge badge-info">@item.EstimatedTimeMinutes phút</span></td>
+                        <td class="align-middle text-center">@item.TotalDistanceKm km</td>
+                        <td class="align-middle text-center text-success fw-bold">@item.TicketPrice.ToString("N0") VNĐ</td>
+                        <td class="align-middle text-center">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-secondary" title="Sửa thông tin">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Xóa tuyến này">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

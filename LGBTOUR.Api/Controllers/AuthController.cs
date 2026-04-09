@@ -10,21 +10,15 @@ namespace LGBTOUR.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
+        public AuthController(IAuthService authService) => _authService = authService;
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             var token = await _authService.LoginAsync(dto);
+            if (token == null) return Unauthorized(new { message = "Sai tài khoản hoặc mật khẩu." });
 
-            if (token == null)
-                return Unauthorized("Tài khoản hoặc mật khẩu không chính xác.");
-
-            return Ok(new { Token = token, Message = "Đăng nhập thành công!" });
+            return Ok(new { token = token }); // Trả về object chứa token
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using LGBTOUR.Api.DTOs.UserLogs;
 using LGBTOUR.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace LGBTOUR.Api.Controllers
 
         // GET: api/dashboard/top-pois
         [HttpGet("top-pois")]
+        [Authorize] // CHỈ ADMIN mới được xem thống kê
         public async Task<ActionResult<IEnumerable<PoiStatisticDto>>> GetTopPois([FromQuery] int top = 5)
         {
             var result = await _userLogService.GetTopListenedPoisAsync(top);
@@ -26,8 +28,8 @@ namespace LGBTOUR.Api.Controllers
         }
 
         // POST: api/dashboard/record-listen
-        // (API này dành cho App Mobile gọi khi du khách nghe xong 1 bài thuyết minh)
         [HttpPost("record-listen")]
+        [AllowAnonymous] // MỞ CỬA cho Mobile App gọi ngầm không cần đăng nhập
         public async Task<IActionResult> RecordListen([FromQuery] string userId, [FromQuery] int poiId, [FromQuery] int duration)
         {
             await _userLogService.RecordListenEventAsync(userId, poiId, duration);

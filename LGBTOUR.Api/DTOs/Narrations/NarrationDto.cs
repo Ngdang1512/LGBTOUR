@@ -8,5 +8,8 @@
         public string? AudioUrl { get; set; }
         public int DurationSeconds { get; set; }
         public string? VoiceType { get; set; }
+
+        // Added so DTO can carry the translated display name if needed by callers
+        public string TranslatedName { get; set; } = string.Empty;
     }
 }

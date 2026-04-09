@@ -7,17 +7,20 @@ namespace LGBTOUR.Api.DTOs.Tours
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public int EstimatedTimeMinutes { get; set; }
+        public int EstimatedTimeMinutes { get; set; } // Thời gian chạy hết tuyến (Phút)
 
-        // Danh sách các quán ăn thuộc tour này, đã được sắp xếp
+        // MỚI: Dành cho xe buýt
+        public double TicketPrice { get; set; }
+        public double TotalDistanceKm { get; set; }
+
+        // Danh sách các trạm xe buýt sẽ đi qua (đã sắp xếp đúng thứ tự)
         public List<TourPoiItemDto> Pois { get; set; } = new List<TourPoiItemDto>();
     }
 
-    // Class phụ trợ để hiển thị quán ăn trong 1 tour
     public class TourPoiItemDto
     {
         public int PoiId { get; set; }
         public string PoiName { get; set; } = string.Empty;
-        public int DisplayOrder { get; set; } // Quán nào đi trước, quán nào đi sau
+        public int DisplayOrder { get; set; } // Thứ tự trạm (1, 2, 3...)
     }
 }

@@ -8,6 +8,6 @@ namespace LGBTOUR.Api.DTOs.Tours
         public int PoiId { get; set; }
 
         [Required]
-        public int DisplayOrder { get; set; } // Quyết định quán này nằm thứ mấy trong Tour
+        public int DisplayOrder { get; set; } // Quyết định xe buýt tới trạm này thứ mấy
     }
 }

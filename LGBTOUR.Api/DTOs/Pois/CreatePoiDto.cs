@@ -11,9 +11,12 @@ namespace LGBTOUR.Api.DTOs.Pois
         public string? Description { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
+
+        // Bán kính (mét) để xe buýt nhận diện tự động bật audio
         public int Radius { get; set; }
         public int Priority { get; set; }
-        // Lưu ý: Không có trường Id ở đây, vì Id do DB tự tạo.
-        // Tạm thời chưa bắt upload Image vội, sẽ xử lý ở API riêng.
+
+        // MỚI: Đánh dấu có phải trạm dừng hay không
+        public bool IsStopStation { get; set; }
     }
 }

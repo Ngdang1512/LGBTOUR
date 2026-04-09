@@ -5,28 +5,27 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="container-fluid mt-4">
-    <h2 class="fw-bold mb-4">Tổng quan hoạt động Tour (Quận 1)</h2>
+<div class="container-fluid">
+    <h3 class="fw-bold mb-4 text-dark"><i class="fas fa-tachometer-alt mr-2"></i> Tổng Quan Hoạt Động (Quận 1)</h3>
 
     <div class="row">
         <div class="col-md-8">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-0">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">📍 Bản đồ Nhiệt (Khu vực du khách tập trung nghe Audio)</h5>
+                    <h5 class="card-title m-0 font-weight-bold"><i class="fas fa-fire mr-1"></i> Bản đồ Nhiệt (Khu vực du khách tập trung nghe)</h5>
                 </div>
-                <div class="card-body">
-                    <div id="heatmap" style="height: 500px; width: 100%; border-radius: 5px;"></div>
+                <div class="card-body p-1">
+                    <div id="heatmap" style="height: 500px; width: 100%; border-radius: 4px;"></div>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-0">
                 <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">📊 Top 5 Địa điểm Hot nhất</h5>
+                    <h5 class="card-title m-0 font-weight-bold"><i class="fas fa-chart-bar mr-1"></i> Top 5 Trạm Hot Nhất</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="topPoiChart" style="height: 450px; width: 100%;"></canvas>
@@ -36,52 +35,52 @@
     </div>
 </div>
 
-<script>
-    
-    // --- 1. XỬ LÝ BẢN ĐỒ NHIỆT (HEATMAP) ---
-    var map = L.map('heatmap').setView([10.7769, 106.7009], 15); // Focus trung tâm Q1
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+@section Scripts {
+    <script>
+        // --- 1. XỬ LÝ BẢN ĐỒ NHIỆT (HEATMAP) ---
+        var map = L.map('heatmap').setView([10.7769, 106.7009], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap - LGBTOUR'
-    }).addTo(map);
+        }).addTo(map);
 
-    // Nhận dữ liệu Tọa độ từ C# truyền xuống
-    var rawHeatData = @Html.Raw(ViewBag.HeatMapData ?? "[]");
+        // Nhận dữ liệu Tọa độ từ C#
+        var rawHeatData = @Html.Raw(ViewBag.HeatMapData ?? "[]");
 
-    // Chuyển format dữ liệu cho phù hợp với thư viện leaflet.heat
-    var heatPoints = rawHeatData.map(function(item) {
+        var heatPoints = rawHeatData.map(function(item) {
         return [item.lat, item.lng, item.intensity];
-    });
+        });
 
-    // Vẽ lớp nhiệt lên bản đồ
-    if(heatPoints.length > 0){
-        L.heatLayer(heatPoints, { radius: 25, blur: 15, maxZoom: 17 }).addTo(map);
-    } else {
-        console.log("Chưa có dữ liệu người dùng nghe audio để vẽ Heatmap.");
-    }
+        if(heatPoints.length > 0){
+        L.heatLayer(heatPoints, { radius: 30, blur: 20, maxZoom: 17 }).addTo(map);
+        }
 
-    // --- 2. XỬ LÝ BIỂU ĐỒ CHART.JS ---
-    var rawChartData = @Html.Raw(ViewBag.TopPOIsData ?? "[]");
+        // --- 2. XỬ LÝ BIỂU ĐỒ CHART.JS ---
+        var rawChartData = @Html.Raw(ViewBag.TopPOIsData ?? "[]");
 
-    var labels = rawChartData.map(function(item) { return item.Name; });
-    var counts = rawChartData.map(function(item) { return item.Count; });
+        var labels = rawChartData.map(function(item) { return item.PoiName; });
+        var counts = rawChartData.map(function(item) { return item.TotalListens; });
 
-    var ctx = document.getElementById('topPoiChart').getContext('2d');
-    new Chart(ctx, {
+        var ctx = document.getElementById('topPoiChart').getContext('2d');
+        new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labels,
-            datasets: [{
-                label: 'Số lượt nghe',
-                data: counts,
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
+        labels: labels,
+        datasets: [{
+        label: 'Số lượt nghe',
+        data: counts,
+        backgroundColor: 'rgba(40, 167, 69, 0.7)',
+        borderColor: 'rgba(40, 167, 69, 1)',
+        borderWidth: 1,
+        borderRadius: 4
+        }]
         },
         options: {
-            responsive: true,
-            scales: { y: { beginAtZero: true } }
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 1 } }
         }
-    });
-</script>
+        }
+        });
+    </script>
+}

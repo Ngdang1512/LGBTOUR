@@ -1,176 +1,182 @@
-﻿using LGBTOUR.AdminWeb.Data;
-using LGBTOUR.AdminWeb.Entities;
+﻿using LGBTOUR.AdminWeb.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net.Http.Headers;
 
 namespace LGBTOUR.AdminWeb.Controllers
 {
-    [Authorize]
-    public class POIsController : Controller
+    [Authorize] // Bắt buộc đăng nhập mới được vào
+    public class PoisController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public POIsController(ApplicationDbContext context)
+        public PoisController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
-        // GET: POIs1
+        // GET: Hiển thị danh sách POIs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.POIs.ToListAsync());
-        }
+            var client = _httpClientFactory.CreateClient("ApiClient");
 
-        // GET: POIs1/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            // Gọi API lấy danh sách trạm (API này hôm bữa mình để AllowAnonymous nên gọi thẳng không cần Token)
+            var response = await client.GetAsync("api/Pois");
+
+            if (response.IsSuccessStatusCode)
             {
-                return NotFound();
+                var pois = await response.Content.ReadFromJsonAsync<List<PoiViewModel>>();
+                return View(pois);
             }
 
-            var pOI = await _context.POIs
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (pOI == null)
-            {
-                return NotFound();
-            }
-
-            return View(pOI);
+            // Nếu lỗi API, trả về mảng rỗng để web không bị sập
+            return View(new List<PoiViewModel>());
         }
-
-        // GET: POIs1/Create
+        // GET: Hiển thị form Thêm mới
+        [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            // Trả về view kèm vài giá trị mặc định cho tiện
+            return View(new PoiViewModel { Radius = 100, Priority = 1, IsStopStation = true });
         }
 
-        // POST: POIs1/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Xử lý khi bấm nút Lưu
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Lat,Lng,Radius,Image,Priority")] POI pOI)
+        public async Task<IActionResult> Create(PoiViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+
+            var client = _httpClientFactory.CreateClient("ApiClient");
+
+            // 1. Móc cái Token từ Cookie ra để xin phép API
+            var token = User.FindFirst("JWToken")?.Value;
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // 2. Gói dữ liệu lại cho khớp với CreatePoiDto của API
+            var createData = new
             {
-                _context.Add(pOI);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                name = model.Name,
+                description = model.Description,
+                lat = model.Lat,
+                lng = model.Lng,
+                radius = model.Radius,
+                priority = model.Priority,
+                isStopStation = model.IsStopStation
+            };
+
+            // 3. Bắn sang API
+            var response = await client.PostAsJsonAsync("api/Pois", createData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index"); // Thành công thì về trang danh sách
             }
-            return View(pOI);
+
+            ViewBag.Error = "Có lỗi từ API, vui lòng kiểm tra lại!";
+            return View(model);
+        }
+        // GET: Lấy thông tin trạm cũ đưa lên Form
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var response = await client.GetAsync("api/Pois");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var pois = await response.Content.ReadFromJsonAsync<List<PoiViewModel>>();
+                var poi = pois?.FirstOrDefault(p => p.Id == id);
+
+                if (poi != null) return View(poi);
+            }
+            return RedirectToAction("Index"); // Không tìm thấy thì đá về danh sách
         }
 
-        // GET: POIs1/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var pOI = await _context.POIs.FindAsync(id);
-            if (pOI == null)
-            {
-                return NotFound();
-            }
-            return View(pOI);
-        }
-
-        // POST: POIs1/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Lưu thông tin mới
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Lat,Lng,Radius,Image,Priority")] POI pOI)
+        public async Task<IActionResult> Edit(int id, PoiViewModel model, IFormFile? uploadImage)
         {
-            if (id != pOI.Id)
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = User.FindFirst("JWToken")?.Value;
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // 1. Gọi API PUT để cập nhật thông tin chữ / tọa độ
+            var updateData = new
             {
-                return NotFound();
+                name = model.Name,
+                description = model.Description,
+                lat = model.Lat,
+                lng = model.Lng,
+                radius = model.Radius,
+                priority = model.Priority,
+                isStopStation = model.IsStopStation
+            };
+
+            var updateResponse = await client.PutAsJsonAsync($"api/Pois/{id}", updateData);
+
+            if (updateResponse.IsSuccessStatusCode)
+            {
+                // 2. LOGIC NÂNG CAO: Nếu Admin chọn ảnh mới, gọi thêm API Upload
+                if (uploadImage != null && uploadImage.Length > 0)
+                {
+                    using var content = new MultipartFormDataContent();
+                    var fileContent = new StreamContent(uploadImage.OpenReadStream());
+                    fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(uploadImage.ContentType);
+                    content.Add(fileContent, "imageFile", uploadImage.FileName);
+
+                    await client.PostAsync($"api/Pois/{id}/image", content);
+                }
+
+                TempData["SuccessMessage"] = "Cập nhật Trạm thành công!";
+                return RedirectToAction("Index");
             }
 
-            if (ModelState.IsValid)
+            ViewBag.Error = "Lỗi hệ thống khi cập nhật thông tin!";
+            return View(model);
+        }
+        // GET: Hiển thị trang Xác nhận Xóa
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var response = await client.GetAsync("api/Pois");
+
+            if (response.IsSuccessStatusCode)
             {
-                try
-                {
-                    _context.Update(pOI);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!POIExists(pOI.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var pois = await response.Content.ReadFromJsonAsync<List<PoiViewModel>>();
+                var poi = pois?.FirstOrDefault(p => p.Id == id);
+
+                // Nếu tìm thấy trạm thì đưa dữ liệu sang View để hiển thị
+                if (poi != null) return View(poi);
             }
-            return View(pOI);
+
+            // Lỗi hoặc không thấy thì đá về trang chủ
+            return RedirectToAction("Index");
         }
 
-        // GET: POIs1/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var pOI = await _context.POIs
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (pOI == null)
-            {
-                return NotFound();
-            }
-
-            return View(pOI);
-        }
-
-        // POST: POIs1/Delete/5
+        // POST: Xử lý gửi lệnh Xóa xuống API
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            // Bắt transaction để đảm bảo tính nhất quán
-            await using var tx = await _context.Database.BeginTransactionAsync();
+            var client = _httpClientFactory.CreateClient("ApiClient");
 
-            try
+            // Lấy Token từ Cookie nhét vào Header
+            var token = User.FindFirst("JWToken")?.Value;
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // Gọi API DELETE
+            var response = await client.DeleteAsync($"api/Pois/{id}");
+
+            if (response.IsSuccessStatusCode)
             {
-                // Xóa trực tiếp trên DB để tránh materialization/mismatch kiểu
-                await _context.Database.ExecuteSqlRawAsync(
-                    "DELETE FROM dbo.UserLogs WHERE POIId = {0}", id);
-
-                var pOI = await _context.POIs.FindAsync(id);
-                if (pOI != null)
-                {
-                    _context.POIs.Remove(pOI);
-                    await _context.SaveChangesAsync();
-                }
-
-                await tx.CommitAsync();
+                TempData["SuccessMessage"] = "Đã xóa Trạm thành công!";
             }
-            catch
+            else
             {
-                await tx.RollbackAsync();
-                throw;
+                TempData["ErrorMessage"] = "Xóa thất bại! Trạm này có thể đang được sử dụng trong một Tuyến xe buýt.";
             }
 
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool POIExists(int id)
-        {
-            return _context.POIs.Any(e => e.Id == id);
+            return RedirectToAction("Index");
         }
     }
 }

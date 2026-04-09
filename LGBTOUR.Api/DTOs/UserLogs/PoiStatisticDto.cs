@@ -4,7 +4,7 @@
     {
         public int PoiId { get; set; }
         public string PoiName { get; set; } = string.Empty;
-        public int TotalListens { get; set; } // Tổng số lượt nghe
-        public double AverageDurationSeconds { get; set; } // Nghe trung bình bao nhiêu giây
+        public int TotalListens { get; set; } // Trạm nào được khách nghe thuyết minh nhiều nhất
+        public double AverageDurationSeconds { get; set; }
     }
 }

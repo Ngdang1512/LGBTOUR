@@ -1,4 +1,5 @@
 ﻿using LGBTOUR.Api.DTOs.Pois;
+using Microsoft.AspNetCore.Http; // Bổ sung thư viện này để dùng IFormFile
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,10 +7,14 @@ namespace LGBTOUR.Api.Services
 {
     public interface IPoiService
     {
-        // Lấy danh sách tất cả quán ăn
         Task<IEnumerable<PoiDto>> GetAllPoisAsync();
-
-        // Thêm một quán ăn mới
         Task<PoiDto> CreatePoiAsync(CreatePoiDto createPoiDto);
+
+        // --- THÊM HÀM NÀY CHO TÍNH NĂNG UPLOAD ẢNH ---
+        Task<bool> UploadImageAsync(int poiId, IFormFile imageFile);
+        // Thêm API tìm trạm gần nhất, bây giờ nhận thêm tham số ngôn ngữ
+        Task<NearbyPoiDto?> GetNearbyPoiAsync(double currentLat, double currentLng, string langcode);
+        Task<bool> UpdatePoiAsync(int id, UpdatePoiDto dto);
+        Task<bool> DeletePoiAsync(int id);
     }
 }

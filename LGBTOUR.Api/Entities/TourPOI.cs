@@ -7,7 +7,7 @@ namespace LGBTOUR.Api.Entities
         public int Id { get; set; }
 
         public int TourId { get; set; }
-        public Tour Tour { get; set; }
+        public Tour Tour { get; set; }//cho phép lấy thông tin từ bảng tour 
 
         // Chú ý: Đặt tên là POI_Id để khớp 100% với file ApplicationDbContext
         public int POI_Id { get; set; }

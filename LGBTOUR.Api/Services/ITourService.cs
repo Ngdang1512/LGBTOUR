@@ -1,12 +1,21 @@
 ﻿using LGBTOUR.Api.DTOs.Tours;
+using LGBTOUR.Api.Entities;
+using System.Collections.Generic; // Bổ sung thư viện này để dùng IEnumerable
 using System.Threading.Tasks;
 
 namespace LGBTOUR.Api.Services
 {
     public interface ITourService
     {
+        // >>> ĐÂY LÀ DÒNG VỪA ĐƯỢC THÊM VÀO ĐỂ FIX LỖI <<<
+        Task<IEnumerable<TourDetailDto>> GetAllToursAsync();
+        // Thêm dòng này vào
+      
+
         Task<TourDetailDto> CreateTourAsync(CreateTourDto dto);
         Task<TourDetailDto?> GetTourByIdAsync(int id);
         Task<bool> AddPoiToTourAsync(int tourId, AddPoiToTourDto dto);
+        Task<bool> UpdateTourAsync(int id, UpdateTourDto dto);
+        Task<bool> DeleteTourAsync(int id);
     }
 }

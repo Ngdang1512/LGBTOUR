@@ -1,39 +1,52 @@
-﻿@model LGBTOUR.AdminWeb.Entities.Tour
-
+﻿@model LGBTOUR.AdminWeb.Models.TourViewModel
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Xóa Tuyến Xe";
 }
 
-<h1>Delete</h1>
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card card-danger shadow-sm border-0">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold"><i class="fas fa-exclamation-triangle mr-2"></i> CẢNH BÁO XÓA TUYẾN XE</h3>
+            </div>
+            <div class="card-body text-center py-4">
+                <div class="mb-3 text-danger">
+                    <i class="fas fa-bus-alt fa-4x mb-3"></i>
+                </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Tour</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+                <h4 class="text-danger font-weight-bold mb-2">@Model.Name</h4>
+                <p class="text-muted mb-4">Bạn có chắc chắn muốn xóa tuyến xe buýt này khỏi hệ thống không?</p>
+                
+                <div class="row text-left justify-content-center mb-4">
+                    <div class="col-10">
+                        <ul class="list-group list-group-unbordered text-sm">
+                            <li class="list-group-item px-0">
+                                <b>Thời gian đi:</b> <span class="float-right text-dark">@Model.EstimatedTimeMinutes phút</span>
+                            </li>
+                            <li class="list-group-item px-0">
+                                <b>Giá vé:</b> <span class="float-right text-success font-weight-bold">@Model.TicketPrice.ToString("N0") VNĐ</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning text-left text-sm mb-0">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    <strong>Lưu ý:</strong> Hành động này không thể hoàn tác. Các điểm tham quan (POI) đã được gắn vào tuyến này sẽ tự động bị gỡ liên kết nhưng không bị xóa khỏi hệ thống.
+                </div>
+
+            </div>
+            <div class="card-footer bg-light text-center py-3">
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <a asp-action="Index" class="btn btn-default font-weight-bold mr-2 px-4">
+                        Hủy Bỏ
+                    </a>
+                    <button type="submit" class="btn btn-danger font-weight-bold px-4 shadow-sm">
+                        <i class="fas fa-trash-alt mr-1"></i> Xóa Vĩnh Viễn
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

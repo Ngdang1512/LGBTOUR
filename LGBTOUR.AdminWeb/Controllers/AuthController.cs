@@ -1,54 +1,70 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using LGBTOUR.AdminWeb.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace LGBTOUR.AdminWeb.Controllers
 {
     public class AuthController : Controller
     {
-        // Hiện trang Đăng nhập
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public AuthController(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
+
         [HttpGet]
         public IActionResult Login()
         {
-            // Nếu đã đăng nhập rồi thì cho vào thẳng Dashboard
+            // Nếu đã có Cookie (đã đăng nhập) thì cho vô thẳng Dashboard
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View();
+            return View(new LoginViewModel());
         }
 
-        // Xử lý khi bấm nút Đăng nhập
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            // TÀI KHOẢN MẶC ĐỊNH (Bạn có thể đổi lại tùy ý)
-            if (username == "admin" && password == "123456")
+            if (!ModelState.IsValid) return View(model);
+
+            var client = _httpClientFactory.CreateClient("ApiClient");
+
+            // 1. Gửi request Login tới API
+            var response = await client.PostAsJsonAsync("api/Auth/login", new
             {
-                // Tạo chứng minh thư (Claims) cho Admin
+                username = model.Username,
+                password = model.Password
+            });
+
+            if (response.IsSuccessStatusCode)
+            {
+                // 2. Đọc cục JSON API trả về (chứa Token)
+                var result = await response.Content.ReadFromJsonAsync<JsonElement>();
+                string token = result.GetProperty("token").GetString() ?? "";
+
+                // 3. Cất Token vào Cookie của trình duyệt Web Admin
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, "Quản Trị Viên"),
-                    new Claim(ClaimTypes.Role, "Administrator")
+                    new Claim(ClaimTypes.Name, model.Username),
+                    new Claim("JWToken", token) // Mấu chốt là cái này!
                 };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                // Lưu vào Cookie
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity));
-
-                return RedirectToAction("Index", "Home"); // Đăng nhập xong vào trang chủ
+                // 4. Thành công thì phi thẳng vào màn hình chính
+                return RedirectToAction("Index", "Home");
             }
 
-            // Nếu sai pass
             ViewBag.Error = "Tài khoản hoặc mật khẩu không chính xác!";
-            return View();
+            return View(model);
         }
 
-        // Đăng xuất
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
