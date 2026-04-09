@@ -15,7 +15,7 @@
 				"-p:AndroidAttachDebugger=false",
 				"-p:EnableDiagnostics=false",
 				"-p:EnableMauiXamlDiagnostics=false",
-				"/Users/admin/Code/LGBTOUR/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj"
+				"/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj"
 			],
 			"isBackground": false
 		},
@@ -23,7 +23,7 @@
 			"label": "Reinstall Android App",
 			"type": "shell",
 			"command": "bash",
-			"args": ["/Users/admin/Code/LGBTOUR/scripts/reinstall_android.sh"],
+			"args": ["/Users/admin/Code/SaigonAudioTour/scripts/reinstall_android.sh"],
 			"isBackground": false
 		}
 	]

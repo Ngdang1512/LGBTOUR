@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_ROOT="/Users/admin/Code/LGBTOUR"
+REPO_ROOT="/Users/admin/Code/SaigonAudioTour"
 PROJECT_PATH="$REPO_ROOT/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj"
 PACKAGE_ID="com.companyname.saigonaudiotour.mobile"
 if ! adb get-state >/dev/null 2>&1; then
