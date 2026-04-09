@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SaigonAudioTour.Mobile.AnimatedSplashPage"
+             BackgroundColor="{StaticResource Primary}"
+             Shell.NavBarIsVisible="False">
+
+       <Grid RowDefinitions="*, Auto, *" Padding="20">
+        <!-- Top Spacer -->
+        <VerticalStackLayout Grid.Row="0" />
+
+        <!-- Center Content -->
+              <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center" Spacing="24">
+            
+                     <!-- Animated Brand Badge -->
+                     <Border x:Name="Badge" WidthRequest="180" HeightRequest="180" 
+                                   StrokeShape="RoundRectangle 90"
+                                   Background="{StaticResource Primary}"
+                                   Stroke="#F97316"
+                                   StrokeThickness="4"
+                                   Opacity="0"
+                                   Scale="0.82">
+                            <Grid>
+                                   <Label Text="SAT"
+                                             FontSize="58"
+                                             FontAttributes="Bold"
+                                             TextColor="White"
+                                             HorizontalOptions="Center"
+                                             VerticalOptions="Center"
+                                             CharacterSpacing="8" />
+                            </Grid>
+                     </Border>
+
+            <!-- Brand Label -->
+            <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                            <Label x:Name="BrandLabel" Text="SAT" FontSize="42" FontAttributes="Bold" 
+                       TextColor="White" HorizontalOptions="Center" Opacity="0"
+                       TranslationY="20"/>
+                       
+                            <Label x:Name="SubtitleLabel" Text="Saigon Audio Tour" FontSize="16" 
+                       TextColor="{StaticResource PrimaryLight}" HorizontalOptions="Center" Opacity="0"
+                       TranslationY="20" CharacterSpacing="1"/>
+            </VerticalStackLayout>
+
+            <!-- Slogan -->
+                     <Label x:Name="SloganLabel" Text="Thuyết minh tự động • Bản đồ thông minh • Trải nghiệm thành phố" 
+                   FontSize="14" TextColor="#E0E7FF" HorizontalOptions="Center" 
+                   Opacity="0" TranslationY="20"
+                   LineBreakMode="WordWrap" HorizontalTextAlignment="Center" />
+                   
+        </VerticalStackLayout>
+
+        <!-- Bottom Progress -->
+        <VerticalStackLayout Grid.Row="2" VerticalOptions="End" Spacing="15" HorizontalOptions="Fill">
+            <ProgressBar x:Name="ProgressIndicator" Progress="0" HeightRequest="3" 
+                         ProgressColor="{StaticResource PrimaryLight}" />
+            <Label x:Name="LoadingLabel" Text="Đang tải..." FontSize="12" 
+                   TextColor="#E0E7FF" HorizontalOptions="Center" Opacity="0" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

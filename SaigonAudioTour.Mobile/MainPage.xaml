@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SaigonAudioTour.Mobile"
+             xmlns:models="clr-namespace:SaigonAudioTour.Mobile.Models"
+             x:Class="SaigonAudioTour.Mobile.MainPage"
+             x:DataType="local:MainPage"
+             BackgroundColor="{StaticResource BgColor}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="20, 50, 20, 10" RowSpacing="20">
+            
+            <!-- Header with Avatar -->
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                    <Label Text="Chào mừng bạn! 👋" 
+                           TextColor="{StaticResource TextSecondary}" FontSize="14" 
+                              CharacterSpacing="0.5" />
+                          <Label Text="Tuyến bus 2 tầng Quận 1" 
+                           TextColor="{StaticResource TextColor}" FontSize="26" 
+                           FontAttributes="Bold" />
+                </VerticalStackLayout>
+                <Border Grid.Column="1" WidthRequest="50" HeightRequest="50" 
+                       StrokeShape="RoundRectangle 25" StrokeThickness="2" 
+                       Stroke="{StaticResource Primary}">
+                    <Label Text="👤" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+            </Grid>
+
+            <!-- Search Bar -->
+                <Border Grid.Row="1" Stroke="{StaticResource BorderColor}" StrokeThickness="1" 
+                   BackgroundColor="{StaticResource SurfaceColor}" Padding="16, 12">
+                <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                <Grid ColumnDefinitions="Auto, *">
+                    <Label Text="🔍" FontSize="16" VerticalOptions="Center" Margin="0,0,10,0" />
+                    <Entry Grid.Column="1" 
+                              Placeholder="Tìm trạm hoặc địa danh..." 
+                           PlaceholderColor="{StaticResource TextLight}" 
+                           TextColor="{StaticResource TextColor}" 
+                           BackgroundColor="Transparent"
+                           FontSize="14" /> 
+                </Grid>
+            </Border>
+
+            <!-- Recommendations -->
+                     <Label Grid.Row="2" Text="🚌 Tuyến xe buýt 2 tầng" FontSize="16" FontAttributes="Bold" 
+                   TextColor="{StaticResource TextColor}" />
+
+            <CollectionView Grid.Row="3"
+                            ItemsSource="{Binding DisplayPlaces}"
+                            SelectionMode="None"
+                            ItemSizingStrategy="MeasureFirstItem"
+                            Margin="0,0,0,16">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                </CollectionView.ItemsLayout>
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Place">
+                        <Border x:Name="CardRoot"
+                               BackgroundColor="{StaticResource SurfaceColor}" 
+                               StrokeThickness="1" Stroke="{StaticResource BorderColor}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCardTapped" />
+                            </Border.GestureRecognizers>
+                            <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                            <Border.Shadow>
+                                <Shadow Brush="#0F172A" Offset="0,6" Radius="12" Opacity="0.08" />
+                            </Border.Shadow>
+                            
+                            <Grid RowDefinitions="180, *">
+                                <!-- Image -->
+                                <Grid Grid.Row="0">
+                                    <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+                                    <BoxView Opacity="0.65" VerticalOptions="End" HeightRequest="70">
+                                        <BoxView.Background>
+                                            <LinearGradientBrush EndPoint="0,1">
+                                                <GradientStop Color="#00131F" Offset="0.0" />
+                                                <GradientStop Color="#AA0F172A" Offset="1.0" />
+                                            </LinearGradientBrush>
+                                        </BoxView.Background>
+                                    </BoxView>
+                                </Grid>
+                                
+                                <!-- Badge (Rating) -->
+                                <Border Grid.Row="0" Margin="8" Padding="8, 4" 
+                                       BackgroundColor="{StaticResource PrimaryLight}"
+                                       Stroke="Transparent" HorizontalOptions="End"
+                                       VerticalOptions="Start">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                                    <Label Text="{Binding Rating, StringFormat='⭐ {0}'}" FontSize="11" 
+                                           TextColor="{StaticResource PrimaryDark}" FontAttributes="Bold" />
+                                </Border>
+                                
+                                <!-- Info Section -->
+                                <VerticalStackLayout Grid.Row="1" Padding="12" Spacing="6" 
+                                                    VerticalOptions="Fill">
+                                                                        <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" CharacterSpacing="0.2"
+                                           TextColor="{StaticResource TextColor}" 
+                                             MaxLines="2" LineBreakMode="TailTruncation" />
+                                    
+                                    <Label Text="{Binding Location}" FontSize="11" 
+                                           TextColor="{StaticResource TextSecondary}" 
+                                             MaxLines="2" LineBreakMode="TailTruncation" />
+
+                                                                        <Border IsVisible="{Binding IsNarrating}"
+                                                                                        BackgroundColor="#EEF2FF"
+                                                                                        Stroke="#C7D2FE"
+                                                                                        StrokeThickness="1"
+                                                                                        Padding="8,3"
+                                                                                        HorizontalOptions="Start">
+                                                                                <Border.StrokeShape>
+                                                                                        <RoundRectangle CornerRadius="10" />
+                                                                                </Border.StrokeShape>
+                                                                            <HorizontalStackLayout Spacing="6">
+                                                                                <ActivityIndicator IsRunning="True"
+                                                                                           WidthRequest="10"
+                                                                                           HeightRequest="10"
+                                                                                           Color="#3730A3"
+                                                                                           VerticalOptions="Center" />
+                                                                                <Label Text="🔊 Đang phát thuyết minh"
+                                                                                         FontSize="10"
+                                                                                         FontAttributes="Bold"
+                                                                                         TextColor="#3730A3"
+                                                                                         VerticalOptions="Center" />
+                                                                            </HorizontalStackLayout>
+                                                                        </Border>
+                                    
+                                    <Label Text="{Binding Category, StringFormat='📍 {0}'}" FontSize="10" 
+                                           TextColor="{StaticResource Accent}" 
+                                           MaxLines="1" LineBreakMode="TailTruncation" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Grid Grid.RowSpan="4"
+                  IsVisible="{Binding IsLoadingPlaces}"
+                  InputTransparent="False"
+                  BackgroundColor="#40FFFFFF">
+                <Border Padding="14,10"
+                        BackgroundColor="{StaticResource SurfaceColor}"
+                        Stroke="{StaticResource BorderColor}"
+                        StrokeThickness="1"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <HorizontalStackLayout Spacing="10">
+                        <ActivityIndicator IsRunning="{Binding IsLoadingPlaces}" Color="{StaticResource Primary}" />
+                        <Label Text="Đang tải địa điểm..." VerticalOptions="Center" TextColor="{StaticResource TextColor}" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+    </Grid>
+</ContentPage>

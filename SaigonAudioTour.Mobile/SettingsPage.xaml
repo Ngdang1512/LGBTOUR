@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SaigonAudioTour.Mobile.SettingsPage"
+             BackgroundColor="#F8FAFC"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="20, 50, 20, 40" Spacing="30">
+            
+            <Label Text="Tài khoản" TextColor="#0F172A" FontSize="28" FontAttributes="Bold" />
+
+            <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="20">
+                <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+                <Border.Shadow><Shadow Brush="#64748B" Offset="0,8" Radius="15" Opacity="0.05" /></Border.Shadow>
+                
+                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
+                    <Border WidthRequest="60" HeightRequest="60" StrokeShape="RoundRectangle 30" StrokeThickness="0">
+                        <Image Source="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" Aspect="AspectFill" />
+                    </Border>
+                    
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                        <Label Text="Du khách VIP" TextColor="#0F172A" FontSize="18" FontAttributes="Bold" />
+                        <Label Text="admin@lgbtour.com" TextColor="#64748B" FontSize="14" />
+                    </VerticalStackLayout>
+                    
+                    <Label Grid.Column="2" Text="Sửa" TextColor="#0F172A" FontAttributes="Bold" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <VerticalStackLayout Spacing="10">
+                <Label Text="GÓI DỊCH VỤ" TextColor="#94A3B8" FontSize="13" FontAttributes="Bold" Margin="5,0,0,5" />
+
+                <Border BackgroundColor="#FFF7ED" Stroke="#FDBA74" StrokeThickness="1" Padding="16">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="{Binding PremiumTitleText}" TextColor="#9A3412" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="{Binding PremiumDescriptionText}" TextColor="#7C2D12" FontSize="13" />
+                        <Button Text="{Binding PremiumButtonText}"
+                                Clicked="OnUpgradeClicked"
+                                BackgroundColor="#F97316"
+                                TextColor="White"
+                                HeightRequest="44"
+                                CornerRadius="10" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="CÀI ĐẶT CHUNG" TextColor="#94A3B8" FontSize="13" FontAttributes="Bold" Margin="5,10,0,5" />
+                
+                <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="20,15">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Text="Ngôn ngữ" TextColor="#0F172A" FontSize="16" VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                            <Label Text="{Binding CurrentLanguageDisplay}" TextColor="#64748B" FontSize="14" VerticalOptions="Center"/>
+                            <Label Text=">" TextColor="#CBD5E1" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="20,15">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Text="Thông báo" TextColor="#0F172A" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text=">" TextColor="#CBD5E1" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <Label Text="HỖ TRỢ" TextColor="#94A3B8" FontSize="13" FontAttributes="Bold" Margin="5,15,0,5" />
+
+                <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="20,15">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Text="Trung tâm trợ giúp" TextColor="#0F172A" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text=">" TextColor="#CBD5E1" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <Button Text="Đăng xuất" BackgroundColor="#FEE2E2" TextColor="#EF4444" FontSize="16" FontAttributes="Bold" CornerRadius="12" HeightRequest="55" Margin="0,20,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

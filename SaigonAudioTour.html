@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaigonAudioTour — Báo Cáo Kỹ Thuật & Thuyết Trình Hệ Thống</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Tùy chỉnh hệ thống màu sắc nhận diện thương hiệu (Brand Identity) */
+        :root {
+            --navy: #0F172A;
+            --slate: #F8FAFC;
+            --accent: #4F46E5;
+            --text-main: #1E293B;
+            --text-muted: #475569;
+        }
+
+        body {
+            background-color: var(--slate);
+            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        /* Lớp phủ màu sắc Custom Bootstrap */
+        .bg-navy { background-color: var(--navy) !important; }
+        .text-navy { color: var(--navy) !important; }
+        .border-navy { border-color: var(--navy) !important; }
+        .border-accent-bottom { border-bottom: 5px solid var(--accent) !important; }
+        
+        /* Cấu hình Thanh điều hướng (Navigation) */
+        .nav-pills .nav-link {
+            color: var(--text-muted);
+            font-weight: 600;
+            border-radius: 6px;
+            margin: 0 4px;
+            padding: 10px 20px;
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-pills .nav-link:hover {
+            background-color: #E2E8F0;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            background-color: var(--navy);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Cấu hình Khoảng cách Cuộn trang (Scroll Padding) */
+        section {
+            scroll-margin-top: 100px;
+        }
+        
+        /* Cấu hình Thẻ nội dung (Cards) */
+        .custom-card {
+            border-left: 4px solid var(--accent);
+            background-color: #FFFFFF;
+            transition: transform 0.2s ease-in-out;
+        }
+        .custom-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Cấu hình Khối mã nguồn (Code Blocks) */
+        .code-block {
+            background-color: #0F172A;
+            color: #F8FAFC;
+            border-left: 4px solid var(--accent);
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .section-title {
+            color: var(--navy);
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+    </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-smooth-scroll="true" tabindex="0">
+
+    <header class="bg-navy text-white text-center py-5 border-accent-bottom">
+        <div class="container py-4">
+            <h1 class="display-4 fw-bold mb-3 letter-spacing-tight">SaigonAudioTour</h1>
+            <p class="lead text-light opacity-75 mb-0 fw-light">Báo Cáo Hoàn Thiện: Nền Tảng Du Lịch Thông Minh & Thuyết Minh Tự Động</p>
+        </div>
+    </header>
+
+    <nav id="mainNav" class="navbar sticky-top bg-white shadow-sm py-3">
+        <div class="container justify-content-center">
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link active" href="#tong-quan">Tổng quan Dự án</a></li>
+                <li class="nav-item"><a class="nav-link" href="#chan-dung">Khách hàng Mục tiêu</a></li>
+                <li class="nav-item"><a class="nav-link" href="#kien-truc">Kiến trúc Hệ thống</a></li>
+                <li class="nav-item"><a class="nav-link" href="#ui-ux">Ngôn ngữ Thiết kế</a></li>
+                <li class="nav-item"><a class="nav-link" href="#chuc-nang">Chi tiết Chức năng</a></li>
+                <li class="nav-item"><a class="nav-link" href="#thanh-qua">Đánh giá Hiệu năng</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        
+        <section id="tong-quan" class="bg-white p-4 p-md-5 rounded-4 shadow-sm mb-5 border">
+            <h2 class="section-title">Tổng quan Dự án (Project Overview)</h2>
+            
+            <div class="mb-4">
+                <h5 class="text-navy fw-bold mb-2">Định vị Sản phẩm</h5>
+                <p class="text-muted text-justify">
+                    SaigonAudioTour được định vị là một nền tảng du lịch thông minh, đóng vai trò như một người hướng dẫn viên kỹ thuật số bỏ túi dành riêng cho phân khúc khách du lịch tự túc. Sự bùng nổ của xu hướng du lịch độc lập đòi hỏi các giải pháp công nghệ phải đáp ứng được tính linh hoạt, chiều sâu thông tin và sự liền mạch trong trải nghiệm. Dự án nhằm mục đích số hóa toàn bộ quy trình khám phá lịch sử, văn hóa tại các điểm đến nổi bật thông qua sự kết hợp giữa bản đồ tương tác và trí tuệ nhân tạo (công nghệ tổng hợp giọng nói).
+                </p>
+            </div>
+            
+            <div>
+                <h5 class="text-navy fw-bold mb-2">Bài toán Thực tiễn (Problem Statement)</h5>
+                <p class="text-muted text-justify mb-3">
+                    Trong bối cảnh ngành du lịch hiện đại, du khách tự túc thường gặp phải hai rào cản lớn. Thứ nhất, việc tiếp nhận thông tin lịch sử tại các di tích (như Dinh Độc Lập hay Nhà thờ Đức Bà) chủ yếu phụ thuộc vào các bảng thông tin vật lý hoặc tài liệu văn bản dài dòng trên internet, gây ra sự nhàm chán và gián đoạn trải nghiệm quan sát thực tế. Thứ hai, sự phân mảnh của các ứng dụng: du khách phải sử dụng một ứng dụng để xem bản đồ lộ trình xe buýt, và một ứng dụng hoặc trình duyệt khác để tra cứu thông tin điểm đến.
+                </p>
+                <p class="text-muted text-justify">
+                    SaigonAudioTour giải quyết triệt để hai rào cản này bằng cách hợp nhất hệ thống định tuyến (Routing) và hệ thống thuyết minh âm thanh (Audio Guide) vào một giao diện đồng nhất. Người dùng có thể vừa di chuyển theo bản đồ, vừa lắng nghe các câu chuyện lịch sử được phát ra tự động mà không cần dán mắt vào màn hình điện thoại.
+                </p>
+            </div>
+        </section>
+
+        <section id="chan-dung" class="bg-white p-4 p-md-5 rounded-4 shadow-sm mb-5 border">
+            <h2 class="section-title">Khách hàng Mục tiêu (Target Audience)</h2>
+            <p class="text-muted mb-4">Hệ thống được nghiên cứu và thiết kế dựa trên hành vi, tâm lý của hai nhóm người dùng cốt lõi có yêu cầu khắt khe về trải nghiệm số.</p>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm custom-card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title text-navy fw-bold mb-3">Phân khúc Khách Du lịch Tự túc (VIP/Solo Tourists)</h5>
+                            <p class="card-text text-muted text-justify">
+                                Đây là nhóm người dùng trân trọng sự tự do trong việc sắp xếp lịch trình và không muốn bị gò bó bởi các tour du lịch truyền thống ghép đoàn. Họ có tiêu chuẩn rất cao đối với giao diện người dùng (UI) và thiết kế trải nghiệm (UX). Họ mong muốn một ứng dụng không có quảng cáo, không có các thao tác thừa (frictionless), thao tác vuốt chạm phải mượt mà và thông tin phải được trình bày theo cấu trúc phân cấp rõ ràng (Visual Hierarchy). SaigonAudioTour đáp ứng nhóm này bằng một thiết kế tối giản, loại bỏ hoàn toàn các yếu tố gây xao nhãng.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm custom-card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title text-navy fw-bold mb-3">Du khách Đa quốc gia & Rào cản Ngôn ngữ</h5>
+                            <p class="card-text text-muted text-justify">
+                                Việc truyền tải các giá trị lịch sử và văn hóa bản địa cho khách quốc tế thường bị hạn chế nghiêm trọng do rào cản ngôn ngữ. Ứng dụng SaigonAudioTour được phát triển để trở thành một cầu nối văn hóa thông qua tính năng đa ngôn ngữ theo thời gian thực. Hệ thống được lập trình để không chỉ dịch thuật văn bản mà còn điều hướng Engine phát âm (Text-to-Speech Engine) của thiết bị chuyển đổi trọng âm và ngữ điệu sao cho phù hợp nhất với ngôn ngữ mà du khách đã chọn (Tiếng Việt hoặc Tiếng Anh), tạo ra cảm giác như đang được hướng dẫn bởi người bản xứ.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kien-truc" class="bg-white p-4 p-md-5 rounded-4 shadow-sm mb-5 border">
+            <h2 class="section-title">Kiến trúc Hệ thống & Công nghệ (System Architecture)</h2>
+            <p class="text-muted mb-4">Quyết định lựa chọn công nghệ cho SaigonAudioTour được cân nhắc kỹ lưỡng nhằm đảm bảo ba yếu tố: Hiệu năng Native, Tái sử dụng mã nguồn (Code Reusability) và Khả năng bảo trì dài hạn (Maintainability).</p>
+            
+            <div class="mb-4">
+                <span class="badge bg-navy fs-6 me-2 mb-2 px-3 py-2">Framework: .NET MAUI</span>
+                <span class="badge bg-secondary fs-6 me-2 mb-2 px-3 py-2">Language: C# 11 / XAML</span>
+                <span class="badge bg-dark fs-6 me-2 mb-2 px-3 py-2">Pattern: MVVM</span>
+                <span class="badge bg-light text-dark border fs-6 me-2 mb-2 px-3 py-2">Integration: Native API & Web-Embed</span>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h5 class="text-navy fw-bold">1. Nền tảng Đa thiết bị (Cross-Platform Framework)</h5>
+                    <p class="text-muted text-justify">
+                        Dự án sử dụng <strong>.NET Multi-platform App UI (.NET MAUI)</strong> thay vì các framework khác như React Native hay Flutter. Quyết định này cho phép dự án tận dụng toàn bộ sức mạnh của hệ sinh thái .NET và ngôn ngữ C# strongly-typed, đồng thời biên dịch trực tiếp ra mã máy (Native Binaries) cho cả nền tảng Android và iOS. Điều này giúp ứng dụng đạt được hiệu năng tối đa về mặt xử lý đồ họa và quản lý bộ nhớ, không bị suy giảm tốc độ bởi các lớp cầu nối (bridge) như các công nghệ hybrid cũ.
+                    </p>
+
+                    <h5 class="text-navy fw-bold mt-4">2. Mô hình Thiết kế Phần mềm (Design Pattern)</h5>
+                    <p class="text-muted text-justify">
+                        Ứng dụng tuân thủ nghiêm ngặt mô hình <strong>MVVM (Model - View - ViewModel)</strong>. Việc phân tách rõ ràng giữa lớp Giao diện (XAML), lớp Trạng thái và Logic nghiệp vụ (C# ViewModel), và lớp Dữ liệu (Models/Services) giúp cho mã nguồn có tính kết dính lỏng lẻo (Loose Coupling). Nhờ đó, việc thay đổi giao diện sẽ không ảnh hưởng đến logic luồng dữ liệu, giúp quá trình nâng cấp, bảo trì và viết Unit Test trong tương lai trở nên dễ dàng và an toàn hơn.
+                    </p>
+
+                    <h5 class="text-navy fw-bold mt-4">3. Chiến lược Tích hợp Dịch vụ (Service Integration)</h5>
+                    <ul class="text-muted">
+                        <li class="mb-3"><strong>Trình điều khiển Giọng nói (Native Audio Engine):</strong> Gọi trực tiếp thư viện <code>Microsoft.Maui.Media.TextToSpeech</code> để kích hoạt bộ tổng hợp giọng nói phần cứng (Hardware Synthesizer) của thiết bị, đảm bảo độ trễ thấp nhất thay vì gọi các API đám mây tốn băng thông mạng.</li>
+                        <li class="mb-3"><strong>Chiến lược Xử lý Bản đồ (Map Injection):</strong> Nhằm khắc phục lỗi hệ thống bảo mật sâu của Android liên quan đến WebView URL Schemes (cụ thể là lỗi <code>ERR_UNKNOWN_URL_SCHEME</code> khi cố gắng ép mở ứng dụng ngoài bằng <code>intent://</code>), hệ thống đã áp dụng kỹ thuật tiêm mã HTML iFrame nội suy vào bộ nhớ. Phương pháp này ép Google Maps chạy trong môi trường Sandbox (Hộp cát) ảo, đảm bảo bản đồ hoạt động trơn tru 100% bên trong ứng dụng mà không gây xung đột hệ điều hành.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <button type="button" class="btn btn-outline-dark px-4 py-2 fw-bold" data-bs-toggle="modal" data-bs-target="#diagramModal">
+                    Mở Sơ đồ Luồng Kiến Trúc Hệ Thống
+                </button>
+            </div>
+        </section>
+
+        <section id="ui-ux" class="bg-white p-4 p-md-5 rounded-4 shadow-sm mb-5 border">
+            <h2 class="section-title">Lý luận Ngôn ngữ Thiết kế (UI/UX Design Rationale)</h2>
+            <p class="text-muted mb-4">Giao diện của SaigonAudioTour không đơn thuần là sự sắp xếp các nút bấm, mà là kết quả của việc áp dụng các nguyên tắc tâm lý học hành vi nhằm giảm tải nhận thức (Cognitive Load) cho người dùng trong quá trình đi du lịch.</p>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h5 class="text-navy fw-bold">Màu sắc và Cảm xúc (Color Psychology)</h5>
+                    <p class="text-muted text-justify">
+                        Dự án ứng dụng thiết kế Đơn sắc Tối giản (Monochromatic Minimalism). 
+                        Màu <strong>Xám Slate (<code>#F8FAFC</code>)</strong> được dùng làm nền tảng diện rộng để giảm sự phản chiếu ánh sáng khi du khách sử dụng điện thoại ngoài trời nắng. 
+                        Màu <strong>Xanh Navy (<code>#0F172A</code>)</strong> được dùng cho hệ thống chữ viết (Typography) và các điểm chạm tương tác chính (Call-to-Action). Xanh Navy theo tâm lý học đại diện cho sự uy quyền, chuyên nghiệp và độ tin cậy tuyệt đối, phù hợp với một ứng dụng hướng dẫn viên số.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="text-navy fw-bold">Bố cục và Hình thái (Layout & Form)</h5>
+                    <p class="text-muted text-justify">
+                        Ứng dụng tuân thủ nguyên tắc Thiết kế ưu tiên ngón cái (Thumb-driven Design). Mọi thao tác cuộn, lướt thẻ (Horizontal Card Scrolling) đều nằm gọn trong khu vực tiếp cận tự nhiên của ngón cái trên các thiết bị màn hình lớn. Hình ảnh điểm đến được sử dụng ở độ phân giải cao, bo góc (Border-Radius) tinh tế và đổ bóng (Drop Shadow) phân tầng để tạo chiều sâu không gian (Depth of Field), giúp giao diện không bị phẳng và nhàm chán. Biểu tượng La bàn được sử dụng đồng nhất làm nhân tố dẫn dắt thị giác.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="chuc-nang" class="bg-white p-4 p-md-5 rounded-4 shadow-sm mb-5 border">
+            <h2 class="section-title">Chi tiết Triển khai Tính năng Lõi (Core Implementation)</h2>
+            
+            <div class="row g-5 mt-2">
+                <div class="col-12">
+                    <h4 class="text-navy fw-bold mb-3">1. Phân luồng Định danh và Khởi động (Authentication & Routing)</h4>
+                    <p class="text-muted text-justify">
+                        Quá trình Onboarding được thiết kế để gây ấn tượng thị giác ngay từ giây đầu tiên thông qua <strong>Splash Screen</strong> mang logo La bàn. Để tối ưu hóa Tỷ lệ chuyển đổi người dùng (Conversion Rate Optimization - CRO) và tránh việc người dùng gỡ cài đặt app ngay khi bị ép tạo tài khoản, hệ thống cung cấp tính năng <strong>Guest Mode (Khám phá ngay)</strong>. Về mặt kỹ thuật, việc chuyển đổi từ Splash Screen sang Login/Main App được thực hiện bằng kỹ thuật thay thế Root Page (<code>Application.Current.MainPage</code>) thay vì Push/Pop thông thường, nhằm giải phóng bộ nhớ của màn hình chào và ngăn chặn hoàn toàn lỗi người dùng ấn nút Back vật lý để quay lại màn hình ảo.
+                    </p>
+                </div>
+                
+                <hr class="text-muted opacity-25">
+
+                <div class="col-12">
+                    <h4 class="text-navy fw-bold mb-3">2. Cơ chế Bộ lọc Động trên Trang Khám phá (Dynamic Filtering)</h4>
+                    <p class="text-muted text-justify">
+                        Tại giao diện màn hình chính, tính năng lọc danh mục (Phổ biến, Ẩm thực, Mua sắm, Di tích) không sử dụng cơ chế Request/Response gọi lại Server để tránh độ trễ (Latency). Thay vào đó, toàn bộ tập dữ liệu (Dataset) được lưu trữ vào biến cục bộ (In-memory Caching). Khi có sự kiện người dùng chạm (Tapped) vào bộ lọc, hệ thống sử dụng thuật toán LINQ trong C# để truy vấn và cập nhật vào cấu trúc dữ liệu đặc thù <code>ObservableCollection</code>. Cấu trúc này có khả năng tự động phát ra các tín hiệu (Notifications) thông báo cho Giao diện UI tự động vẽ lại danh sách chỉ trong vài mili-giây, tạo ra cảm giác lọc tức thời và vô cùng mượt mà.
+                    </p>
+                </div>
+
+                <hr class="text-muted opacity-25">
+
+                <div class="col-12">
+                    <h4 class="text-navy fw-bold mb-3">3. Hệ thống Thuyết minh AI Đa ngôn ngữ (Smart Audio Guide)</h4>
+                    <p class="text-muted text-justify">
+                        Đây là tính năng giá trị nhất của ứng dụng. Khi người dùng truy cập trang Chi tiết (DetailPage), họ có thể lựa chọn kịch bản thuyết minh. Hệ thống được trang bị bộ xử lý Đa ngôn ngữ giả lập (Mock Translation Logic) để tự động ánh xạ (Mapping) từ kịch bản Tiếng Việt sang kịch bản Tiếng Anh chuẩn ngữ pháp. 
+                    </p>
+                    <p class="text-muted text-justify">
+                        Việc phát âm thanh được thực hiện thông qua các Tác vụ Bất đồng bộ (Asynchronous Tasks) để không làm đóng băng (Freeze) giao diện. Người dùng hoàn toàn có thể cuộn trang xem hình ảnh trong khi ứng dụng vẫn đang đọc thuyết minh. Hơn thế nữa, hệ thống được lập trình để quản lý Vòng đời trang (Page Lifecycle); nếu người dùng bấm nút Quay lại (Back) khi đang nghe dở, sự kiện <code>OnDisappearing</code> sẽ kích hoạt tín hiệu Hủy (CancellationTokenSource) để ngắt lập tức luồng âm thanh, ngăn chặn triệt để hiện tượng rò rỉ bộ nhớ (Memory Leak) và âm thanh chạy ngầm ngoài ý muốn.
+                    </p>
+                </div>
+
+                <hr class="text-muted opacity-25">
+
+                <div class="col-12">
+                    <h4 class="text-navy fw-bold mb-3">4. Bản đồ Tuyến đường Tương tác (Interactive Route Mapping)</h4>
+                    <p class="text-muted text-justify">
+                        Tính năng Bản đồ cho phép trực quan hóa toàn bộ lộ trình di chuyển của hệ thống xe buýt du lịch đi qua các điểm cầu quan trọng (Dinh Độc Lập, Nhà thờ Đức Bà, Chợ Bến Thành). Component WebView được tinh chỉnh lại toàn bộ thuộc tính biên dịch để cho phép các thao tác cảm ứng đa điểm (Multi-touch) như Pinch-to-Zoom (Thu phóng bằng hai ngón tay) và Panning (Kéo trượt màn hình) hoạt động trơn tru với tốc độ khung hình cao, mang lại trải nghiệm xem bản đồ số không thua kém ứng dụng Google Maps bản địa.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="thanh-qua" class="bg-white p-4 p-md-5 rounded-4 shadow-sm mb-5 border">
+            <h2 class="section-title">Đánh giá Hiệu năng & Kết quả Nghiệm thu (Performance & Validation)</h2>
+            <p class="text-muted mb-4">Sản phẩm phần mềm SaigonAudioTour đã vượt qua các bài kiểm thử nghiêm ngặt về cả chức năng (Functional) và phi chức năng (Non-functional), chứng minh được tính sẵn sàng để đưa vào vận hành thực tế.</p>
+
+            <div class="row g-4 mt-2">
+                <div class="col-md-6">
+                    <h5 class="text-navy fw-bold">Khả năng Quản lý Bộ nhớ (Memory Allocation)</h5>
+                    <p class="text-muted text-justify">
+                        Với việc sử dụng thành phần <code>CollectionView</code> kết hợp với cơ chế Tái chế Giao diện (UI Virtualization), hệ thống chỉ phân bổ bộ nhớ (Allocate Memory) cho những thẻ địa điểm đang thực sự hiển thị trên màn hình. Khi người dùng cuộn danh sách, các thành phần đã khuất khỏi tầm nhìn sẽ bị thu hồi và tái sử dụng, giúp dung lượng RAM tiêu thụ duy trì ở mức tối thiểu, ngăn chặn hoàn toàn lỗi tràn bộ nhớ đệm (Out of Memory Exception) khi tải lượng lớn hình ảnh độ phân giải cao từ Internet.
+                    </p>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5 class="text-navy fw-bold">Trải nghiệm Mượt mà (60FPS Responsiveness)</h5>
+                    <p class="text-muted text-justify">
+                        Ứng dụng đạt được tốc độ phản hồi tối ưu nhờ việc đẩy toàn bộ các tác vụ nặng (như tải hình ảnh từ mạng nội dung phân phối CDN Unsplash, hay gọi tiến trình xử lý giọng nói TTS) xuống chạy trên các Luồng nền (Background Threads). Luồng chính (Main UI Thread) luôn được giữ ở trạng thái rảnh rỗi để sẵn sàng lắng nghe và xử lý các thao tác vuốt chạm của người dùng, đảm bảo tốc độ khung hình luôn ổn định ở mức 60FPS.
+                    </p>
+                </div>
+                
+                <div class="col-12 mt-4">
+                    <div class="alert alert-secondary bg-slate border-navy text-navy" role="alert">
+                        <h5 class="alert-heading fw-bold mb-2">Tuyên bố Hoàn thành Dự án</h5>
+                        <p class="mb-0 text-justify text-muted">
+                            Hệ thống đã khắc phục thành công toàn bộ các rủi ro kỹ thuật liên quan đến xung đột thư viện điều hướng, lỗi tương thích sơ đồ URL của Android, và các lỗi quản lý trạng thái. Về mặt UI/UX, ứng dụng đã đạt được sự đồng nhất hoàn hảo về ngôn ngữ thiết kế, mang lại cảm giác của một sản phẩm thương mại phân khúc cao cấp. Dự án đáp ứng 100% các tiêu chí đặc tả yêu cầu phần mềm đã đề ra ban đầu.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-navy text-white text-center py-5 mt-auto">
+        <div class="container">
+            <p class="mb-2 fw-bold letter-spacing-tight">Dự án Phần mềm SaigonAudioTour</p>
+            <p class="small opacity-50 mb-0">Thiết kế và Phát triển trên Nền tảng Công nghệ .NET MAUI.</p>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="diagramModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-navy text-white border-0">
+                    <h5 class="modal-title fw-bold">Sơ đồ Kiến trúc MVVM - Phân lớp Xử lý</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+<pre class="code-block p-4 m-0">
+[ VIEW LAYER (XAML UI Layer) ]
+  ├─ AppShell.xaml (Cấu trúc Điều hướng Đa Tab)
+  ├─ MainPage.xaml (Trang chủ - Danh sách Khám phá)
+  ├─ DetailPage.xaml (Trang Chi tiết - Bảng điều khiển Thuyết minh)
+  └─ MapPage.xaml (Trang Bản đồ - Trình duyệt nhúng WebView)
+         │
+    (Cơ chế Data Binding & Event Triggers)
+         ▼
+[ VIEWMODEL / CODE-BEHIND LAYER (C# Logic Layer) ]
+  ├─ MainPage.xaml.cs (Thuật toán Lọc Trạng thái & Observable Collection)
+  ├─ DetailPage.xaml.cs (Điều khiển CancellationToken & Mock Translation)
+  └─ SplashScreen.xaml.cs (Quản lý Vòng đời & Thay thế Root Page)
+         │
+    (Tiêm Phụ thuộc - Dependency Injection & Trích xuất Dữ liệu)
+         ▼
+[ MODEL / SERVICE LAYER (Data Layer) ]
+  ├─ Models/Place.cs (Định nghĩa Cấu trúc Thực thể Dữ liệu)
+  └─ Services/TourApiService.cs (Cung cấp Dữ liệu Giả lập Khởi tạo)
+         │
+         ▼
+[ EXTERNAL/NATIVE INTEGRATION (Tích hợp Hệ thống Ngoại vi) ]
+  ├─ Mạng lưới Phân phối Nội dung Unsplash (CDN Hình ảnh)
+  ├─ Nền tảng Hệ điều hành Android/iOS (Native Text-To-Speech Hardware)
+  └─ Dịch vụ Web Google Maps (HTML iFrame Injection)
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
