@@ -20,13 +20,13 @@
 
                 <Border Stroke="#E2E8F0" StrokeThickness="1" Padding="20, 5" BackgroundColor="White">
                     <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                    <Entry Placeholder="Email của bạn" PlaceholderColor="#CBD5E1" TextColor="#0F172A" Keyboard="Email" /> 
+                    <Entry x:Name="EmailEntry" Placeholder="Email của bạn" PlaceholderColor="#CBD5E1" TextColor="#0F172A" Keyboard="Email" /> 
                 </Border>
 
                 <VerticalStackLayout Spacing="8">
                     <Border Stroke="#E2E8F0" StrokeThickness="1" Padding="20, 5" BackgroundColor="White">
                         <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                        <Entry Placeholder="Mật khẩu" PlaceholderColor="#CBD5E1" TextColor="#0F172A" IsPassword="True" /> 
+                        <Entry x:Name="PasswordEntry" Placeholder="Mật khẩu" PlaceholderColor="#CBD5E1" TextColor="#0F172A" IsPassword="True" /> 
                     </Border>
                     <Label Text="Quên mật khẩu?" TextColor="#475569" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
                 </VerticalStackLayout>

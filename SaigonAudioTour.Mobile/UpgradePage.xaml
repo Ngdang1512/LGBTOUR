@@ -42,10 +42,10 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Button Text="Tạo mã QR thanh toán" Clicked="OnCreateOrderClicked"
+                <Button Text="Tạo mã QR thanh toán" Clicked="OnCreateOrderClicked"
                     BackgroundColor="#F97316" TextColor="White" CornerRadius="10" HeightRequest="48" />
 
-            <Border IsVisible="{Binding IsOrderVisible}" BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="12">
+                <Border IsVisible="{Binding IsOrderVisible}" BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="12">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="12" />
                 </Border.StrokeShape>

@@ -1,11 +1,15 @@
 // SaigonAudioTour.Mobile/Services/TourApiService.cs
 using SaigonAudioTour.Mobile.Models;
 using System.Net.Http.Json;
+using System.Globalization;
 
 namespace SaigonAudioTour.Mobile.Services;
 
 public class TourApiService
 {
+    private const string PremiumPlanKeyPrefix = "PremiumPlan_";
+    private const string PremiumUntilKeyPrefix = "PremiumUntil_";
+
     private static readonly HttpClient _httpClient = new()
     {
         BaseAddress = new Uri("https://localhost:7289/")
@@ -13,6 +17,51 @@ public class TourApiService
 
     public TourApiService()
     {
+    }
+
+    private static string GetPremiumPlanKey(string userId) => $"{PremiumPlanKeyPrefix}{userId}";
+    private static string GetPremiumUntilKey(string userId) => $"{PremiumUntilKeyPrefix}{userId}";
+
+    public void SavePremiumStatusLocal(string userId, string planId, int durationDays)
+    {
+        var safeDays = Math.Max(1, durationDays);
+        var until = DateTime.UtcNow.AddDays(safeDays);
+
+        Preferences.Set(GetPremiumPlanKey(userId), string.IsNullOrWhiteSpace(planId) ? "premium_month" : planId);
+        Preferences.Set(GetPremiumUntilKey(userId), until.ToString("O", CultureInfo.InvariantCulture));
+    }
+
+    public void ClearPremiumStatusLocal(string userId)
+    {
+        Preferences.Remove(GetPremiumPlanKey(userId));
+        Preferences.Remove(GetPremiumUntilKey(userId));
+    }
+
+    private PremiumStatus GetLocalPremiumStatus(string userId)
+    {
+        var savedPlanId = Preferences.Get(GetPremiumPlanKey(userId), "free");
+        var savedUntilText = Preferences.Get(GetPremiumUntilKey(userId), string.Empty);
+
+        if (DateTime.TryParse(savedUntilText, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var premiumUntil)
+            && premiumUntil > DateTime.UtcNow)
+        {
+            return new PremiumStatus
+            {
+                UserId = userId,
+                IsPremium = true,
+                PlanId = string.IsNullOrWhiteSpace(savedPlanId) ? "premium_month" : savedPlanId,
+                PremiumUntil = premiumUntil
+            };
+        }
+
+        ClearPremiumStatusLocal(userId);
+        return new PremiumStatus
+        {
+            UserId = userId,
+            IsPremium = false,
+            PlanId = "free",
+            PremiumUntil = null
+        };
     }
 
     // 1. Dữ liệu giả lập cho bản đồ: tuyến xe buýt 2 tầng Quận 1
@@ -178,7 +227,7 @@ public class TourApiService
         return new UserProfile
         {
             FullName = "Hướng dẫn viên VIP",
-            Email = "admin@lgbtour.com",
+            Email = "admin@SAT.com",
             AvatarUrl = "https://example.com/avatar.jpg" // Có thể thay bằng ảnh local nếu cần
         };
     }
@@ -266,19 +315,26 @@ public class TourApiService
         try
         {
             var status = await _httpClient.GetFromJsonAsync<PremiumStatus>($"api/subscription/user/{userId}/status");
-            if (status != null) return status;
+            if (status != null)
+            {
+                if (status.IsPremium && status.PremiumUntil.HasValue && status.PremiumUntil.Value > DateTime.UtcNow)
+                {
+                    var inferredDuration = Math.Max(1, (int)Math.Ceiling((status.PremiumUntil.Value - DateTime.UtcNow).TotalDays));
+                    SavePremiumStatusLocal(userId, status.PlanId, inferredDuration);
+                }
+                else
+                {
+                    ClearPremiumStatusLocal(userId);
+                }
+
+                return status;
+            }
         }
         catch
         {
             // fallback
         }
 
-        return new PremiumStatus
-        {
-            UserId = userId,
-            IsPremium = false,
-            PlanId = "free",
-            PremiumUntil = null
-        };
+        return GetLocalPremiumStatus(userId);
     }
 }

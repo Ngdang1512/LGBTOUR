@@ -13,14 +13,14 @@ public partial class RegisterPage : ContentPage
         // Giả lập đăng ký thành công cho Demo
         await DisplayAlertAsync("Thông báo", "Tạo tài khoản thành công!", "OK");
         
-        // Quay về trang Đăng nhập
-        await Navigation.PopAsync();
+        // Chuyển sang trang Đăng nhập
+        await Shell.Current.GoToAsync(nameof(LoginPage));
     }
 
     // Hàm khi user bấm chữ "Đăng nhập ngay"
     private async void OnLoginLabelTapped(object sender, EventArgs e)
     {
-        // Quay về trang Đăng nhập
-        await Navigation.PopAsync();
+        // Chuyển sang trang Đăng nhập
+        await Shell.Current.GoToAsync(nameof(LoginPage));
     }
 }

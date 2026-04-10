@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <application android:allowBackup="true" android:supportsRtl="true" android:theme="@style/Maui.MainTheme">
+    <application android:allowBackup="true"
+                 android:supportsRtl="true"
+                 android:theme="@style/Maui.MainTheme"
+                 android:label="Saigon Audio Tour"
+                 android:icon="@mipmap/appicon"
+                 android:roundIcon="@mipmap/appicon_round">
         
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_api_key" />
         <uses-library android:name="org.apache.http.legacy" android:required="false" />

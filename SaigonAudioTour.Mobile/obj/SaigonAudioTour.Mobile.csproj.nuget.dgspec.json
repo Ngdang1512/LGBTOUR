@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/admin/Code/LGBTOUR/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj": {}
+    "/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj": {}
   },
   "projects": {
-    "/Users/admin/Code/LGBTOUR/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj": {
+    "/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/admin/Code/LGBTOUR/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj",
+        "projectUniqueName": "/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj",
         "projectName": "SaigonAudioTour.Mobile",
-        "projectPath": "/Users/admin/Code/LGBTOUR/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj",
+        "projectPath": "/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj",
         "packagesPath": "/Users/admin/.nuget/packages/",
-        "outputPath": "/Users/admin/Code/LGBTOUR/SaigonAudioTour.Mobile/obj/",
+        "outputPath": "/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.Mobile/obj/",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "configFilePaths": [

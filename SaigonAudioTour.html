@@ -7,6 +7,7 @@
     <title>SaigonAudioTour — Báo Cáo Kỹ Thuật & Thuyết Trình Hệ Thống</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
     
     <style>
         /* Tùy chỉnh hệ thống màu sắc nhận diện thương hiệu (Brand Identity) */
@@ -304,42 +305,68 @@
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-navy text-white border-0">
-                    <h5 class="modal-title fw-bold">Sơ đồ Kiến trúc MVVM - Phân lớp Xử lý</h5>
+                    <h5 class="modal-title fw-bold">Sequence Diagram - Luồng Quản Trị, GPS & Heatmap</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-0">
-<pre class="code-block p-4 m-0">
-[ VIEW LAYER (XAML UI Layer) ]
-  ├─ AppShell.xaml (Cấu trúc Điều hướng Đa Tab)
-  ├─ MainPage.xaml (Trang chủ - Danh sách Khám phá)
-  ├─ DetailPage.xaml (Trang Chi tiết - Bảng điều khiển Thuyết minh)
-  └─ MapPage.xaml (Trang Bản đồ - Trình duyệt nhúng WebView)
-         │
-    (Cơ chế Data Binding & Event Triggers)
-         ▼
-[ VIEWMODEL / CODE-BEHIND LAYER (C# Logic Layer) ]
-  ├─ MainPage.xaml.cs (Thuật toán Lọc Trạng thái & Observable Collection)
-  ├─ DetailPage.xaml.cs (Điều khiển CancellationToken & Mock Translation)
-  └─ SplashScreen.xaml.cs (Quản lý Vòng đời & Thay thế Root Page)
-         │
-    (Tiêm Phụ thuộc - Dependency Injection & Trích xuất Dữ liệu)
-         ▼
-[ MODEL / SERVICE LAYER (Data Layer) ]
-  ├─ Models/Place.cs (Định nghĩa Cấu trúc Thực thể Dữ liệu)
-  └─ Services/TourApiService.cs (Cung cấp Dữ liệu Giả lập Khởi tạo)
-         │
-         ▼
-[ EXTERNAL/NATIVE INTEGRATION (Tích hợp Hệ thống Ngoại vi) ]
-  ├─ Mạng lưới Phân phối Nội dung Unsplash (CDN Hình ảnh)
-  ├─ Nền tảng Hệ điều hành Android/iOS (Native Text-To-Speech Hardware)
-  └─ Dịch vụ Web Google Maps (HTML iFrame Injection)
-</pre>
+                    <div class="mermaid p-4">
+sequenceDiagram
+    autonumber
+    actor Admin as Admin (Web CMS)
+    actor User as Du Khách (Mobile App)
+    participant OS as HĐH Điện thoại (GPS)
+    participant API as C# Backend API
+    participant DB as SQL Server DB
+    participant TTS as Hệ thống AI (External)
+
+    rect rgb(240, 248, 255)
+    Note over Admin, TTS: GIAI ĐOẠN 1: QUẢN TRỊ & TẠO ÂM THANH
+    Admin->>API: Tạo Trạm (POI) & Kịch bản thuyết minh
+    API->>TTS: Gửi Text kịch bản (API Request)
+    TTS-->>API: Trả về file Audio (.mp3)
+    API->>DB: Lưu thông tin POI & Đường dẫn Audio
+    DB-->>API: OK
+    API-->>Admin: Thông báo Thêm thành công
+    end
+
+    rect rgb(240, 253, 244)
+    Note over User, DB: GIAI ĐOẠN 2: ĐỊNH VỊ & TỰ ĐỘNG PHÁT NHẠC
+    User->>OS: Cấp quyền Truy cập Vị trí (Location)
+    
+    loop Tiến trình chạy ngầm (Background)
+        OS-->>User: Liên tục cập nhật Tọa độ (Lat, Lng)
+        User->>API: Bắn tọa độ lên server tìm Trạm lân cận
+        API->>DB: Tính khoảng cách (Thuật toán Haversine)
+        DB-->>API: Trả về Trạm có (Khoảng cách < Bán kính)
+        API-->>User: Phản hồi thông tin Trạm + Link file nhạc
+        User->>User: Ứng dụng tự động phát nhạc
+    end
+    end
+
+    rect rgb(255, 251, 235)
+    Note over Admin, DB: GIAI ĐOẠN 3: GHI NHẬN & VẼ BẢN ĐỒ NHIỆT
+    User->>API: Rời khỏi trạm -> Gửi báo cáo Lịch sử
+    API->>DB: Lưu UserLog (Tọa độ, Thời lượng nghe)
+    
+    Admin->>API: Truy cập trang chủ Dashboard
+    API->>DB: Truy vấn dữ liệu UserLog
+    DB-->>API: Dữ liệu phân nhóm theo Tọa độ & Lượt nghe
+    API-->>Admin: Vẽ Bản đồ nhiệt (Heatmap) & Biểu đồ
+    end
+</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            securityLevel: 'loose'
+        });
+    </script>
 </body>
 
 </html>
