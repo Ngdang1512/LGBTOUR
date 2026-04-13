@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SaigonAudioTour.Mobile.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SaigonAudioTour.Mobile"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False">
+
+    <TabBar>
+        <ShellContent
+            Route="main"
+            Title="Khám phá"
+            Icon="icon_home.png"
+            ContentTemplate="{DataTemplate local:MainPage}" />
+
+        <ShellContent
+            Route="map"
+            Title="Bản đồ"
+            Icon="icon_map.png"
+            ContentTemplate="{DataTemplate local:MapPage}" />
+
+        <ShellContent
+            Route="settings"
+            Title="Cài đặt"
+            Icon="icon_profile.png"
+            ContentTemplate="{DataTemplate local:SettingsPage}" />
+    </TabBar>
+
+</Shell>

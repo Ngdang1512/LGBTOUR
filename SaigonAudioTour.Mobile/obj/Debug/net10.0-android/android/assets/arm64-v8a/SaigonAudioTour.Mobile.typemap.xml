@@ -1,0 +1,10 @@
+<api type="debug" assembly-name="SaigonAudioTour.Mobile" mvid="1dfefcb1eb2e4f58b60a72ff9e2799ef">
+  <java-to-managed>
+    <entry java-name="crc649e408905a1cccc33/MainActivity" managed-name="SaigonAudioTour.Mobile.MainActivity, SaigonAudioTour.Mobile" managed-type-token-id="33554447" />
+    <entry java-name="crc649e408905a1cccc33/MainApplication" managed-name="SaigonAudioTour.Mobile.MainApplication, SaigonAudioTour.Mobile" managed-type-token-id="33554448" />
+  </java-to-managed>
+  <managed-to-java>
+    <entry java-name="crc649e408905a1cccc33/MainActivity" managed-name="SaigonAudioTour.Mobile.MainActivity, SaigonAudioTour.Mobile" managed-type-token-id="33554447" />
+    <entry java-name="crc649e408905a1cccc33/MainApplication" managed-name="SaigonAudioTour.Mobile.MainApplication, SaigonAudioTour.Mobile" managed-type-token-id="33554448" />
+  </managed-to-java>
+</api>

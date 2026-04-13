@@ -1,0 +1,15 @@
+<api>
+  <jcw-types>
+    <type name="MainActivity" package="crc649e408905a1cccc33" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="crc6488302ad6e9e4df1a.MauiAppCompatActivity" partial_assembly_qualified_name="SaigonAudioTour.Mobile.MainActivity, SaigonAudioTour.Mobile">
+      <constructors>
+        <constructor name="MainActivity" method="n_.ctor:()V:" jni_signature="()V" managed_parameters="" retval="void" is_dynamically_registered="True" />
+        <constructor name="MainActivity" method="n_.ctor:(I)V:" jni_signature="(I)V" managed_parameters="System.Int32, System.Private.CoreLib" params="int p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+      </constructors>
+    </type>
+    <type name="MainApplication" package="crc649e408905a1cccc33" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="crc6488302ad6e9e4df1a.MauiApplication" is_application="True" partial_assembly_qualified_name="SaigonAudioTour.Mobile.MainApplication, SaigonAudioTour.Mobile" application_constructor="MainApplication" />
+  </jcw-types>
+  <acw-types partial-assembly-name="SaigonAudioTour.Mobile" module-name="SaigonAudioTour.Mobile.dll">
+    <type assembly-qualified-name="SaigonAudioTour.Mobile.MainActivity, SaigonAudioTour.Mobile, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="saigonaudiotour.mobile.MainActivity" java-key="crc649e408905a1cccc33.MainActivity" managed-key="SaigonAudioTour.Mobile.MainActivity" partial-assembly-qualified-name="SaigonAudioTour.Mobile.MainActivity, SaigonAudioTour.Mobile" />
+    <type assembly-qualified-name="SaigonAudioTour.Mobile.MainApplication, SaigonAudioTour.Mobile, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="saigonaudiotour.mobile.MainApplication" java-key="crc649e408905a1cccc33.MainApplication" managed-key="SaigonAudioTour.Mobile.MainApplication" partial-assembly-qualified-name="SaigonAudioTour.Mobile.MainApplication, SaigonAudioTour.Mobile" />
+  </acw-types>
+</api>

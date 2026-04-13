@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/Solution Items/" />
+  <Project Path="SaigonAudioTour.Api/SaigonAudioTour.Api.csproj" Id="ae9ad78a-d34b-46f8-ad62-34c6d8348a38" />
+  <Project Path="SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj" />
+</Solution>

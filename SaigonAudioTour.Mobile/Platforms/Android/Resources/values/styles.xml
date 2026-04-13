@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Override theme để Shell TabBar dùng được Material BottomNavigationView -->
+  <style name="Maui.MainTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <item name="colorPrimary">#0F172A</item>
+    <item name="colorPrimaryVariant">#0F172A</item>
+    <item name="colorOnPrimary">#FFFFFF</item>
+    <item name="colorSecondary">#F97316</item>
+    <item name="colorSecondaryVariant">#EA580C</item>
+    <item name="colorOnSecondary">#FFFFFF</item>
+    <item name="android:statusBarColor">#0F172A</item>
+    <item name="android:navigationBarColor">#FFFFFF</item>
+    <item name="textAppearanceBody1">@style/TextAppearance.MaterialComponents.Body1</item>
+    <item name="textAppearanceBody2">@style/TextAppearance.MaterialComponents.Body2</item>
+    <item name="textAppearanceButton">@style/TextAppearance.MaterialComponents.Button</item>
+  </style>
+</resources>

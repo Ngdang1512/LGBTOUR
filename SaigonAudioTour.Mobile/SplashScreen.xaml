@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SaigonAudioTour.Mobile.SplashScreen"
+             BackgroundColor="{StaticResource BgColor}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *, Auto" Padding="20">
+        
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="8" Padding="0, 40, 0, 30">
+            <Label Text="🍜 Chọn ngôn ngữ" FontSize="32" FontAttributes="Bold" 
+                   TextColor="{StaticResource TextColor}" />
+            <Label Text="Hướng dẫn âm thanh khám phá ẩm thực Q.4" FontSize="14" 
+                   TextColor="{StaticResource TextSecondary}" />
+        </VerticalStackLayout>
+
+        <!-- Language Selection Grid -->
+        <CollectionView Grid.Row="1" 
+                       ItemsSource="{Binding Languages}"
+                       SelectionMode="Single"
+                       SelectionChanged="OnLanguageSelectionChanged"
+                       SelectedItem="{Binding SelectedLanguage}"
+                       Margin="0, 10">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" 
+                                HorizontalItemSpacing="12" 
+                                VerticalItemSpacing="12"
+                                Span="2" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="16, 24" 
+                           BackgroundColor="{StaticResource SurfaceColor}" 
+                           Stroke="{StaticResource BorderColor}" 
+                           StrokeThickness="2"
+                           StrokeShape="RoundRectangle 16"
+                           HorizontalOptions="Fill">
+                        <Border.Shadow>
+                            <Shadow Brush="#94A3B8" Offset="0,2" Radius="8" Opacity="0.05" />
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="12" HorizontalOptions="Center">
+                            <Label Text="{Binding FlagEmoji}" FontSize="48" HorizontalOptions="Center" />
+                            <Label Text="{Binding DisplayName}" FontSize="14" FontAttributes="Bold" 
+                                   TextColor="{StaticResource TextColor}" HorizontalOptions="Center" />
+                            <Label Text="{Binding Code}" FontSize="11" 
+                                   TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Footer Buttons -->
+        <VerticalStackLayout Grid.Row="2" Spacing="12" Padding="0, 20, 0, 40">
+            <Button Text="Tiếp Tục" 
+                   BackgroundColor="{StaticResource Primary}"
+                   TextColor="White" FontAttributes="Bold"
+                   Padding="0, 16" CornerRadius="12"
+                   FontSize="16"
+                   Command="{Binding ContinueCommand}" />
+            
+            <Button Text="Bỏ Qua" 
+                   BackgroundColor="Transparent"
+                   TextColor="{StaticResource TextSecondary}"
+                   Padding="0, 12" CornerRadius="12"
+                   BorderColor="{StaticResource BorderColor}"
+                   BorderWidth="1"
+                   FontSize="14"
+                   Command="{Binding SkipCommand}" />
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

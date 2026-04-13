@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="80" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="15 10" />
+  
+  <path d="M100,35 C75.1,35 55,55.1 55,80 C55,113.8 100,165 100,165 C100,165 145,113.8 145,80 C145,55.1 124.9,35 100,35 Z M100,100 C88.9,100 80,91.1 80,80 C80,68.9 88.9,60 100,60 C111.1,60 120,68.9 120,80 C120,91.1 111.1,100 100,100 Z" fill="#FFFFFF" />
+  
+  <circle cx="100" cy="80" r="12" fill="#FFFFFF" />
+</svg>

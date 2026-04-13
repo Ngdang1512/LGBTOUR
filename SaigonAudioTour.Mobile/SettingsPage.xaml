@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SaigonAudioTour.Mobile.SettingsPage"
+             BackgroundColor="#F8FAFC"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="20, 50, 20, 40" Spacing="30">
+            
+            <Label Text="{Binding AccountTitleText}" TextColor="#0F172A" FontSize="28" FontAttributes="Bold" />
+
+            <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="20">
+                <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+                <Border.Shadow><Shadow Brush="#64748B" Offset="0,8" Radius="15" Opacity="0.05" /></Border.Shadow>
+                
+                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
+                    <Border WidthRequest="60" HeightRequest="60" StrokeShape="RoundRectangle 30" StrokeThickness="0">
+                        <Image Source="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" Aspect="AspectFill" />
+                    </Border>
+                    
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                        <Label Text="{Binding CurrentUser.FullName}" TextColor="#0F172A" FontSize="18" FontAttributes="Bold" />
+                        <Label Text="{Binding CurrentUser.Email}" TextColor="#64748B" FontSize="14" />
+                    </VerticalStackLayout>
+                    
+                    <Label Grid.Column="2" Text="{Binding EditLabelText}" TextColor="#0F172A" FontAttributes="Bold" VerticalOptions="Center" IsVisible="{Binding IsLoggedIn}" />
+                </Grid>
+            </Border>
+
+            <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="16" IsVisible="{Binding ShowLoginActions}">
+                <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding LoginPromptText}" TextColor="#475569" FontSize="14" />
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="{Binding LoginButtonText}"
+                                Clicked="OnLoginClicked"
+                                BackgroundColor="#0F172A"
+                                TextColor="White"
+                                HeightRequest="44"
+                                CornerRadius="10" />
+                        <Button Grid.Column="1"
+                                Text="{Binding RegisterButtonText}"
+                                Clicked="OnRegisterClicked"
+                                BackgroundColor="#E2E8F0"
+                                TextColor="#0F172A"
+                                HeightRequest="44"
+                                CornerRadius="10" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout Spacing="10">
+                <Label Text="{Binding ServiceSectionText}" TextColor="#94A3B8" FontSize="13" FontAttributes="Bold" Margin="5,0,0,5" />
+
+                <Border BackgroundColor="{Binding PremiumCardBackgroundColor}" Stroke="{Binding PremiumCardStrokeColor}" StrokeThickness="1" Padding="16">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="{Binding PremiumTitleText}" TextColor="{Binding PremiumTitleColor}" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="{Binding PremiumDescriptionText}" TextColor="{Binding PremiumDescriptionColor}" FontSize="13" />
+                        <Label Text="{Binding PremiumBenefitText}" TextColor="{Binding PremiumBenefitColor}" FontSize="12" IsVisible="{Binding IsPremium}" />
+                        <Button Text="{Binding PremiumButtonText}"
+                                Clicked="OnUpgradeClicked"
+                                BackgroundColor="{Binding PremiumButtonBackgroundColor}"
+                                TextColor="{Binding PremiumButtonTextColor}"
+                                HeightRequest="44"
+                                CornerRadius="10" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="{Binding GeneralSectionText}" TextColor="#94A3B8" FontSize="13" FontAttributes="Bold" Margin="5,10,0,5" />
+                
+                <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="20,15">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLanguageTapped" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Text="{Binding LanguageLabelText}" TextColor="#0F172A" FontSize="16" VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                            <Label Text="{Binding CurrentLanguageDisplay}" TextColor="#64748B" FontSize="14" VerticalOptions="Center"/>
+                            <Label Text=">" TextColor="#CBD5E1" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="20,15">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Text="{Binding NotificationLabelText}" TextColor="#0F172A" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text=">" TextColor="#CBD5E1" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <Label Text="{Binding SupportSectionText}" TextColor="#94A3B8" FontSize="13" FontAttributes="Bold" Margin="5,15,0,5" />
+
+                <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="20,15">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Text="{Binding HelpCenterLabelText}" TextColor="#0F172A" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text=">" TextColor="#CBD5E1" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <Button Text="{Binding LogoutButtonText}"
+                    BackgroundColor="#FEE2E2"
+                    TextColor="#EF4444"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    HeightRequest="55"
+                    Margin="0,20,0,0"
+                    IsVisible="{Binding IsLoggedIn}"
+                    Clicked="OnLogoutClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

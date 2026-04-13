@@ -1,15 +1,31 @@
 ﻿@model IEnumerable<AdminApp.Models.Poi>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý POI";
 }
 
-<h1>Index</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-1">Quản lý POI</h1>
+        <p class="text-muted mb-0">Danh sách địa điểm, điểm dừng và dữ liệu hiển thị cho app.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Create">+ Thêm POI</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+@if (TempData["Success"] is string successMessage)
+{
+    <div class="alert alert-success">@successMessage</div>
+}
+
+@if (TempData["Error"] is string errorMessage)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
     <thead>
         <tr>
             <th>
@@ -61,11 +77,14 @@
                 @Html.DisplayFor(modelItem => item.AudioPath)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a class="btn btn-sm btn-outline-primary me-1" asp-action="Edit" asp-route-id="@item.Id">Sửa</a>
+                <a class="btn btn-sm btn-outline-secondary me-1" asp-action="Details" asp-route-id="@item.Id">Chi tiết</a>
+                <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
             </td>
         </tr>
 }
     </tbody>
-</table>
+            </table>
+        </div>
+    </div>
+</div>

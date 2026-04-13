@@ -1,62 +1,110 @@
 ﻿@model AdminApp.Models.Poi
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Sửa POI";
 }
 
-<h1>Edit</h1>
+@if (TempData["Success"] is string successMessage)
+{
+    <div class="alert alert-success">@successMessage</div>
+}
 
-<h4>Poi</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@if (TempData["Error"] is string errorMessage)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Description" class="form-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Lat" class="form-label"></label>
+                    <input asp-for="Lat" class="form-control" />
+                    <span asp-validation-for="Lat" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Lng" class="form-label"></label>
+                    <input asp-for="Lng" class="form-control" />
+                    <span asp-validation-for="Lng" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Radius" class="form-label"></label>
+                    <input asp-for="Radius" class="form-control" />
+                    <span asp-validation-for="Radius" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Image" class="form-label"></label>
+                    <input asp-for="Image" class="form-control" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="AudioPath" class="form-label"></label>
+                    <input asp-for="AudioPath" class="form-control" />
+                    <span asp-validation-for="AudioPath" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lat" class="control-label"></label>
-                <input asp-for="Lat" class="form-control" />
-                <span asp-validation-for="Lat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lng" class="control-label"></label>
-                <input asp-for="Lng" class="form-control" />
-                <span asp-validation-for="Lng" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Radius" class="control-label"></label>
-                <input asp-for="Radius" class="form-control" />
-                <span asp-validation-for="Radius" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AudioPath" class="control-label"></label>
-                <input asp-for="AudioPath" class="form-control" />
-                <span asp-validation-for="AudioPath" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Hủy</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="row g-3 mt-1">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h5 class="card-title">Gắn hình ảnh</h5>
+                <form asp-action="UploadImage" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label class="form-label">Chọn file ảnh</label>
+                        <input name="imageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp,.jfif" />
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">Upload ảnh</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h5 class="card-title">Gắn dữ liệu audio / thuyết minh</h5>
+                <form asp-action="AddNarration" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-2">
+                        <label class="form-label">Mã ngôn ngữ</label>
+                        <input name="languageCode" class="form-control" placeholder="vi / en" value="vi" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Nội dung thuyết minh</label>
+                        <textarea name="contentText" rows="4" class="form-control" placeholder="Nhập nội dung audio..." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">File audio (tuỳ chọn)</label>
+                        <input name="audioFile" type="file" class="form-control" accept=".mp3,.wav,.m4a" />
+                    </div>
+                    <button type="submit" class="btn btn-outline-success">Lưu audio/thuyết minh</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

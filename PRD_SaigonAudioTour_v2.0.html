@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaigonAudioTour PRD - Đặc Tả Yêu Cầu Sản Phẩm v2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1565C0;
+            --primary-light: #42a5f5;
+            --primary-dark: #0D2137;
+            --accent: #00838f;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; display: flex; }
+        
+        /* Sidebar */
+        .sidebar { width: 320px; background: var(--primary-dark); height: 100vh; position: fixed; top: 0; left: 0; padding: 2rem 0; overflow-y: auto; }
+        .sidebar-header { padding: 0 1.5rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem; }
+        .sidebar-header h1 { color: #fff; font-size: 1.3rem; font-weight: 800; letter-spacing: 0.5px; }
+        .sidebar-header p { color: var(--primary-light); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; }
+        
+        .nav-group { margin-bottom: 1.5rem; }
+        .nav-title { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; padding: 0 1.5rem 0.5rem; }
+        .nav-link { display: block; padding: 0.6rem 1.5rem; color: #cbd5e1; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; border-left: 3px solid transparent; }
+        .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.05); color: #fff; border-left-color: var(--primary-light); }
+
+        /* Main */
+        .main-content { margin-left: 320px; flex: 1; min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, var(--primary-dark) 0%, #1a237e 100%); padding: 4rem 3rem; color: white; }
+        .hero h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; }
+        .hero p { font-size: 1.05rem; opacity: 0.9; max-width: 800px; margin-bottom: 2rem; }
+        .badges { margin-top: 1.5rem; }
+        .badges span { background: rgba(255,255,255,0.15); padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-right: 0.5rem; display: inline-block; margin-bottom: 0.5rem; }
+        
+        .container { padding: 3rem; max-width: 1400px; }
+        .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; margin-bottom: 3rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .section-header { display: flex; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border); }
+        .section-number { background: var(--primary); color: white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: bold; margin-right: 1rem; font-size: 1.1rem; flex-shrink: 0; }
+        .section-title { font-size: 1.6rem; font-weight: 700; color: var(--primary-dark); }
+        .section-subtitle { font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; }
+
+        .diagram-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 2rem; margin-top: 1.5rem; overflow-x: auto; text-align: center; }
+        .mermaid { font-family: 'Inter', sans-serif; }
+
+        /* Content Styling */
+        .content-text { color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.8; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .feature-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; }
+        .feature-card h4 { color: var(--primary); font-weight: 700; margin-bottom: 0.5rem; }
+        .feature-card p { font-size: 0.9rem; color: var(--text-secondary); }
+
+        .api-endpoint { background: #f0f4f8; border-left: 4px solid var(--primary); padding: 1rem; margin: 1rem 0; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9rem; }
+        .method { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 4px; font-weight: 600; margin-right: 0.5rem; }
+        .get { background: #dcfce7; color: var(--success); }
+        .post { background: #dbeafe; color: var(--primary); }
+        .put { background: #fef3c7; color: var(--warning); }
+        .delete { background: #fee2e2; color: var(--danger); }
+
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        table thead { background: var(--bg); }
+        table th, table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+        table th { font-weight: 700; color: var(--primary-dark); }
+        table tr:hover { background: #f9fafb; }
+
+        .note-box { background: #fef3c7; border-left: 4px solid var(--warning); padding: 1rem; margin: 1.5rem 0; border-radius: 4px; }
+        .note-box strong { color: var(--warning); }
+        .success-box { background: #dcfce7; border-left: 4px solid var(--success); padding: 1rem; margin: 1.5rem 0; border-radius: 4px; }
+
+        .diagram-label { font-size: 0.85rem; color: var(--text-secondary); margin-top: 1rem; font-style: italic; }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        @media (max-width: 1200px) {
+            .sidebar { width: 250px; }
+            .main-content { margin-left: 250px; }
+            .container { padding: 2rem; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>📍 SaigonAudioTour</h1>
+            <p>PRD v2.0 - Báo Cáo Đặc Tả Công Nghệ</p>
+        </div>
+        
+        <div class="nav-group">
+            <div class="nav-title">📋 I. Tổng Quan</div>
+            <a href="#overview" class="nav-link">1. Phạm Vi Dự Án</a>
+            <a href="#objectives" class="nav-link">2. Mục Tiêu & Kỳ Vọng</a>
+            <a href="#requirements" class="nav-link">3. Yêu Cầu Chức Năng</a>
+            <a href="#tech-stack" class="nav-link">4. Công Nghệ & Stack</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title">🏗️ II. Kiến Trúc</div>
+            <a href="#architecture" class="nav-link">5. Kiến Trúc Hệ Thống</a>
+            <a href="#class-diagram" class="nav-link">6. Sơ Đồ Class (UML)</a>
+            <a href="#erd" class="nav-link">7. Thiết Kế CSDL (ERD)</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title">⚙️ III. Luồng Xử Lý</div>
+            <a href="#sequence" class="nav-link">8. Chọn Ngôn Ngữ & Phát Thuyết Minh</a>
+            <a href="#activity" class="nav-link">9. Quy Trình Admin</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title">🔌 IV. API & Data</div>
+            <a href="#api-spec" class="nav-link">10. REST API Endpoints</a>
+            <a href="#error-handling" class="nav-link">11. Xử Lý Lỗi & Response</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="hero">
+            <h2>🎯 SaigonAudioTour: Hệ Thống Thuyết Minh Xe Buýt 2 Tầng Tại Quận 1</h2>
+            <p>Giải pháp thuyết minh du lịch tự động cho các tuyến xe buýt 2 tầng tham quan Quận 1 (Hà Nội). Khi xe di chuyển vào gần các địa danh lịch sử, văn hóa như Nhà Thờ Lớn, Bưu Điện, Dinh Độc Lập, hệ thống tự động phát âm thanh thuyết minh tiếng Việt/Anh/Hàn giúp du khách hiểu rõ hơn về từng địa điểm.</p>
+            <div class="badges">
+                <span>💻 C# ASP.NET Core 8</span>
+                <span>📱 Mobile MAUI / Flutter</span>
+                <span>🗄️ SQL Server 2022</span>
+                <span>🤖 Azure AI TTS</span>
+                <span>📊 LeafletJS & ChartJS</span>
+                <span>🔐 JWT Authentication</span>
+            </div>
+        </div>
+
+        <div class="container">
+            
+            <!-- Section 1: Overview -->
+            <section id="overview" class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">Phạm Vi & Mô Tả Dự Án</h3>
+                </div>
+                <p class="content-text">
+                    <strong>SaigonAudioTour - Hệ Thống Thuyết Minh Du Lịch Tự Động Trên Xe Buýt 2 Tầng</strong> là giải pháp toàn diện để quản lý và phát hành thông tin du lịch cho các tuyến xe bưu dK tham quan quanh Quận 1 (Hà Nội). Hệ thống tự động phát âm thanh thuyết minh tiếng Việt, tiếng Anh, tiếng Hàn khi xe di chuyển vào vùng các địa danh nổi tiếng.
+                </p>
+                <p class="content-text"><strong>Các Địa Danh Chính Quận 1 (District 1):</strong></p>
+                <ul style="margin-left: 2rem; margin-bottom: 1.5rem; line-height: 2; column-count: 2;">
+                    <li>🏛️ Nhà Thờ Lớn (Thánh Josephine)</li>
+                    <li>📮 Bưu Điện Thành Phố (Post Office)</li>
+                    <li>🏛️ Tòa Nhà Patriot (Legend Plaza)</li>
+                    <li>🌊 Bến Nghè - Bờ Sông Sài Gòn</li>
+                    <li>🏰 Dinh Độc Lập (Independence Palace)</li>
+                    <li>🎭 Nhà Hát Thành Phố</li>
+                    <li>👟 Thao Đức Sports Center</li>
+                    <li>🌳 Tao Đức Park</li>
+                </ul>
+                <p class="content-text"><strong>SaigonAudioTour cung cấp:</strong></p>
+                <ul style="margin-left: 2rem; margin-bottom: 1.5rem; line-height: 2;">
+                    <li>✅ <strong>Quản trị Địa Danh (POI)</strong> - CRUD các điểm tham quan Quận 1 với GPS, bán kính kích hoạt</li>
+                    <li>✅ <strong>Quản lý Âm Thanh Đa Ngôn Ngữ</strong> - Thuyết minh VI/EN/KO, AI TTS, convert text to speech</li>
+                    <li>✅ <strong>Kế Hoạch Tuyến Xe Buýt</strong> - Sắp xếp các POI theo lộ trình xe từ Dinh Độc Lập → Bưu Điện → Nhà Thờ Lớn</li>
+                    <li>✅ <strong>Phát Âm Thanh Tự Động</strong> - Khi xe buýt vào gần địa danh, phát thuyết minh vị trí, lịch sử, kiến trúc</li>
+                    <li>✅ <strong>Dashboard Xe Buýt</strong> - Theo dõi vị trí xe realtime, số hành khách, lượt nghe từng địa danh</li>
+                    <li>✅ <strong>Heatmap Analytics</strong> - Phân tích địa danh nào được du khách quan tâm nhất, thời gian lưu lại</li>
+                    <li>✅ <strong>CMS Web Quản Lý</strong> - CRUD Địa Danh, Upload Âm Thanh, Sắp Xếp Tuyến Xe, Quản Lý Admin</li>
+                </ul>
+            </section>
+
+            <!-- Section 2: Objectives -->
+            <section id="objectives" class="section">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">Mục Tiêu & Kỳ Vọng Chính</h3>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🎯 Tối Ưu Trải Nghiệm</h4>
+                        <p>Du khách nhận thông tin chi tiết mà không cần tìm kiếm, tăng mức độ hài lòng đến 95%</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📊 Dữ Liệu Thực Thời</h4>
+                        <p>Dashboard cập nhật live hành vi khách, giúp các tour operator điều chỉnh chiến lược</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌐 Đa Ngôn Ngữ</h4>
+                        <p>Hỗ trợ đầy đủ 7 ngôn ngữ chính để kế thừa thị trường quốc tế</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚡ Hiệu Năng Cao</h4>
+                        <p>API đáp ứng < 200ms, xử lý 10,000+ yêu cầu GPS/phút, uptime 99.9%</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Functional Requirements -->
+            <section id="requirements" class="section">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    <h3 class="section-title">Yêu Cầu Chức Năng (Functional Requirements)</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Chức Năng</th>
+                            <th>Mô Tả Chi Tiết</th>
+                            <th>Module</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>F01</strong></td>
+                            <td>Quản Lý Điểm Dừng (POI)</td>
+                            <td>CRUD, Geofence Radius, Hình ảnh, Mô tả</td>
+                            <td>Admin CMS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F02</strong></td>
+                            <td>Upload Audio Đa Ngôn Ngữ</td>
+                            <td>Hỗ trợ .mp3, .wav, max 50MB/file, chuyển đổi TTS AI</td>
+                            <td>Admin CMS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F03</strong></td>
+                            <td>Xây Dựng Tuyến Du Lịch</td>
+                            <td>Kéo-thả POI để sắp xếp, thiết định giá tour</td>
+                            <td>Admin CMS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F04</strong></td>
+                            <td>GPS Tracking & Auto-Play</td>
+                            <td>Bắt tọa độ mỗi 30s, tính Haversine, phát audio</td>
+                            <td>Mobile App</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F05</strong></td>
+                            <td>Heatmap Analytics</td>
+                            <td>Hiển thị mật độ khách hàng theo thời gian, địa điểm</td>
+                            <td>Admin Dashboard</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F06</strong></td>
+                            <td>Quản Lý User & Permissions</td>
+                            <td>RBAC, chứng thực JWT, đăng ký 2-factor</td>
+                            <td>Auth Service</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Section 4: Tech Stack -->
+            <section id="tech-stack" class="section">
+                <div class="section-header">
+                    <div class="section-number">4</div>
+                    <h3 class="section-title">Công Nghệ & Tech Stack</h3>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🖥️ Backend API</h4>
+                        <p><strong>C# ASP.NET Core 8</strong> với Entity Framework 8.0, Swagger/OpenAPI, Dependency Injection pattern</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📱 Mobile Application</h4>
+                        <p><strong>.NET MAUI / Flutter</strong> cho cross-platform iOS & Android với background GPS service</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🗄️ Database</h4>
+                        <p><strong>SQL Server 2022</strong> hoặc <strong>PostgreSQL 15+</strong> với Full-Text Search, Spatial Queries</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>☁️ Cloud Services</h4>
+                        <p><strong>Azure AI Services</strong> (Text-to-Speech), <strong>Blob Storage</strong> cho Media, <strong>CDN</strong> cho delivery</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🎨 Frontend (Admin CMS)</h4>
+                        <p><strong>React 18</strong>, <strong>TypeScript</strong>, <strong>Tailwind CSS</strong>, <strong>LeafletJS</strong> maps, <strong>ChartJS</strong> analytics</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔐 Security & Auth</h4>
+                        <p><strong>JWT (RS256)</strong>, OAuth2, Rate Limiting, CORS, HTTPS only, SQL Injection Prevention</p>
+                    </div>
+                </div>
+                
+            </section>
+
+            <!-- Section 5: System Architecture -->
+            <section id="architecture" class="section">
+                <div class="section-header">
+                    <div class="section-number">5</div>
+                    <h3 class="section-title">Kiến Trúc Hệ Thống (System Architecture)</h3>
+                </div>
+                <p class="content-text">Hệ thống được thiết kế theo kiến trúc 4-layer với 2 ứng dụng riêng biệt: (1) Mobile App cho khách du lịch, (2) Admin Web CMS cho quản trị viên. Backend API cung cấp RESTful services cho cả 2 frontend.</p>
+                <div class="diagram-box">
+                    <div class="mermaid">
+graph TB
+    subgraph MobileApp["📱 Mobile App (Passenger)"]
+        GPS_MOBILE["🛰️ GPS Background Service<br/>(30s interval)"]
+        UI_DISPLAY["📱 UI Display<br/>(POI Info)"]
+        AUDIO_PLAYER["🎵 Audio Player<br/>(Auto-play)"]
+    end
+
+    subgraph AdminWeb["💼 Admin Web CMS (ASP.NET MVC)"]
+        POI_MANAGE["📍 POI Management<br/>(CRUD Operations)"]
+        TOUR_MANAGE["🚌 Tour Management<br/>(Drag & Drop)"]
+        NARRATION_MANAGE["🎙️ Narration Management<br/>(Multi-language)"]
+        DASHBOARD["📊 Analytics Dashboard<br/>(Heatmaps)"]
+    end
+
+    subgraph BackendAPI["🖥️ Backend API (ASP.NET Core 8)"]
+        POIS_CONTROLLER["POIs Controller<br/>(Geofencing)"]
+        TOURS_CONTROLLER["Tours Controller<br/>(Route Planning)"]
+        NARRATIONS_CONTROLLER["Narrations Controller<br/>(Audio/Text)"]
+        AUTH_CONTROLLER["Auth Controller<br/>(JWT)"]
+        SERVICES["Business Services<br/>(PoiService, TourService, etc.)"]
+    end
+
+    subgraph Database["💾 SQL Server 2022"]
+        POI_TABLE["POI Table<br/>(Lat/Lng/Radius)"]
+        NARRATION_TABLE["Narration Table<br/>(Multi-lang Audio)"]
+        TOUR_TABLE["Tour Table<br/>(Routes)"]
+        TOURPOI_TABLE["TourPOI Table<br/>(Order)"]
+        USERLOG_TABLE["UserLog Table<br/>(Analytics)"]
+    end
+
+    subgraph CloudServices["☁️ Azure Cloud"]
+        AZURE_TTS["Cognitive Services<br/>(TTS)"]
+        BLOB_STORAGE["Blob Storage<br/>(Audio Files)"]
+        APP_INSIGHTS["Application Insights<br/>(Monitoring)"]
+    end
+
+    %% Mobile App Flow
+    GPS_MOBILE -->|POST /api/pois/nearby| POIS_CONTROLLER
+    POIS_CONTROLLER -->|Geofence Check| POI_TABLE
+    POIS_CONTROLLER -->|Return POI + Audio| UI_DISPLAY
+    UI_DISPLAY -->|Auto-play| AUDIO_PLAYER
+    
+    %% Admin Web Flow
+    POI_MANAGE -->|CRUD Operations| POIS_CONTROLLER
+    TOUR_MANAGE -->|Route Planning| TOURS_CONTROLLER
+    NARRATION_MANAGE -->|Audio Management| NARRATIONS_CONTROLLER
+    
+    %% API to Database
+    POIS_CONTROLLER --> POI_TABLE
+    TOURS_CONTROLLER --> TOUR_TABLE
+    NARRATIONS_CONTROLLER --> NARRATION_TABLE
+    SERVICES --> USERLOG_TABLE
+    
+    %% Cloud Integration
+    NARRATIONS_CONTROLLER -->|TTS Generation| AZURE_TTS
+    NARRATIONS_CONTROLLER -->|File Storage| BLOB_STORAGE
+    BackendAPI -->|Telemetry| APP_INSIGHTS
+
+    style MobileApp fill:#e0f2fe,stroke:#0284c7,stroke-width:3px
+    style AdminWeb fill:#fef3c7,stroke:#ca8a04,stroke-width:3px
+    style BackendAPI fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style Database fill:#f3e8ff,stroke:#7c3aed,stroke-width:3px
+    style CloudServices fill:#fecaca,stroke:#dc2626,stroke-width:3px
+    GEOFENCE -->|Truy vấn âm thanh| AUDIO
+    AUDIO -->|Lấy URL MP3| STORAGE
+    STORAGE -->|Presigned URL| SPEAKER
+    
+    %% Admin Interface
+    POIADMIN -->|CRUD| POI
+    AUDIOADMIN -->|Upload| TTS
+    TTS -->|Convert TTS| STORAGE
+    TOUR -->|Sắp xếp POI| TOUR_DB
+    DASHBOARD -->|Phân tích| LOGS
+    
+    %% Monitoring
+    CTL -->|Telemetry| APPINSIGHT
+    
+    %% Database
+    POI -.->|Foreign Key| TOUR_DB
+    AUDIO_DB -.->|Foreign Key| POI
+    LOGS -.->|Log Events| POI
+
+    style BusSystem fill:#e0f2fe,stroke:#0284c7,stroke-width:3px
+    style Backend fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style AdminCMS fill:#fef3c7,stroke:#ca8a04,stroke-width:3px
+    style Database fill:#f3e8ff,stroke:#9333ea,stroke-width:3px
+    style CloudServices fill:#fee2e2,stroke:#dc2626,stroke-width:3px
+                    </div>
+                </div>
+                <p class="diagram-label">🔍 Luồng Hoạt Động: Xe Buýt GPS → API Server → Geofence Check → Phát Âm Thanh + Hiển Thị POI trên Display + Ghi Log Analytics</p>
+            </section>
+
+            <!-- Section 6: Class Diagram -->
+            <section id="class-diagram" class="section">
+                <div class="section-header">
+                    <div class="section-number">6</div>
+                    <h3 class="section-title">Sơ Đồ Class (UML Class Diagram)</h3>
+                </div>
+                <p class="content-text">Thiết kế lớp tối ưu cho hệ thống xe buýt 2 tầng ở Quận 1. Sơ đồ chia thành 2 phần: (1) Domain Models & Relationships, (2) Services & Controllers</p>
+
+                <h4 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary-dark); font-weight: 700;">📊 Phần 1: Domain Models & Database Entities</h4>
+                <div class="diagram-box">
+                    <div class="mermaid">
+classDiagram
+    class POI {
+        -Id
+        -Name
+        -Description
+        -Lat
+        -Lng
+        -Radius
+        -Image
+        -Priority
+        -IsStopStation
+        +Narrations
+        +TourPOIs
+        +UserLogs
+    }
+
+    class Narration {
+        -Id
+        -PoiId
+        -LanguageCode
+        -TranslatedName
+        -TranslatedDescription
+        -ContentText
+        -AudioUrl
+        -DurationSeconds
+        -VoiceType
+        +POI
+    }
+
+    class Tour {
+        -Id
+        -Name
+        -Description
+        -EstimatedTimeMinutes
+        -TicketPrice
+        -TotalDistanceKm
+        +TourPOIs
+    }
+
+    class TourPOI {
+        -Id
+        -TourId
+        -PoiId
+        -DisplayOrder
+        +Tour
+        +POI
+    }
+
+    class UserLog {
+        -Id
+        -UserId
+        -PoiId
+        -Lat
+        -Lng
+        -EventType
+        -DurationSeconds
+        -CreatedAt
+        +POI
+    }
+
+    POI --o Narration
+    POI --o TourPOI
+    POI --o UserLog
+    Tour --o TourPOI
+
+    style POI fill:#e0f2fe,stroke:#0284c7,stroke-width:2px
+    style Narration fill:#e0f2fe,stroke:#0284c7,stroke-width:2px
+    style Tour fill:#e0f2fe,stroke:#0284c7,stroke-width:2px
+    style TourPOI fill:#e0f2fe,stroke:#0284c7,stroke-width:2px
+    style UserLog fill:#fef3c7,stroke:#ca8a04,stroke-width:2px
+                    </div>
+                </div>
+                <p class="diagram-label">🗂️ Domain Models: POI (địa danh) → Narration (thuyết minh đa ngôn ngữ) → Tour (tuyến xe buýt) → UserLog (ghi nhận hoạt động)</p>
+
+                <h4 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary-dark); font-weight: 700;">⚙️ Phần 2: Services & REST Controllers</h4>
+                <div class="diagram-box">
+                    <div class="mermaid">
+classDiagram
+    class IPoiService {
+        +GetAllPoisAsync() Task
+        +CreatePoiAsync() Task
+        +UploadImageAsync() Task
+        +GetNearbyPoiAsync() Task
+        +UpdatePoiAsync() Task
+        +DeletePoiAsync() Task
+    }
+
+    class PoiService {
+        -ApplicationDbContext _context
+        +GetAllPoisAsync() Task
+        +CreatePoiAsync() Task
+        +UploadImageAsync() Task
+        +GetNearbyPoiAsync() Task
+        +UpdatePoiAsync() Task
+        +DeletePoiAsync() Task
+    }
+
+    class ITourService {
+        +GetAllToursAsync() Task
+        +CreateTourAsync() Task
+        +UpdateTourAsync() Task
+        +DeleteTourAsync() Task
+    }
+
+    class TourService {
+        -ApplicationDbContext _context
+        +GetAllToursAsync() Task
+        +CreateTourAsync() Task
+        +UpdateTourAsync() Task
+        +DeleteTourAsync() Task
+    }
+
+    class INarrationService {
+        +GetNarrationsByPoiAsync() Task
+        +CreateNarrationAsync() Task
+        +UpdateNarrationAsync() Task
+        +DeleteNarrationAsync() Task
+    }
+
+    class NarrationService {
+        -ApplicationDbContext _context
+        +GetNarrationsByPoiAsync() Task
+        +CreateNarrationAsync() Task
+        +UpdateNarrationAsync() Task
+        +DeleteNarrationAsync() Task
+    }
+
+    class IUserLogService {
+        +LogUserActivityAsync() Task
+        +GetUserLogsAsync() Task
+    }
+
+    class UserLogService {
+        -ApplicationDbContext _context
+        +LogUserActivityAsync() Task
+        +GetUserLogsAsync() Task
+    }
+
+    class POIsController {
+        -IPoiService _poiService
+        +GetAllPois() ActionResult
+        +GetNearbyPoi() IActionResult
+        +CreatePoi() ActionResult
+        +UpdatePoi() ActionResult
+        +DeletePoi() ActionResult
+    }
+
+    class ToursController {
+        -ITourService _tourService
+        +GetAllTours() ActionResult
+        +CreateTour() ActionResult
+        +UpdateTour() ActionResult
+        +DeleteTour() ActionResult
+    }
+
+    class NarrationsController {
+        -INarrationService _narrationService
+        +GetNarrationsByPoi() ActionResult
+        +CreateNarration() ActionResult
+        +UpdateNarration() ActionResult
+        +DeleteNarration() ActionResult
+    }
+
+    IPoiService <|.. PoiService : implements
+    ITourService <|.. TourService : implements
+    INarrationService <|.. NarrationService : implements
+    IUserLogService <|.. UserLogService : implements
+
+    PoiService --> POIsController : dependency injection
+    TourService --> ToursController : dependency injection
+    NarrationService --> NarrationsController : dependency injection
+
+    style IPoiService fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style PoiService fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style ITourService fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style TourService fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style INarrationService fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style NarrationService fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style IUserLogService fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style UserLogService fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style POIsController fill:#fecaca,stroke:#dc2626,stroke-width:2px
+    style ToursController fill:#fecaca,stroke:#dc2626,stroke-width:2px
+    style NarrationsController fill:#fecaca,stroke:#dc2626,stroke-width:2px
+                    </div>
+                </div>
+                <!-- <p class="diagram-label">🔧 Services (xanh lá) → Controllers (đỏ): GeofenceService xử lý Haversine, AudioService quản lý TTS, BusTrackingService orchestrate tất cả</p> -->
+
+            <!-- Section 7: ERD -->
+            <section id="erd" class="section">
+                <div class="section-header">
+                    <div class="section-number">7</div>
+                    <h3 class="section-title">Thiết Kế Cơ Sở Dữ Liệu (Entity Relationship Diagram)</h3>
+                </div>
+                <p class="content-text">Cấu trúc CSDL chuẩn hóa 3NF (Third Normal Form) trên SQL Server 2022. Hỗ trợ Soft Delete, Audit Logs, Full-Text Search, và Transaction Consistency với ACID properties.</p>
+                <div class="diagram-box">
+                    <div class="mermaid">
+erDiagram
+    POI {
+        int Id PK "Primary Key"
+        string Name "Tên điểm dừng"
+        string Description "Mô tả chi tiết"
+        double Lat "Vĩ độ"
+        double Lng "Kinh độ"
+        string Image "Link ảnh đại diện"
+        int Priority "Thứ tự ưu tiên"
+        bool IsStopStation "Điểm dừng?"
+        int Radius "Bán kính geofence (m)"
+    }
+
+    Narration {
+        int Id PK "Primary Key"
+        int POI_Id FK "Reference to POI.Id"
+        string LanguageCode "Code: vi, en, ko, zh, ja, es, fr"
+        string TranslatedName "Tên dịch"
+        string TranslatedDescription "Mô tả dịch"
+        string ContentText "Nội dung text cho TTS"
+        string AudioUrl "Đường dẫn file MP3"
+        int DurationSeconds "Thời lượng (giây)"
+        string VoiceType "Loại giọng đọc"
+    }
+
+    TOUR {
+        int Id PK "Primary Key"
+        string Name "Tên tour du lịch"
+        string Description "Mô tả chuyến đi"
+        int EstimatedTimeMinutes "Thời gian ước tính (phút)"
+        decimal TicketPrice "Giá vé du lịch"
+        double TotalDistanceKm "Tổng khoảng cách (km)"
+    }
+
+    TourPOI {
+        int Id PK "Primary Key"
+        int TourId FK "Reference to Tour.Id"
+        int POIId FK "Reference to POI.Id"
+        int DisplayOrder "Thứ tự lộ trình (1, 2, 3...)"
+    }
+
+    UserLog {
+        long Id PK "Primary Key"
+        string UserId "Device ID hoặc User ID"
+        int POIId FK "Reference to POI.Id"
+        double Lat "Vĩ độ khi bắt sự kiện"
+        double Lng "Kinh độ khi bắt sự kiện"
+        string EventType "Loại sự kiện"
+        long DurationSeconds "Thời lượng nghe audio"
+        datetime CreatedAt "Timestamp sự kiện"
+    }
+
+    POI ||--o{ Narration : "Có bản thuyết minh (1-N)"
+    POI ||--o{ UserLog : "Ghi nhận lượt nghe (1-N)"
+    POI ||--o{ TourPOI : "Nằm trong tour (N-N)"
+    TOUR ||--o{ TourPOI : "Bao gồm POI (1-N)"
+                    </div>
+                </div>
+                <p class="diagram-label">🗂️ Tổng cộng 5 bảng chính: POI, Narration, Tour, TourPOI, UserLog</p>
+                <div class="success-box">
+                    <strong>✓ Khóa & Quan Hệ:</strong><br>
+                    • POI & Narration (1-N): Mỗi POI có nhiều bản thuyết minh đa ngôn ngữ<br>
+                    • Tour & TourPOI (1-N): Mỗi Tour bao gồm nhiều POI với DisplayOrder xác định thứ tự<br>
+                    • POI & UserLog (1-N): Mỗi POI ghi lại hoạt động của khách (Lat/Lng/DurationSeconds/EventType)<br>
+                    • Tọa độ dùng double (Lat/Lng) để tính Haversine distance cho geofencing
+                </div>
+            </section>
+
+            <!-- Section 8: Sequence Diagram -->
+            <section id="sequence" class="section">
+                <div class="section-header">
+                    <div class="section-number">8</div>
+                    <h3 class="section-title">Chọn Ngôn Ngữ & Phát Thuyết Minh Trong Trang Chi Tiết (Sequence Diagram)</h3>
+                </div>
+                <p class="content-text">Mô tả quá trình người dùng mở trang chi tiết, chọn ngôn ngữ thuyết minh, ứng dụng tải nội dung tương ứng và tự động phát audio theo ngôn ngữ đã chọn.</p>
+                <div class="diagram-box">
+                    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor User as Du Khách (Mobile App)
+    participant Detail as DetailPage.xaml.cs
+    participant Picker as LanguagePicker
+    participant Pref as Preferences (Local)
+    participant TTS as TextToSpeech.Default
+    participant UI as Play/Stop + ProgressBar
+
+    rect rgb(240, 248, 255)
+    Note over User, Pref: GIAI ĐOẠN 1: MỞ TRANG & KHÔI PHỤC NGÔN NGỮ
+    User->>Detail: Chạm vào một địa điểm trên MainPage
+    Detail->>Picker: Nạp ItemsSource (vi/en/zh/ja/ko/fr)
+    Detail->>Pref: Đọc key SelectedLanguage
+    Pref-->>Detail: Trả về mã ngôn ngữ đã lưu
+    Detail->>Picker: Set SelectedIndex theo mã ngôn ngữ
+    end
+
+    rect rgb(240, 253, 244)
+    Note over User, UI: GIAI ĐOẠN 2: BẤM PHÁT & ĐỌC THUYẾT MINH
+    User->>Picker: Chọn ngôn ngữ mong muốn
+    User->>Detail: Bấm nút ▶️ Phát
+    Detail->>UI: Ẩn Play, hiện Stop
+    Detail->>Detail: Map ngôn ngữ -> selectedCode
+    Detail->>Pref: Lưu SelectedLanguage + NarratingPlaceId
+    Detail->>Detail: Chọn text theo ngôn ngữ (TranslateTo...)
+    Detail->>TTS: GetLocalesAsync()
+    TTS-->>Detail: Danh sách locale khả dụng
+    Detail->>TTS: SpeakAsync(text, locale, cts.Token)
+    par Trong khi đang phát
+        Detail->>UI: AnimateProgressBar()
+    and Nếu người dùng bấm ⏹️ Dừng
+        User->>Detail: OnStopClicked()
+        Detail->>Detail: _cts.Cancel()
+    end
+    TTS-->>Detail: Hoàn tất hoặc bị hủy
+    Detail->>UI: Hiện Play, ẩn Stop, reset Progress=0
+    end
+
+    rect rgb(255, 251, 235)
+    Note over User, Pref: GIAI ĐOẠN 3: THOÁT TRANG & DỌN TRẠNG THÁI
+    User->>Detail: Bấm Back / rời trang chi tiết
+    Detail->>Detail: OnDisappearing() -> _cts.Cancel()
+    Detail->>Pref: Clear NarratingPlaceId nếu đang nghe
+    Pref-->>Detail: Xác nhận cập nhật local state
+    end
+                    </div>
+                </div>
+                <p class="diagram-label">🎧 Luồng thực thi hiện tại là local-first: Picker + Preferences + TextToSpeech trên thiết bị, chưa gọi API/DB backend cho bước phát thuyết minh</p>
+
+                <h4 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary-dark); font-weight: 700;">🎯 Use Case: Chức Năng Thuyết Minh Trên Trang Chi Tiết</h4>
+                <div class="diagram-box">
+                    <div class="mermaid">
+flowchart LR
+    User[👤 Du Khách]
+
+    UC1((Mở trang chi tiết địa điểm))
+    UC2((Chọn ngôn ngữ thuyết minh))
+    UC3((Bấm phát thuyết minh))
+    UC4((Dừng phát thuyết minh))
+    UC5((Lưu ngôn ngữ đã chọn))
+    UC6((Khôi phục ngôn ngữ lần mở sau))
+    UC7((Tự hủy phát khi rời trang))
+
+    User --> UC1
+    User --> UC2
+    User --> UC3
+    User --> UC4
+
+    UC3 -. include .-> UC5
+    UC1 -. include .-> UC6
+    UC1 -. extend .-> UC7
+
+    style User fill:#e0f2fe,stroke:#0284c7,stroke-width:2px
+    style UC1 fill:#f8fafc,stroke:#64748b
+    style UC2 fill:#f8fafc,stroke:#64748b
+    style UC3 fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style UC4 fill:#fee2e2,stroke:#dc2626,stroke-width:2px
+    style UC5 fill:#fef3c7,stroke:#ca8a04
+    style UC6 fill:#fef3c7,stroke:#ca8a04
+    style UC7 fill:#fef3c7,stroke:#ca8a04
+                    </div>
+                </div>
+                <p class="diagram-label">📌 Use Case này phản ánh đúng code hiện tại: người dùng chọn ngôn ngữ, phát/dừng thuyết minh, lưu Preferences và tự hủy khi rời DetailPage.</p>
+            </section>
+
+            <!-- Section 9: Activity Diagram -->
+            <section id="activity" class="section">
+                <div class="section-header">
+                    <div class="section-number">9</div>
+                    <h3 class="section-title">Quy Trình Quản Trị: Sắp Xếp Tuyến Đường Kéo-Thả (Activity Diagram)</h3>
+                </div>
+                <p class="content-text">Mô tả toàn bộ quy trình từ khi Admin kéo-thả các POI để sắp xếp lộ trình đến khi dữ liệu được lưu vào Database.</p>
+                <div class="diagram-box">
+                    <div class="mermaid">
+flowchart TD
+    Start([👤 Admin mở CMS]) --> Load["🔄 Load giao diện Quản lý Tour + POI List"]
+    Load --> FetchDB["API GET /api/tours/{id}<br/>Truy vấn danh sách POI theo thứ tự"]
+    FetchDB --> RenderUI["📌 Render HTML: Mỗi POI = Draggable Card<br/>SortableJS init library"]
+    
+    RenderUI --> DragStart["🎯 Admin di chuột vào POI #2"]
+    DragStart --> Drag["🔄 DRAG: Kéo POI #2 xuống vị trí #4"]
+    Drag --> UIUpdate["✨ SortableJS hoán đổi HTML DOM<br/>Thứ tự trở thành: 1,3,4,2,5..."]
+    UIUpdate --> ShowBtn["💾 Hiển thị nút 'LƯUÙ Thứ Tự Mới'<br/>(Nút này ẩn ban đầu)"]
+    
+    ShowBtn --> ClickCheck{Admin bấm<br/>Lưu?}
+    
+    ClickCheck -->|Chưa bấm| Drag
+    ClickCheck -->|Bấm Lưu| BuildJSON["🔧 JavaScript xây array ID<br/>Ví dụ: [1, 3, 4, 2, 5]"]
+    
+    BuildJSON --> SendAPI["📤 AJAX POST /api/tours/{id}/reorder<br/>Gửi payload:<br/>{tourId: 1, poiIds: [1,3,4,2,5]}"]
+    
+    SendAPI --> BackendReceive["🖥️ C# Controller Method"]
+    BackendReceive --> Validate{Kiểm tra<br/>Dữ liệu?}
+    
+    Validate -->|Null/Invalid| ErrorRes["❌ Trả lỗi 400 BadRequest"]
+    Validate -->|Valid| Strategy["🎯 Cuộn mảng qua foreach"]
+    
+    ErrorRes --> ShowError["⚠️ Alert user: 'Dữ liệu không hợp lệ'"]
+    ShowError --> Drag
+    
+    Strategy --> Loop["🔁 Loop i=1 to N:<br/>TourPoi.DisplayOrder = i"]
+    Loop --> SaveDB["💾 Entity Framework SaveChangesAsync()"]
+    
+    SaveDB --> Commit["✅ SQL Transaction Commit"]
+    Commit --> Success["🎉 API return 200 OK"]
+    Success --> Refresh["🔄 Frontend tải lại trang"]
+    Refresh --> End(["✨ UI cập nhật với thứ tự mới"])
+
+    style Start fill:#1565C0,color:#fff
+    style End fill:#16a34a,color:#fff
+    style LoadDB fill:#0284c7,stroke:#0284c7,color:#fff
+    style ErrorRes fill:#dc2626,stroke:#dc2626,color:#fff
+    style Success fill:#16a34a,stroke:#16a34a,color:#fff
+                    </div>
+                </div>
+                <p class="diagram-label">🎬 Flow này đảm bảo Optimistic UI: update frontend ngay, sau khi API trả về OK mới commit</p>
+            </section>
+
+            <!-- Section 10: API Endpoints -->
+            <section id="api-spec" class="section">
+                <div class="section-header">
+                    <div class="section-number">10</div>
+                    <h3 class="section-title">REST API Endpoints & Specifications</h3>
+                </div>
+                <p class="content-text">Tất cả API đều tuân theo REST convention, hỗ trợ JSON Request/Response, Pagination, Filtering, Sorting. Authentication bắt buộc qua JWT Bearer token.</p>
+
+                <h4 style="margin-top: 2rem; color: var(--primary-dark); font-weight: 700;">🗺️ POI Management Endpoints</h4>
+                
+                <div class="api-endpoint">
+                    <span class="method get">GET</span> <strong>/api/pois</strong><br/>
+                    Lấy danh sách tất cả POI (cho mobile app)
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Response: [{
+  "id": 1,
+  "name": "Nhà Thờ Lớn",
+  "description": "Nhà thờ chính tòa Hà Nội",
+  "lat": 21.0285,
+  "lng": 105.8542,
+  "radius": 50,
+  "image": "https://...",
+  "priority": 1,
+  "isStopStation": true
+}]</pre>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="method get">GET</span> <strong>/api/pois/nearby</strong><br/>
+                    Tìm POI gần nhất trong bán kính geofence (Mobile GPS tracking)
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Query: ?lat=21.0285&lng=105.8542&lang=vi
+Response: {
+  "poiId": 1,
+  "name": "Nhà Thờ Lớn",
+  "translatedName": "Saint Joseph Cathedral",
+  "audioUrl": "https://blob/audio/vi_1.mp3",
+  "durationSeconds": 120
+} hoặc null nếu không có POI nào</pre>
+                </div>
+
+                <h4 style="margin-top: 2rem; color: var(--primary-dark); font-weight: 700;">🚌 Tour Management Endpoints</h4>
+                
+                <div class="api-endpoint">
+                    <span class="method get">GET</span> <strong>/api/tours</strong><br/>
+                    Lấy danh sách tất cả tours
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Response: [{
+  "id": 1,
+  "name": "Tour Quận 1",
+  "description": "Tham quan các địa danh lịch sử",
+  "estimatedTimeMinutes": 120,
+  "ticketPrice": 50000,
+  "totalDistanceKm": 15.5
+}]</pre>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="method post">POST</span> <strong>/api/tours/{id}/reorder</strong><br/>
+                    Cập nhật thứ tự POI trong tour (Admin drag & drop)
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Body: {
+  "tourId": 1,
+  "poiIds": [1, 3, 4, 2, 5]
+}
+Response: 200 OK</pre>
+                </div>
+
+                <h4 style="margin-top: 2rem; color: var(--primary-dark); font-weight: 700;">🎙️ Narration Management Endpoints</h4>
+                
+                <div class="api-endpoint">
+                    <span class="method get">GET</span> <strong>/api/narrations/{poiId}</strong><br/>
+                    Lấy tất cả bản thuyết minh của một POI theo ngôn ngữ
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Query: ?lang=vi
+Response: [{
+  "id": 1,
+  "poiId": 1,
+  "languageCode": "vi",
+  "translatedName": "Nhà Thờ Lớn",
+  "translatedDescription": "Nhà thờ chính tòa...",
+  "audioUrl": "https://blob/audio/vi_1.mp3",
+  "durationSeconds": 120,
+  "voiceType": "Female Southern"
+}]</pre>
+                </div>
+}
+Response: 201 Created
+{
+  "id": 125,
+  "name": "Tháp Rùa",
+  "createdAt": "2024-11-15T10:30:00Z"
+}</pre>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="method get">GET</span> <strong>/api/pois/nearby</strong><br/>
+                    Tìm POI gần vị trí hiện tại (dùng cho Mobile)
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Query: ?lat=21.0285&lng=105.8542&radiusKm=1&lang=vi
+Response: {
+  "nearbyPois": [
+    {
+      "id": 1,
+      "name": "Tháp Rùa",
+      "distanceMeters": 45,
+      "audio": {
+        "url": "https://cdn/audio_vi.mp3",
+        "duration": 120
+      }
+    }
+  ]
+}</pre>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="method put">PUT</span> <strong>/api/pois/{id}</strong><br/>
+                    Cập nhật POI
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">Response: 200 OK</pre>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="method delete">DELETE</span> <strong>/api/pois/{id}</strong><br/>
+                    Xóa POI (Soft Delete)
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">Response: 204 No Content</pre>
+                </div>
+
+                <h4 style="margin-top: 2rem; color: var(--primary-dark); font-weight: 700;">🎙️ Audio Management Endpoints</h4>
+
+                <div class="api-endpoint">
+                    <span class="method post">POST</span> <strong>/api/audios/upload</strong><br/>
+                    Upload file âm thanh (multipart/form-data)
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Form Fields:
+- poiId (int) = ID POI
+- languageCode (string) = vi, en, ko, ...
+- audioFile (file) = Binary .mp3 or .wav
+- isAutoGenerated (bool) = từ TTS hay upload handmade
+
+Response: 201 Created
+{
+  "audioId": 567,
+  "poiId": 1,
+  "language": "vi",
+  "url": "https://cdn/audio_1_vi.mp3",
+  "duration": 125
+}</pre>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="method get">GET</span> <strong>/api/audios/{poiId}/{lang}</strong><br/>
+                    Lấy URL audio của POI theo ngôn ngữ
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">Response: 200 OK
+{
+  "audioUrl": "https://cdn/audio_1_vi.mp3?sig=...",
+  "duration": 125,
+  "fileSize": 2048576
+}</pre>
+                </div>
+
+                <h4 style="margin-top: 2rem; color: var(--primary-dark); font-weight: 700;">🚌 Tour Management Endpoints</h4>
+
+                <div class="api-endpoint">
+                    <span class="method post">POST</span> <strong>/api/tours/{id}/reorder</strong><br/>
+                    Sắp xếp lại thứ tự POI trong tour (từ Drag & Drop)
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Body: {
+  "poiIds": [1, 3, 4, 2, 5]
+}
+Response: 200 OK
+{
+  "message": "Tour reordered successfully",
+  "updatedCount": 5
+}</pre>
+                </div>
+
+                <h4 style="margin-top: 2rem; color: var(--primary-dark); font-weight: 700;">📊 Analytics & Logging Endpoints</h4>
+
+                <div class="api-endpoint">
+                    <span class="method post">POST</span> <strong>/api/userlogs/checkin</strong><br/>
+                    Ghi nhận sự kiện người dùng vào POI
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Body: {
+  "userId": "device_abc123",
+  "poiId": 1,
+  "latitude": 21.0285,
+  "longitude": 105.8542,
+  "durationSeconds": 120,
+  "deviceId": "mobile_xyz"
+}
+Response: 201 Created</pre>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="method get">GET</span> <strong>/api/dashboard/heatmap</strong><br/>
+                    Lấy dữ liệu Heatmap cho Admin Dashboard
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Query: ?startDate=2024-01-01&endDate=2024-01-31&groupBy=poi
+Response: {
+  "heatmapData": [
+    {"poiId": 1, "poiName": "Tháp Rùa", "visitCount": 450, "avgDuration": 125},
+    {"poiId": 2, "poiName": "Hoan Kiếm Lake", "visitCount": 380, "avgDuration": 98}
+  ]
+}</pre>
+                </div>
+
+                <h4 style="margin-top: 2rem; color: var(--primary-dark); font-weight: 700;">🔐 Authentication Endpoints</h4>
+
+                <div class="api-endpoint">
+                    <span class="method post">POST</span> <strong>/api/auth/login</strong><br/>
+                    Đăng nhập Admin/User
+                    <pre style="background: white; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Body: { "username": "admin@lgbtour.com", "password": "pass123" }
+Response: 200 OK
+{
+  "accessToken": "eyJhbGciOiJSUzI1NiIs...",
+  "refreshToken": "refresh_token_xyz",
+  "expiresIn": 3600,
+  "user": {"id": 1, "username": "admin", "role": "SuperAdmin"}
+}</pre>
+                </div>
+            </section>
+
+            <!-- Section 11: Error Handling -->
+            <section id="error-handling" class="section">
+                <div class="section-header">
+                    <div class="section-number">11</div>
+                    <h3 class="section-title">Xử Lý Lỗi & HTTP Response Codes</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Status</th>
+                            <th>Tình Huống</th>
+                            <th>Response Body</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>200</strong></td>
+                            <td>OK</td>
+                            <td>Request thành công, có dữ liệu trả về</td>
+                            <td><code>{ "success": true, "data": {...} }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>201</strong></td>
+                            <td>Created</td>
+                            <td>Tạo resource mới thành công</td>
+                            <td><code>{ "id": 123, "createdAt": "..." }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>204</strong></td>
+                            <td>No Content</td>
+                            <td>Request thành công, không có content (DELETE, UPDATE)</td>
+                            <td>(Empty body)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>400</strong></td>
+                            <td>Bad Request</td>
+                            <td>Request không hợp lệ (missing field, invalid format)</td>
+                            <td><code>{ "error": "Invalid latitude", "code": "ERR_INVALID_PARAM" }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>401</strong></td>
+                            <td>Unauthorized</td>
+                            <td>JWT token invalid, expired hoặc missing</td>
+                            <td><code>{ "error": "Unauthorized", "code": "ERR_NO_AUTH" }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>403</strong></td>
+                            <td>Forbidden</td>
+                            <td>User không có quyền truy cập resource này</td>
+                            <td><code>{ "error": "Forbidden", "code": "ERR_NO_PERMISSION" }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>404</strong></td>
+                            <td>Not Found</td>
+                            <td>Resource không tồn tại (POI không có ID đó)</td>
+                            <td><code>{ "error": "POI not found", "code": "ERR_NOT_FOUND" }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>409</strong></td>
+                            <td>Conflict</td>
+                            <td>Conflict dữ liệu (duplicate, version mismatch)</td>
+                            <td><code>{ "error": "POI already exists", "code": "ERR_DUPLICATE" }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>429</strong></td>
+                            <td>Too Many Requests</td>
+                            <td>Rate limit exceeded (> 1000 req/min per IP)</td>
+                            <td><code>{ "error": "Rate limit exceeded", "retryAfter": 60 }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>500</strong></td>
+                            <td>Internal Server Error</td>
+                            <td>Lỗi server không dự kiến, log stack trace</td>
+                            <td><code>{ "error": "Internal server error", "requestId": "req_123" }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>503</strong></td>
+                            <td>Service Unavailable</td>
+                            <td>Database down, Azure Service unavailable</td>
+                            <td><code>{ "error": "Service temporarily unavailable", "retryAfter": 30 }</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-top: 2rem; color: var(--primary-dark); font-weight: 700;">🔍 Standard Error Response Format</h4>
+                <div class="api-endpoint">
+                    <pre style="background: white; padding: 1rem; border-radius: 4px; font-size: 0.9rem;">
+{
+  "success": false,
+  "error": {
+    "code": "ERR_INVALID_COORDINATES",
+    "message": "Invalid latitude or longitude provided",
+    "details": {
+      "latitude": "must be between -90 and 90",
+      "longitude": "must be between -180 and 180"
+    }
+  },
+  "timestamp": "2024-11-15T10:30:45Z",
+  "requestId": "req_abc123def456"
+}</pre>
+                </div>
+
+                <!-- <div class="note-box">
+                    <strong>⚠️ Lưu Ý:</strong> Mỗi lỗi phải có RequestId để tracking trong logs. Client retry strategy: exponential backoff 1s, 2s, 4s, max 3 lần
+                </div> --> 
+            </section>
+
+            <!-- Footer Section -->
+            <section class="section" style="background: linear-gradient(135deg, var(--primary-dark) 0%, #0D2137 100%); color: white; text-align: center;">
+                <h3 style="color: white; margin-bottom: 1rem;">✅ Document Version: 2.0</h3>
+                <p style="color: rgba(255,255,255,0.9);">
+                    <strong>Ngày cập nhật:</strong> 15 November 2024 | 
+                    
+                    
+                </p>
+                <p style="color: rgba(255,255,255,0.8); margin-top: 1rem; font-size: 0.9rem;">
+                    Tài liệu này  của SaigonAudioTour © 2026.
+                </p>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            securityLevel: 'loose',
+            themeVariables: {
+                primaryColor: '#f1f5f9',
+                primaryTextColor: '#1e293b',
+                primaryBorderColor: '#1565C0',
+                lineColor: '#64748b',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '12px'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+
+        // Active Menu Based on Scroll
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                if (window.scrollY >= section.offsetTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

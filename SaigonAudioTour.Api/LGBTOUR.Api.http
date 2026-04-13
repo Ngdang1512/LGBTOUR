@@ -1,0 +1,6 @@
+@SaigonAudioTour_Api_HostAddress = http://localhost:5117
+
+GET {{SaigonAudioTour_Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
