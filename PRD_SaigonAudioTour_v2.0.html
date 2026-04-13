@@ -119,7 +119,7 @@
 
         <div class="nav-group">
             <div class="nav-title">⚙️ III. Luồng Xử Lý</div>
-            <a href="#sequence" class="nav-link">8. Luồng GPS Auto-Play</a>
+            <a href="#sequence" class="nav-link">8. Chọn Ngôn Ngữ & Phát Thuyết Minh</a>
             <a href="#activity" class="nav-link">9. Quy Trình Admin</a>
         </div>
 
@@ -675,57 +675,95 @@ erDiagram
             <section id="sequence" class="section">
                 <div class="section-header">
                     <div class="section-number">8</div>
-                    <h3 class="section-title">Luồng GPS & Tự Động Phát Âm Thanh (Sequence Diagram)</h3>
+                    <h3 class="section-title">Chọn Ngôn Ngữ & Phát Thuyết Minh Trong Trang Chi Tiết (Sequence Diagram)</h3>
                 </div>
-                <p class="content-text">Mô tả chi tiết quá trình Background Service trên Mobile bắt GPS, gửi lên API, tính toán Geofence bằng Haversine Formula, và tự động phát âm thanh thích hợp.</p>
+                <p class="content-text">Mô tả quá trình người dùng mở trang chi tiết, chọn ngôn ngữ thuyết minh, ứng dụng tải nội dung tương ứng và tự động phát audio theo ngôn ngữ đã chọn.</p>
                 <div class="diagram-box">
                     <div class="mermaid">
 sequenceDiagram
     autonumber
-    actor Admin as Admin (Web CMS)
     actor User as Du Khách (Mobile App)
-    participant OS as HĐH Điện thoại (GPS)
-    participant API as C# Backend API
-    participant DB as SQL Server DB
-    participant TTS as Hệ thống AI (External)
+    participant Detail as DetailPage.xaml.cs
+    participant Picker as LanguagePicker
+    participant Pref as Preferences (Local)
+    participant TTS as TextToSpeech.Default
+    participant UI as Play/Stop + ProgressBar
 
     rect rgb(240, 248, 255)
-    Note over Admin, TTS: GIAI ĐOẠN 1: QUẢN TRỊ & TẠO ÂM THANH
-    Admin->>API: Tạo Trạm (POI) & Kịch bản thuyết minh
-    API->>TTS: Gửi Text kịch bản (API Request)
-    TTS-->>API: Trả về file Audio (.mp3)
-    API->>DB: Lưu thông tin POI & Đường dẫn Audio
-    DB-->>API: OK
-    API-->>Admin: Thông báo Thêm thành công
+    Note over User, Pref: GIAI ĐOẠN 1: MỞ TRANG & KHÔI PHỤC NGÔN NGỮ
+    User->>Detail: Chạm vào một địa điểm trên MainPage
+    Detail->>Picker: Nạp ItemsSource (vi/en/zh/ja/ko/fr)
+    Detail->>Pref: Đọc key SelectedLanguage
+    Pref-->>Detail: Trả về mã ngôn ngữ đã lưu
+    Detail->>Picker: Set SelectedIndex theo mã ngôn ngữ
     end
 
     rect rgb(240, 253, 244)
-    Note over User, DB: GIAI ĐOẠN 2: ĐỊNH VỊ & TỰ ĐỘNG PHÁT NHẠC
-    User->>OS: Cấp quyền Truy cập Vị trí (Location)
-    
-    loop Tiến trình chạy ngầm (Background)
-        OS-->>User: Liên tục cập nhật Tọa độ (Lat, Lng)
-        User->>API: Bắn tọa độ lên server tìm Trạm lân cận
-        API->>DB: Tính khoảng cách (Thuật toán Haversine)
-        DB-->>API: Trả về Trạm có (Khoảng cách < Bán kính)
-        API-->>User: Phản hồi thông tin Trạm + Link file nhạc
-        User->>User: Ứng dụng tự động phát nhạc
+    Note over User, UI: GIAI ĐOẠN 2: BẤM PHÁT & ĐỌC THUYẾT MINH
+    User->>Picker: Chọn ngôn ngữ mong muốn
+    User->>Detail: Bấm nút ▶️ Phát
+    Detail->>UI: Ẩn Play, hiện Stop
+    Detail->>Detail: Map ngôn ngữ -> selectedCode
+    Detail->>Pref: Lưu SelectedLanguage + NarratingPlaceId
+    Detail->>Detail: Chọn text theo ngôn ngữ (TranslateTo...)
+    Detail->>TTS: GetLocalesAsync()
+    TTS-->>Detail: Danh sách locale khả dụng
+    Detail->>TTS: SpeakAsync(text, locale, cts.Token)
+    par Trong khi đang phát
+        Detail->>UI: AnimateProgressBar()
+    and Nếu người dùng bấm ⏹️ Dừng
+        User->>Detail: OnStopClicked()
+        Detail->>Detail: _cts.Cancel()
     end
+    TTS-->>Detail: Hoàn tất hoặc bị hủy
+    Detail->>UI: Hiện Play, ẩn Stop, reset Progress=0
     end
 
     rect rgb(255, 251, 235)
-    Note over Admin, DB: GIAI ĐOẠN 3: GHI NHẬN & VẼ BẢN ĐỒ NHIỆT
-    User->>API: Rời khỏi trạm -> Gửi báo cáo Lịch sử
-    API->>DB: Lưu UserLog (Tọa độ, Thời lượng nghe)
-    
-    Admin->>API: Truy cập trang chủ Dashboard
-    API->>DB: Truy vấn dữ liệu UserLog
-    DB-->>API: Dữ liệu phân nhóm theo Tọa độ & Lượt nghe
-    API-->>Admin: Vẽ Bản đồ nhiệt (Heatmap) & Biểu đồ
+    Note over User, Pref: GIAI ĐOẠN 3: THOÁT TRANG & DỌN TRẠNG THÁI
+    User->>Detail: Bấm Back / rời trang chi tiết
+    Detail->>Detail: OnDisappearing() -> _cts.Cancel()
+    Detail->>Pref: Clear NarratingPlaceId nếu đang nghe
+    Pref-->>Detail: Xác nhận cập nhật local state
     end
                     </div>
                 </div>
-                <p class="diagram-label">⏱️ Quy trình này lặp mỗi 30 giây, đảm bảo phát hiện POI nhanh nhất < 1 phút</p>
+                <p class="diagram-label">🎧 Luồng thực thi hiện tại là local-first: Picker + Preferences + TextToSpeech trên thiết bị, chưa gọi API/DB backend cho bước phát thuyết minh</p>
+
+                <h4 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary-dark); font-weight: 700;">🎯 Use Case: Chức Năng Thuyết Minh Trên Trang Chi Tiết</h4>
+                <div class="diagram-box">
+                    <div class="mermaid">
+flowchart LR
+    User[👤 Du Khách]
+
+    UC1((Mở trang chi tiết địa điểm))
+    UC2((Chọn ngôn ngữ thuyết minh))
+    UC3((Bấm phát thuyết minh))
+    UC4((Dừng phát thuyết minh))
+    UC5((Lưu ngôn ngữ đã chọn))
+    UC6((Khôi phục ngôn ngữ lần mở sau))
+    UC7((Tự hủy phát khi rời trang))
+
+    User --> UC1
+    User --> UC2
+    User --> UC3
+    User --> UC4
+
+    UC3 -. include .-> UC5
+    UC1 -. include .-> UC6
+    UC1 -. extend .-> UC7
+
+    style User fill:#e0f2fe,stroke:#0284c7,stroke-width:2px
+    style UC1 fill:#f8fafc,stroke:#64748b
+    style UC2 fill:#f8fafc,stroke:#64748b
+    style UC3 fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style UC4 fill:#fee2e2,stroke:#dc2626,stroke-width:2px
+    style UC5 fill:#fef3c7,stroke:#ca8a04
+    style UC6 fill:#fef3c7,stroke:#ca8a04
+    style UC7 fill:#fef3c7,stroke:#ca8a04
+                    </div>
+                </div>
+                <p class="diagram-label">📌 Use Case này phản ánh đúng code hiện tại: người dùng chọn ngôn ngữ, phát/dừng thuyết minh, lưu Preferences và tự hủy khi rời DetailPage.</p>
             </section>
 
             <!-- Section 9: Activity Diagram -->

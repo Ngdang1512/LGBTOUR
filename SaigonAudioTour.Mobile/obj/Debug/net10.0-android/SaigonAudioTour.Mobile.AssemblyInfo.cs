@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SaigonAudioTour.Mobile")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+53fb104177aaf613cc16501700a4ae8bbf3c9ed9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+ca972010fbe8a3e5a420b9264035ad1321ea2696")]
 [assembly: System.Reflection.AssemblyProductAttribute("SaigonAudioTour.Mobile")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SaigonAudioTour.Mobile")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -287,6 +287,13 @@ public partial class MapPage : ContentPage
                     ? string.Empty
                     : $"L.polyline([{polylinePoints}], {{ color: '#2563EB', weight: 5, opacity: 0.92 }}).addTo(map);";
 
+                // Build fitBounds script for all markers
+                var fitBoundsPoints = string.Join("\n                ", 
+                    Enumerable.Range(0, orderedStops.Count)
+                        .Select(i => $"bounds.extend([{orderedStops[i].Latitude.ToString(CultureInfo.InvariantCulture)}, {orderedStops[i].Longitude.ToString(CultureInfo.InvariantCulture)}]);"));
+
+                var markerScript = markersBuilder.ToString();
+
                 var html = $@"
 <!DOCTYPE html>
 <html>
@@ -295,8 +302,8 @@ public partial class MapPage : ContentPage
     <link rel='stylesheet' href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css' />
     <script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'></script>
     <style>
-        html, body, #map {{ height: 100%; margin: 0; padding: 0; }}
-        .poi-wrap {{ background: transparent; border: none; }}
+        html, body, #map {{ height: 100%; margin: 0; padding: 0; overflow: hidden; }}
+        .poi-wrap {{ background: transparent; border: none; display: flex; }}
         .poi-chip {{
             width: 34px;
             height: 34px;
@@ -305,26 +312,56 @@ public partial class MapPage : ContentPage
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            box-shadow: 0 1px 5px rgba(15,23,42,.25);
+            box-shadow: 0 2px 6px rgba(15,23,42,.3);
             background: #ffffff;
             border: 2px solid #CBD5E1;
+            flex-shrink: 0;
         }}
         .poi-chip.start {{
             border-color: #16A34A;
             background: #ECFDF5;
+        }}
+        .leaflet-popup-content {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 12px;
         }}
     </style>
 </head>
 <body>
     <div id='map'></div>
     <script>
-        var map = L.map('map').setView([{centerLat}, {centerLon}], 15);
-        L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
-        }}).addTo(map);
-        {polylineScript}
-        {markersBuilder}
+        (function() {{
+            try {{
+                console.log('Initializing map...');
+                var map = L.map('map').setView([{centerLat}, {centerLon}], 15);
+                L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors'
+                }}).addTo(map);
+                
+                console.log('Adding polyline...');
+                {polylineScript}
+                
+                console.log('Adding markers: {orderedStops.Count} points');
+                {markerScript}
+                
+                console.log('Fitting bounds...');
+                if (map.fitBounds) {{
+                    var bounds = L.latLngBounds();
+                    {fitBoundsPoints}
+                    if (bounds.isValid && bounds.isValid()) {{
+                        map.fitBounds(bounds, {{padding: [50, 50]}});
+                    }}
+                }}
+                console.log('Map initialized successfully!');
+            }} catch(e) {{
+                console.error('Map init error:', e.message, e.stack);
+                var errorDiv = document.createElement('div');
+                errorDiv.style.cssText = 'position:absolute;top:10px;left:10px;background:#fee;color:#c00;padding:10px;border-radius:4px;font-size:12px;z-index:9999;max-width:300px;';
+                errorDiv.innerHTML = 'Lỗi bản đồ: ' + e.message;
+                document.body.appendChild(errorDiv);
+            }}
+        }})();
     </script>
 </body>
 </html>";
