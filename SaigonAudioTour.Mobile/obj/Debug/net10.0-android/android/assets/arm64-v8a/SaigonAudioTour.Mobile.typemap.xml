@@ -1,10 +1,10 @@
-<api type="debug" assembly-name="SaigonAudioTour.Mobile" mvid="1dfefcb1eb2e4f58b60a72ff9e2799ef">
+<api type="debug" assembly-name="SaigonAudioTour.Mobile" mvid="6556e120cbbc426eb47d4904680ebb27">
   <java-to-managed>
-    <entry java-name="crc649e408905a1cccc33/MainActivity" managed-name="SaigonAudioTour.Mobile.MainActivity, SaigonAudioTour.Mobile" managed-type-token-id="33554447" />
-    <entry java-name="crc649e408905a1cccc33/MainApplication" managed-name="SaigonAudioTour.Mobile.MainApplication, SaigonAudioTour.Mobile" managed-type-token-id="33554448" />
+    <entry java-name="crc649e408905a1cccc33/MainActivity" managed-name="SaigonAudioTour.Mobile.MainActivity, SaigonAudioTour.Mobile" managed-type-token-id="33554449" />
+    <entry java-name="crc649e408905a1cccc33/MainApplication" managed-name="SaigonAudioTour.Mobile.MainApplication, SaigonAudioTour.Mobile" managed-type-token-id="33554450" />
   </java-to-managed>
   <managed-to-java>
-    <entry java-name="crc649e408905a1cccc33/MainActivity" managed-name="SaigonAudioTour.Mobile.MainActivity, SaigonAudioTour.Mobile" managed-type-token-id="33554447" />
-    <entry java-name="crc649e408905a1cccc33/MainApplication" managed-name="SaigonAudioTour.Mobile.MainApplication, SaigonAudioTour.Mobile" managed-type-token-id="33554448" />
+    <entry java-name="crc649e408905a1cccc33/MainActivity" managed-name="SaigonAudioTour.Mobile.MainActivity, SaigonAudioTour.Mobile" managed-type-token-id="33554449" />
+    <entry java-name="crc649e408905a1cccc33/MainApplication" managed-name="SaigonAudioTour.Mobile.MainApplication, SaigonAudioTour.Mobile" managed-type-token-id="33554450" />
   </managed-to-java>
 </api>

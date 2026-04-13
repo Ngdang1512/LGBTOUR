@@ -1,0 +1,56 @@
+﻿@model LGBTOUR.AdminWeb.Models.TourViewModel
+@{
+    ViewData["Title"] = "Tạo Tuyến Xe Mới";
+}
+
+<div class="row mt-3">
+    <div class="col-md-8 mx-auto">
+        <div class="card card-primary shadow-sm border-0">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold"><i class="fas fa-bus mr-2"></i> Nhập Thông Tin Tuyến Xe Mới</h3>
+            </div>
+            
+            <form asp-action="Create" method="post">
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger px-2 py-1">@ViewBag.Error</div>
+                    }
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="font-weight-bold">Tên Tuyến Xe <span class="text-danger">*</span></label>
+                        <input asp-for="Name" class="form-control" placeholder="VD: Tuyến Hop-on Hop-off Vòng Quanh Quận 1" required />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description" class="font-weight-bold">Mô Tả Lộ Trình</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Mô tả ngắn gọn về các điểm đi qua..."></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label asp-for="EstimatedTimeMinutes" class="font-weight-bold">Thời Gian (Phút) <span class="text-danger">*</span></label>
+                            <input asp-for="EstimatedTimeMinutes" type="number" class="form-control" placeholder="VD: 60" required />
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label asp-for="TotalDistanceKm" class="font-weight-bold">Quãng Đường (Km) <span class="text-danger">*</span></label>
+                            <input asp-for="TotalDistanceKm" type="number" step="0.1" class="form-control" placeholder="VD: 6.5" required />
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label asp-for="TicketPrice" class="font-weight-bold">Giá Vé (VNĐ) <span class="text-danger">*</span></label>
+                            <input asp-for="TicketPrice" type="number" class="form-control" placeholder="VD: 150000" required />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-white text-right">
+                    <a asp-action="Index" class="btn btn-default mr-2 font-weight-bold">Hủy Bỏ</a>
+                    <button type="submit" class="btn btn-primary font-weight-bold">
+                        <i class="fas fa-save mr-1"></i> Lưu Tuyến Xe
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

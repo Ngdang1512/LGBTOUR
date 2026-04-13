@@ -385,18 +385,18 @@ com.google.android.gms.maps.GoogleMap$OnMyLocationButtonClickListener;com.google
 Android.Gms.Maps.GoogleMap+IOnMyLocationButtonClickListenerImplementor, Xamarin.GooglePlayServices.Maps;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationButtonClickListenerImplementor
 Android.Gms.Maps.GoogleMap.IOnMyLocationButtonClickListenerImplementor;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationButtonClickListenerImplementor
 mono.com.google.android.gms.maps.GoogleMap_OnMyLocationButtonClickListenerImplementor;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationButtonClickListenerImplementor
-Android.Gms.Maps.GoogleMap+IOnMyLocationChangeListener, Xamarin.GooglePlayServices.Maps;com.google.android.gms.maps.GoogleMap$OnMyLocationChangeListener
-Android.Gms.Maps.GoogleMap.IOnMyLocationChangeListener;com.google.android.gms.maps.GoogleMap$OnMyLocationChangeListener
-com.google.android.gms.maps.GoogleMap$OnMyLocationChangeListener;com.google.android.gms.maps.GoogleMap$OnMyLocationChangeListener
-Android.Gms.Maps.GoogleMap+IOnMyLocationChangeListenerImplementor, Xamarin.GooglePlayServices.Maps;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationChangeListenerImplementor
-Android.Gms.Maps.GoogleMap.IOnMyLocationChangeListenerImplementor;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationChangeListenerImplementor
-mono.com.google.android.gms.maps.GoogleMap_OnMyLocationChangeListenerImplementor;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationChangeListenerImplementor
 Android.Gms.Maps.GoogleMap+IOnMyLocationClickListener, Xamarin.GooglePlayServices.Maps;com.google.android.gms.maps.GoogleMap$OnMyLocationClickListener
 Android.Gms.Maps.GoogleMap.IOnMyLocationClickListener;com.google.android.gms.maps.GoogleMap$OnMyLocationClickListener
 com.google.android.gms.maps.GoogleMap$OnMyLocationClickListener;com.google.android.gms.maps.GoogleMap$OnMyLocationClickListener
 Android.Gms.Maps.GoogleMap+IOnMyLocationClickListenerImplementor, Xamarin.GooglePlayServices.Maps;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationClickListenerImplementor
 Android.Gms.Maps.GoogleMap.IOnMyLocationClickListenerImplementor;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationClickListenerImplementor
 mono.com.google.android.gms.maps.GoogleMap_OnMyLocationClickListenerImplementor;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationClickListenerImplementor
+Android.Gms.Maps.GoogleMap+IOnMyLocationChangeListener, Xamarin.GooglePlayServices.Maps;com.google.android.gms.maps.GoogleMap$OnMyLocationChangeListener
+Android.Gms.Maps.GoogleMap.IOnMyLocationChangeListener;com.google.android.gms.maps.GoogleMap$OnMyLocationChangeListener
+com.google.android.gms.maps.GoogleMap$OnMyLocationChangeListener;com.google.android.gms.maps.GoogleMap$OnMyLocationChangeListener
+Android.Gms.Maps.GoogleMap+IOnMyLocationChangeListenerImplementor, Xamarin.GooglePlayServices.Maps;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationChangeListenerImplementor
+Android.Gms.Maps.GoogleMap.IOnMyLocationChangeListenerImplementor;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationChangeListenerImplementor
+mono.com.google.android.gms.maps.GoogleMap_OnMyLocationChangeListenerImplementor;mono.com.google.android.gms.maps.GoogleMap_OnMyLocationChangeListenerImplementor
 Android.Gms.Maps.GoogleMap+IOnPoiClickListener, Xamarin.GooglePlayServices.Maps;com.google.android.gms.maps.GoogleMap$OnPoiClickListener
 Android.Gms.Maps.GoogleMap.IOnPoiClickListener;com.google.android.gms.maps.GoogleMap$OnPoiClickListener
 com.google.android.gms.maps.GoogleMap$OnPoiClickListener;com.google.android.gms.maps.GoogleMap$OnPoiClickListener
@@ -463,18 +463,18 @@ com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaCameraChangeL
 Android.Gms.Maps.StreetViewPanorama+IOnStreetViewPanoramaCameraChangeListenerImplementor, Xamarin.GooglePlayServices.Maps;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaCameraChangeListenerImplementor
 Android.Gms.Maps.StreetViewPanorama.IOnStreetViewPanoramaCameraChangeListenerImplementor;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaCameraChangeListenerImplementor
 mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaCameraChangeListenerImplementor;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaCameraChangeListenerImplementor
-Android.Gms.Maps.StreetViewPanorama+IOnStreetViewPanoramaChangeListener, Xamarin.GooglePlayServices.Maps;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaChangeListener
-Android.Gms.Maps.StreetViewPanorama.IOnStreetViewPanoramaChangeListener;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaChangeListener
-com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaChangeListener;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaChangeListener
-Android.Gms.Maps.StreetViewPanorama+IOnStreetViewPanoramaChangeListenerImplementor, Xamarin.GooglePlayServices.Maps;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaChangeListenerImplementor
-Android.Gms.Maps.StreetViewPanorama.IOnStreetViewPanoramaChangeListenerImplementor;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaChangeListenerImplementor
-mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaChangeListenerImplementor;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaChangeListenerImplementor
 Android.Gms.Maps.StreetViewPanorama+IOnStreetViewPanoramaClickListener, Xamarin.GooglePlayServices.Maps;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaClickListener
 Android.Gms.Maps.StreetViewPanorama.IOnStreetViewPanoramaClickListener;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaClickListener
 com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaClickListener;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaClickListener
 Android.Gms.Maps.StreetViewPanorama+IOnStreetViewPanoramaClickListenerImplementor, Xamarin.GooglePlayServices.Maps;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaClickListenerImplementor
 Android.Gms.Maps.StreetViewPanorama.IOnStreetViewPanoramaClickListenerImplementor;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaClickListenerImplementor
 mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaClickListenerImplementor;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaClickListenerImplementor
+Android.Gms.Maps.StreetViewPanorama+IOnStreetViewPanoramaChangeListener, Xamarin.GooglePlayServices.Maps;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaChangeListener
+Android.Gms.Maps.StreetViewPanorama.IOnStreetViewPanoramaChangeListener;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaChangeListener
+com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaChangeListener;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaChangeListener
+Android.Gms.Maps.StreetViewPanorama+IOnStreetViewPanoramaChangeListenerImplementor, Xamarin.GooglePlayServices.Maps;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaChangeListenerImplementor
+Android.Gms.Maps.StreetViewPanorama.IOnStreetViewPanoramaChangeListenerImplementor;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaChangeListenerImplementor
+mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaChangeListenerImplementor;mono.com.google.android.gms.maps.StreetViewPanorama_OnStreetViewPanoramaChangeListenerImplementor
 Android.Gms.Maps.StreetViewPanorama+IOnStreetViewPanoramaLongClickListener, Xamarin.GooglePlayServices.Maps;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaLongClickListener
 Android.Gms.Maps.StreetViewPanorama.IOnStreetViewPanoramaLongClickListener;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaLongClickListener
 com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaLongClickListener;com.google.android.gms.maps.StreetViewPanorama$OnStreetViewPanoramaLongClickListener
@@ -613,12 +613,6 @@ androidx.annotation.BoolRes;androidx.annotation.BoolRes
 AndroidX.Annotations.ICallSuper, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.CallSuper
 AndroidX.Annotations.ICallSuper;androidx.annotation.CallSuper
 androidx.annotation.CallSuper;androidx.annotation.CallSuper
-AndroidX.Annotations.ICheckResult, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.CheckResult
-AndroidX.Annotations.ICheckResult;androidx.annotation.CheckResult
-androidx.annotation.CheckResult;androidx.annotation.CheckResult
-AndroidX.Annotations.IChecksSdkIntAtLeast, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.ChecksSdkIntAtLeast
-AndroidX.Annotations.IChecksSdkIntAtLeast;androidx.annotation.ChecksSdkIntAtLeast
-androidx.annotation.ChecksSdkIntAtLeast;androidx.annotation.ChecksSdkIntAtLeast
 AndroidX.Annotations.IColorInt, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.ColorInt
 AndroidX.Annotations.IColorInt;androidx.annotation.ColorInt
 androidx.annotation.ColorInt;androidx.annotation.ColorInt
@@ -631,6 +625,12 @@ androidx.annotation.ColorRes;androidx.annotation.ColorRes
 AndroidX.Annotations.IContentView, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.ContentView
 AndroidX.Annotations.IContentView;androidx.annotation.ContentView
 androidx.annotation.ContentView;androidx.annotation.ContentView
+AndroidX.Annotations.ICheckResult, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.CheckResult
+AndroidX.Annotations.ICheckResult;androidx.annotation.CheckResult
+androidx.annotation.CheckResult;androidx.annotation.CheckResult
+AndroidX.Annotations.IChecksSdkIntAtLeast, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.ChecksSdkIntAtLeast
+AndroidX.Annotations.IChecksSdkIntAtLeast;androidx.annotation.ChecksSdkIntAtLeast
+androidx.annotation.ChecksSdkIntAtLeast;androidx.annotation.ChecksSdkIntAtLeast
 AndroidX.Annotations.IDeprecatedSinceApi, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.DeprecatedSinceApi
 AndroidX.Annotations.IDeprecatedSinceApi;androidx.annotation.DeprecatedSinceApi
 androidx.annotation.DeprecatedSinceApi;androidx.annotation.DeprecatedSinceApi
@@ -775,18 +775,18 @@ androidx.annotation.ReturnThis;androidx.annotation.ReturnThis
 AndroidX.Annotations.ISize, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.Size
 AndroidX.Annotations.ISize;androidx.annotation.Size
 androidx.annotation.Size;androidx.annotation.Size
-AndroidX.Annotations.IStringDef, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.StringDef
-AndroidX.Annotations.IStringDef;androidx.annotation.StringDef
-androidx.annotation.StringDef;androidx.annotation.StringDef
-AndroidX.Annotations.IStringRes, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.StringRes
-AndroidX.Annotations.IStringRes;androidx.annotation.StringRes
-androidx.annotation.StringRes;androidx.annotation.StringRes
 AndroidX.Annotations.IStyleableRes, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.StyleableRes
 AndroidX.Annotations.IStyleableRes;androidx.annotation.StyleableRes
 androidx.annotation.StyleableRes;androidx.annotation.StyleableRes
 AndroidX.Annotations.IStyleRes, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.StyleRes
 AndroidX.Annotations.IStyleRes;androidx.annotation.StyleRes
 androidx.annotation.StyleRes;androidx.annotation.StyleRes
+AndroidX.Annotations.IStringDef, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.StringDef
+AndroidX.Annotations.IStringDef;androidx.annotation.StringDef
+androidx.annotation.StringDef;androidx.annotation.StringDef
+AndroidX.Annotations.IStringRes, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.StringRes
+AndroidX.Annotations.IStringRes;androidx.annotation.StringRes
+androidx.annotation.StringRes;androidx.annotation.StringRes
 AndroidX.Annotations.ITransitionRes, Xamarin.AndroidX.Annotation.Jvm;androidx.annotation.TransitionRes
 AndroidX.Annotations.ITransitionRes;androidx.annotation.TransitionRes
 androidx.annotation.TransitionRes;androidx.annotation.TransitionRes
@@ -1579,15 +1579,15 @@ mono.androidx.core.view.WindowInsetsControllerCompat_OnControllableInsetsChanged
 AndroidX.Core.Widget.IAutoSizeableTextView, Xamarin.AndroidX.Core;androidx.core.widget.AutoSizeableTextView
 AndroidX.Core.Widget.IAutoSizeableTextView;androidx.core.widget.AutoSizeableTextView
 androidx.core.widget.AutoSizeableTextView;androidx.core.widget.AutoSizeableTextView
-AndroidX.Core.Widget.ITintableCheckedTextView, Xamarin.AndroidX.Core;androidx.core.widget.TintableCheckedTextView
-AndroidX.Core.Widget.ITintableCheckedTextView;androidx.core.widget.TintableCheckedTextView
-androidx.core.widget.TintableCheckedTextView;androidx.core.widget.TintableCheckedTextView
 AndroidX.Core.Widget.ITintableCompoundButton, Xamarin.AndroidX.Core;androidx.core.widget.TintableCompoundButton
 AndroidX.Core.Widget.ITintableCompoundButton;androidx.core.widget.TintableCompoundButton
 androidx.core.widget.TintableCompoundButton;androidx.core.widget.TintableCompoundButton
 AndroidX.Core.Widget.ITintableCompoundDrawablesView, Xamarin.AndroidX.Core;androidx.core.widget.TintableCompoundDrawablesView
 AndroidX.Core.Widget.ITintableCompoundDrawablesView;androidx.core.widget.TintableCompoundDrawablesView
 androidx.core.widget.TintableCompoundDrawablesView;androidx.core.widget.TintableCompoundDrawablesView
+AndroidX.Core.Widget.ITintableCheckedTextView, Xamarin.AndroidX.Core;androidx.core.widget.TintableCheckedTextView
+AndroidX.Core.Widget.ITintableCheckedTextView;androidx.core.widget.TintableCheckedTextView
+androidx.core.widget.TintableCheckedTextView;androidx.core.widget.TintableCheckedTextView
 AndroidX.Core.Widget.ITintableImageSourceView, Xamarin.AndroidX.Core;androidx.core.widget.TintableImageSourceView
 AndroidX.Core.Widget.ITintableImageSourceView;androidx.core.widget.TintableImageSourceView
 androidx.core.widget.TintableImageSourceView;androidx.core.widget.TintableImageSourceView
@@ -2074,6 +2074,9 @@ androidx.window.layout.WindowMetricsCalculator;androidx.window.layout.WindowMetr
 AndroidX.Window.Layout.IWindowMetricsCalculatorDecorator, Xamarin.AndroidX.Window;androidx.window.layout.WindowMetricsCalculatorDecorator
 AndroidX.Window.Layout.IWindowMetricsCalculatorDecorator;androidx.window.layout.WindowMetricsCalculatorDecorator
 androidx.window.layout.WindowMetricsCalculatorDecorator;androidx.window.layout.WindowMetricsCalculatorDecorator
+Bumptech.Glide.Glide+IRequestOptionsFactory, Xamarin.Android.Glide;com.bumptech.glide.Glide$RequestOptionsFactory
+Bumptech.Glide.Glide.IRequestOptionsFactory;com.bumptech.glide.Glide$RequestOptionsFactory
+com.bumptech.glide.Glide$RequestOptionsFactory;com.bumptech.glide.Glide$RequestOptionsFactory
 Bumptech.Glide.GifDecoder.IGifDecoder, Xamarin.Android.Glide.GifDecoder;com.bumptech.glide.gifdecoder.GifDecoder
 Bumptech.Glide.GifDecoder.IGifDecoder;com.bumptech.glide.gifdecoder.GifDecoder
 com.bumptech.glide.gifdecoder.GifDecoder;com.bumptech.glide.gifdecoder.GifDecoder
@@ -2083,9 +2086,6 @@ com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider;com.bumptech.glide.gifde
 Bumptech.Glide.GifDecoder.IGifDecoderGifDecodeStatus, Xamarin.Android.Glide.GifDecoder;com.bumptech.glide.gifdecoder.GifDecoder$GifDecodeStatus
 Bumptech.Glide.GifDecoder.IGifDecoderGifDecodeStatus;com.bumptech.glide.gifdecoder.GifDecoder$GifDecodeStatus
 com.bumptech.glide.gifdecoder.GifDecoder$GifDecodeStatus;com.bumptech.glide.gifdecoder.GifDecoder$GifDecodeStatus
-Bumptech.Glide.Glide+IRequestOptionsFactory, Xamarin.Android.Glide;com.bumptech.glide.Glide$RequestOptionsFactory
-Bumptech.Glide.Glide.IRequestOptionsFactory;com.bumptech.glide.Glide$RequestOptionsFactory
-com.bumptech.glide.Glide$RequestOptionsFactory;com.bumptech.glide.Glide$RequestOptionsFactory
 Bumptech.Glide.ListPreloader+IPreloadModelProvider, Xamarin.Android.Glide;com.bumptech.glide.ListPreloader$PreloadModelProvider
 Bumptech.Glide.ListPreloader.IPreloadModelProvider;com.bumptech.glide.ListPreloader$PreloadModelProvider
 com.bumptech.glide.ListPreloader$PreloadModelProvider;com.bumptech.glide.ListPreloader$PreloadModelProvider
@@ -2434,6 +2434,27 @@ com.google.android.material.carousel.OnMaskChangedListener;com.google.android.ma
 Google.Android.Material.Carousel.IOnMaskChangedListenerImplementor, Xamarin.Google.Android.Material;mono.com.google.android.material.carousel.OnMaskChangedListenerImplementor
 Google.Android.Material.Carousel.IOnMaskChangedListenerImplementor;mono.com.google.android.material.carousel.OnMaskChangedListenerImplementor
 mono.com.google.android.material.carousel.OnMaskChangedListenerImplementor;mono.com.google.android.material.carousel.OnMaskChangedListenerImplementor
+Google.Android.Material.CircularReveal.CircularRevealHelper+IDelegate, Xamarin.Google.Android.Material;com.google.android.material.circularreveal.CircularRevealHelper$Delegate
+Google.Android.Material.CircularReveal.CircularRevealHelper.IDelegate;com.google.android.material.circularreveal.CircularRevealHelper$Delegate
+com.google.android.material.circularreveal.CircularRevealHelper$Delegate;com.google.android.material.circularreveal.CircularRevealHelper$Delegate
+Google.Android.Material.CircularReveal.CircularRevealHelper+IStrategy, Xamarin.Google.Android.Material;com.google.android.material.circularreveal.CircularRevealHelper$Strategy
+Google.Android.Material.CircularReveal.CircularRevealHelper.IStrategy;com.google.android.material.circularreveal.CircularRevealHelper$Strategy
+com.google.android.material.circularreveal.CircularRevealHelper$Strategy;com.google.android.material.circularreveal.CircularRevealHelper$Strategy
+Google.Android.Material.CircularReveal.ICircularRevealWidget, Xamarin.Google.Android.Material;com.google.android.material.circularreveal.CircularRevealWidget
+Google.Android.Material.CircularReveal.ICircularRevealWidget;com.google.android.material.circularreveal.CircularRevealWidget
+com.google.android.material.circularreveal.CircularRevealWidget;com.google.android.material.circularreveal.CircularRevealWidget
+Google.Android.Material.Color.DynamicColors+IOnAppliedCallback, Xamarin.Google.Android.Material;com.google.android.material.color.DynamicColors$OnAppliedCallback
+Google.Android.Material.Color.DynamicColors.IOnAppliedCallback;com.google.android.material.color.DynamicColors$OnAppliedCallback
+com.google.android.material.color.DynamicColors$OnAppliedCallback;com.google.android.material.color.DynamicColors$OnAppliedCallback
+Google.Android.Material.Color.DynamicColors+IPrecondition, Xamarin.Google.Android.Material;com.google.android.material.color.DynamicColors$Precondition
+Google.Android.Material.Color.DynamicColors.IPrecondition;com.google.android.material.color.DynamicColors$Precondition
+com.google.android.material.color.DynamicColors$Precondition;com.google.android.material.color.DynamicColors$Precondition
+Google.Android.Material.Color.IColorResourcesOverride, Xamarin.Google.Android.Material;com.google.android.material.color.ColorResourcesOverride
+Google.Android.Material.Color.IColorResourcesOverride;com.google.android.material.color.ColorResourcesOverride
+com.google.android.material.color.ColorResourcesOverride;com.google.android.material.color.ColorResourcesOverride
+Google.Android.Material.Color.Utilities.IPointProvider, Xamarin.Google.Android.Material;com.google.android.material.color.utilities.PointProvider
+Google.Android.Material.Color.Utilities.IPointProvider;com.google.android.material.color.utilities.PointProvider
+com.google.android.material.color.utilities.PointProvider;com.google.android.material.color.utilities.PointProvider
 Google.Android.Material.CheckBox.MaterialCheckBox+ICheckedState, Xamarin.Google.Android.Material;com.google.android.material.checkbox.MaterialCheckBox$CheckedState
 Google.Android.Material.CheckBox.MaterialCheckBox.ICheckedState;com.google.android.material.checkbox.MaterialCheckBox$CheckedState
 com.google.android.material.checkbox.MaterialCheckBox$CheckedState;com.google.android.material.checkbox.MaterialCheckBox$CheckedState
@@ -2464,27 +2485,6 @@ com.google.android.material.chip.ChipGroup$OnCheckedStateChangeListener;com.goog
 Google.Android.Material.Chip.ChipGroup+IOnCheckedStateChangeListenerImplementor, Xamarin.Google.Android.Material;mono.com.google.android.material.chip.ChipGroup_OnCheckedStateChangeListenerImplementor
 Google.Android.Material.Chip.ChipGroup.IOnCheckedStateChangeListenerImplementor;mono.com.google.android.material.chip.ChipGroup_OnCheckedStateChangeListenerImplementor
 mono.com.google.android.material.chip.ChipGroup_OnCheckedStateChangeListenerImplementor;mono.com.google.android.material.chip.ChipGroup_OnCheckedStateChangeListenerImplementor
-Google.Android.Material.CircularReveal.CircularRevealHelper+IDelegate, Xamarin.Google.Android.Material;com.google.android.material.circularreveal.CircularRevealHelper$Delegate
-Google.Android.Material.CircularReveal.CircularRevealHelper.IDelegate;com.google.android.material.circularreveal.CircularRevealHelper$Delegate
-com.google.android.material.circularreveal.CircularRevealHelper$Delegate;com.google.android.material.circularreveal.CircularRevealHelper$Delegate
-Google.Android.Material.CircularReveal.CircularRevealHelper+IStrategy, Xamarin.Google.Android.Material;com.google.android.material.circularreveal.CircularRevealHelper$Strategy
-Google.Android.Material.CircularReveal.CircularRevealHelper.IStrategy;com.google.android.material.circularreveal.CircularRevealHelper$Strategy
-com.google.android.material.circularreveal.CircularRevealHelper$Strategy;com.google.android.material.circularreveal.CircularRevealHelper$Strategy
-Google.Android.Material.CircularReveal.ICircularRevealWidget, Xamarin.Google.Android.Material;com.google.android.material.circularreveal.CircularRevealWidget
-Google.Android.Material.CircularReveal.ICircularRevealWidget;com.google.android.material.circularreveal.CircularRevealWidget
-com.google.android.material.circularreveal.CircularRevealWidget;com.google.android.material.circularreveal.CircularRevealWidget
-Google.Android.Material.Color.DynamicColors+IOnAppliedCallback, Xamarin.Google.Android.Material;com.google.android.material.color.DynamicColors$OnAppliedCallback
-Google.Android.Material.Color.DynamicColors.IOnAppliedCallback;com.google.android.material.color.DynamicColors$OnAppliedCallback
-com.google.android.material.color.DynamicColors$OnAppliedCallback;com.google.android.material.color.DynamicColors$OnAppliedCallback
-Google.Android.Material.Color.DynamicColors+IPrecondition, Xamarin.Google.Android.Material;com.google.android.material.color.DynamicColors$Precondition
-Google.Android.Material.Color.DynamicColors.IPrecondition;com.google.android.material.color.DynamicColors$Precondition
-com.google.android.material.color.DynamicColors$Precondition;com.google.android.material.color.DynamicColors$Precondition
-Google.Android.Material.Color.IColorResourcesOverride, Xamarin.Google.Android.Material;com.google.android.material.color.ColorResourcesOverride
-Google.Android.Material.Color.IColorResourcesOverride;com.google.android.material.color.ColorResourcesOverride
-com.google.android.material.color.ColorResourcesOverride;com.google.android.material.color.ColorResourcesOverride
-Google.Android.Material.Color.Utilities.IPointProvider, Xamarin.Google.Android.Material;com.google.android.material.color.utilities.PointProvider
-Google.Android.Material.Color.Utilities.IPointProvider;com.google.android.material.color.utilities.PointProvider
-com.google.android.material.color.utilities.PointProvider;com.google.android.material.color.utilities.PointProvider
 Google.Android.Material.DatePicker.CalendarConstraints+IDateValidator, Xamarin.Google.Android.Material;com.google.android.material.datepicker.CalendarConstraints$DateValidator
 Google.Android.Material.DatePicker.CalendarConstraints.IDateValidator;com.google.android.material.datepicker.CalendarConstraints$DateValidator
 com.google.android.material.datepicker.CalendarConstraints$DateValidator;com.google.android.material.datepicker.CalendarConstraints$DateValidator
@@ -2998,12 +2998,12 @@ org.jetbrains.annotations.Blocking;org.jetbrains.annotations.Blocking
 JetBrains.Annotations.IBlockingExecutor, Xamarin.Jetbrains.Annotations;org.jetbrains.annotations.BlockingExecutor
 JetBrains.Annotations.IBlockingExecutor;org.jetbrains.annotations.BlockingExecutor
 org.jetbrains.annotations.BlockingExecutor;org.jetbrains.annotations.BlockingExecutor
-JetBrains.Annotations.ICheckReturnValue, Xamarin.Jetbrains.Annotations;org.jetbrains.annotations.CheckReturnValue
-JetBrains.Annotations.ICheckReturnValue;org.jetbrains.annotations.CheckReturnValue
-org.jetbrains.annotations.CheckReturnValue;org.jetbrains.annotations.CheckReturnValue
 JetBrains.Annotations.IContract, Xamarin.Jetbrains.Annotations;org.jetbrains.annotations.Contract
 JetBrains.Annotations.IContract;org.jetbrains.annotations.Contract
 org.jetbrains.annotations.Contract;org.jetbrains.annotations.Contract
+JetBrains.Annotations.ICheckReturnValue, Xamarin.Jetbrains.Annotations;org.jetbrains.annotations.CheckReturnValue
+JetBrains.Annotations.ICheckReturnValue;org.jetbrains.annotations.CheckReturnValue
+org.jetbrains.annotations.CheckReturnValue;org.jetbrains.annotations.CheckReturnValue
 JetBrains.Annotations.IMustBeInvokedByOverriders, Xamarin.Jetbrains.Annotations;org.jetbrains.annotations.MustBeInvokedByOverriders
 JetBrains.Annotations.IMustBeInvokedByOverriders;org.jetbrains.annotations.MustBeInvokedByOverriders
 org.jetbrains.annotations.MustBeInvokedByOverriders;org.jetbrains.annotations.MustBeInvokedByOverriders
@@ -3559,15 +3559,15 @@ kotlin.uuid.ExperimentalUuidApi;kotlin.uuid.ExperimentalUuidApi
 KotlinX.Serialization.Descriptors.ISerialDescriptor, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.descriptors.SerialDescriptor
 KotlinX.Serialization.Descriptors.ISerialDescriptor;kotlinx.serialization.descriptors.SerialDescriptor
 kotlinx.serialization.descriptors.SerialDescriptor;kotlinx.serialization.descriptors.SerialDescriptor
-KotlinX.Serialization.Encoding.IChunkedDecoder, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.encoding.ChunkedDecoder
-KotlinX.Serialization.Encoding.IChunkedDecoder;kotlinx.serialization.encoding.ChunkedDecoder
-kotlinx.serialization.encoding.ChunkedDecoder;kotlinx.serialization.encoding.ChunkedDecoder
 KotlinX.Serialization.Encoding.ICompositeDecoder, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.encoding.CompositeDecoder
 KotlinX.Serialization.Encoding.ICompositeDecoder;kotlinx.serialization.encoding.CompositeDecoder
 kotlinx.serialization.encoding.CompositeDecoder;kotlinx.serialization.encoding.CompositeDecoder
 KotlinX.Serialization.Encoding.ICompositeEncoder, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.encoding.CompositeEncoder
 KotlinX.Serialization.Encoding.ICompositeEncoder;kotlinx.serialization.encoding.CompositeEncoder
 kotlinx.serialization.encoding.CompositeEncoder;kotlinx.serialization.encoding.CompositeEncoder
+KotlinX.Serialization.Encoding.IChunkedDecoder, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.encoding.ChunkedDecoder
+KotlinX.Serialization.Encoding.IChunkedDecoder;kotlinx.serialization.encoding.ChunkedDecoder
+kotlinx.serialization.encoding.ChunkedDecoder;kotlinx.serialization.encoding.ChunkedDecoder
 KotlinX.Serialization.Encoding.IDecoder, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.encoding.Decoder
 KotlinX.Serialization.Encoding.IDecoder;kotlinx.serialization.encoding.Decoder
 kotlinx.serialization.encoding.Decoder;kotlinx.serialization.encoding.Decoder
@@ -3589,12 +3589,12 @@ kotlinx.serialization.EncodeDefault;kotlinx.serialization.EncodeDefault
 KotlinX.Serialization.IExperimentalSerializationApi, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.ExperimentalSerializationApi
 KotlinX.Serialization.IExperimentalSerializationApi;kotlinx.serialization.ExperimentalSerializationApi
 kotlinx.serialization.ExperimentalSerializationApi;kotlinx.serialization.ExperimentalSerializationApi
-KotlinX.Serialization.IInheritableSerialInfo, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.InheritableSerialInfo
-KotlinX.Serialization.IInheritableSerialInfo;kotlinx.serialization.InheritableSerialInfo
-kotlinx.serialization.InheritableSerialInfo;kotlinx.serialization.InheritableSerialInfo
 KotlinX.Serialization.IInternalSerializationApi, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.InternalSerializationApi
 KotlinX.Serialization.IInternalSerializationApi;kotlinx.serialization.InternalSerializationApi
 kotlinx.serialization.InternalSerializationApi;kotlinx.serialization.InternalSerializationApi
+KotlinX.Serialization.IInheritableSerialInfo, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.InheritableSerialInfo
+KotlinX.Serialization.IInheritableSerialInfo;kotlinx.serialization.InheritableSerialInfo
+kotlinx.serialization.InheritableSerialInfo;kotlinx.serialization.InheritableSerialInfo
 KotlinX.Serialization.IKeepGeneratedSerializer, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.KeepGeneratedSerializer
 KotlinX.Serialization.IKeepGeneratedSerializer;kotlinx.serialization.KeepGeneratedSerializer
 kotlinx.serialization.KeepGeneratedSerializer;kotlinx.serialization.KeepGeneratedSerializer
@@ -4078,6 +4078,9 @@ microsoft.maui.maps.handlers.MapCallbackHandler;crc64a5df8ade113ad624.MapCallbac
 Microsoft.Maui.MauiAppCompatActivity, Microsoft.Maui;crc6488302ad6e9e4df1a.MauiAppCompatActivity
 Microsoft.Maui.MauiAppCompatActivity;crc6488302ad6e9e4df1a.MauiAppCompatActivity
 microsoft.maui.MauiAppCompatActivity;crc6488302ad6e9e4df1a.MauiAppCompatActivity
+Microsoft.Maui.MauiAppCompatActivity+PredictiveBackCallback, Microsoft.Maui;crc6488302ad6e9e4df1a.MauiAppCompatActivity_PredictiveBackCallback
+Microsoft.Maui.MauiAppCompatActivity.PredictiveBackCallback;crc6488302ad6e9e4df1a.MauiAppCompatActivity_PredictiveBackCallback
+microsoft.maui.MauiAppCompatActivity_PredictiveBackCallback;crc6488302ad6e9e4df1a.MauiAppCompatActivity_PredictiveBackCallback
 Microsoft.Maui.MauiApplication, Microsoft.Maui;crc6488302ad6e9e4df1a.MauiApplication
 Microsoft.Maui.MauiApplication;crc6488302ad6e9e4df1a.MauiApplication
 microsoft.maui.MauiApplication;crc6488302ad6e9e4df1a.MauiApplication
@@ -4108,9 +4111,6 @@ microsoft.maui.platform.ContentViewGroup;crc6452ffdc5b34af3a0f.ContentViewGroup
 Microsoft.Maui.Platform.FragmentManagerExtensions+CallBacks, Microsoft.Maui;crc6452ffdc5b34af3a0f.FragmentManagerExtensions_CallBacks
 Microsoft.Maui.Platform.FragmentManagerExtensions.CallBacks;crc6452ffdc5b34af3a0f.FragmentManagerExtensions_CallBacks
 microsoft.maui.platform.FragmentManagerExtensions_CallBacks;crc6452ffdc5b34af3a0f.FragmentManagerExtensions_CallBacks
-Microsoft.Maui.Platform.GlobalWindowInsetListener, Microsoft.Maui;crc6452ffdc5b34af3a0f.GlobalWindowInsetListener
-Microsoft.Maui.Platform.GlobalWindowInsetListener;crc6452ffdc5b34af3a0f.GlobalWindowInsetListener
-microsoft.maui.platform.GlobalWindowInsetListener;crc6452ffdc5b34af3a0f.GlobalWindowInsetListener
 Microsoft.Maui.Platform.LayoutViewGroup, Microsoft.Maui;crc6452ffdc5b34af3a0f.LayoutViewGroup
 Microsoft.Maui.Platform.LayoutViewGroup;crc6452ffdc5b34af3a0f.LayoutViewGroup
 microsoft.maui.platform.LayoutViewGroup;crc6452ffdc5b34af3a0f.LayoutViewGroup
@@ -4147,6 +4147,9 @@ microsoft.maui.platform.MauiMaterialButton;crc6452ffdc5b34af3a0f.MauiMaterialBut
 Microsoft.Maui.Platform.MauiMaterialButton+MauiResizableDrawable, Microsoft.Maui;crc6452ffdc5b34af3a0f.MauiMaterialButton_MauiResizableDrawable
 Microsoft.Maui.Platform.MauiMaterialButton.MauiResizableDrawable;crc6452ffdc5b34af3a0f.MauiMaterialButton_MauiResizableDrawable
 microsoft.maui.platform.MauiMaterialButton_MauiResizableDrawable;crc6452ffdc5b34af3a0f.MauiMaterialButton_MauiResizableDrawable
+Microsoft.Maui.Platform.MauiMaterialContextThemeWrapper, Microsoft.Maui;crc6452ffdc5b34af3a0f.MauiMaterialContextThemeWrapper
+Microsoft.Maui.Platform.MauiMaterialContextThemeWrapper;crc6452ffdc5b34af3a0f.MauiMaterialContextThemeWrapper
+microsoft.maui.platform.MauiMaterialContextThemeWrapper;crc6452ffdc5b34af3a0f.MauiMaterialContextThemeWrapper
 Microsoft.Maui.Platform.MauiNavHostFragment, Microsoft.Maui;microsoft.maui.platform.MauiNavHostFragment
 Microsoft.Maui.Platform.MauiNavHostFragment;microsoft.maui.platform.MauiNavHostFragment
 microsoft.maui.platform.MauiNavHostFragment;microsoft.maui.platform.MauiNavHostFragment
@@ -4198,6 +4201,9 @@ microsoft.maui.platform.MauiWebView;crc6452ffdc5b34af3a0f.MauiWebView
 Microsoft.Maui.Platform.MauiWebViewClient, Microsoft.Maui;crc6452ffdc5b34af3a0f.MauiWebViewClient
 Microsoft.Maui.Platform.MauiWebViewClient;crc6452ffdc5b34af3a0f.MauiWebViewClient
 microsoft.maui.platform.MauiWebViewClient;crc6452ffdc5b34af3a0f.MauiWebViewClient
+Microsoft.Maui.Platform.MauiWindowInsetListener, Microsoft.Maui;crc6452ffdc5b34af3a0f.MauiWindowInsetListener
+Microsoft.Maui.Platform.MauiWindowInsetListener;crc6452ffdc5b34af3a0f.MauiWindowInsetListener
+microsoft.maui.platform.MauiWindowInsetListener;crc6452ffdc5b34af3a0f.MauiWindowInsetListener
 Microsoft.Maui.Platform.NavigationRootManager+ElementBasedFragment, Microsoft.Maui;crc6452ffdc5b34af3a0f.NavigationRootManager_ElementBasedFragment
 Microsoft.Maui.Platform.NavigationRootManager.ElementBasedFragment;crc6452ffdc5b34af3a0f.NavigationRootManager_ElementBasedFragment
 microsoft.maui.platform.NavigationRootManager_ElementBasedFragment;crc6452ffdc5b34af3a0f.NavigationRootManager_ElementBasedFragment
@@ -4966,15 +4972,15 @@ com.google.errorprone.annotations.concurrent.UnlockMethod;com.google.errorprone.
 Xamarin.Google.ErrorProne.Annotations.ICanIgnoreReturnValue, Xamarin.Google.ErrorProne.Annotations;com.google.errorprone.annotations.CanIgnoreReturnValue
 Xamarin.Google.ErrorProne.Annotations.ICanIgnoreReturnValue;com.google.errorprone.annotations.CanIgnoreReturnValue
 com.google.errorprone.annotations.CanIgnoreReturnValue;com.google.errorprone.annotations.CanIgnoreReturnValue
-Xamarin.Google.ErrorProne.Annotations.ICheckReturnValue, Xamarin.Google.ErrorProne.Annotations;com.google.errorprone.annotations.CheckReturnValue
-Xamarin.Google.ErrorProne.Annotations.ICheckReturnValue;com.google.errorprone.annotations.CheckReturnValue
-com.google.errorprone.annotations.CheckReturnValue;com.google.errorprone.annotations.CheckReturnValue
 Xamarin.Google.ErrorProne.Annotations.ICompatibleWith, Xamarin.Google.ErrorProne.Annotations;com.google.errorprone.annotations.CompatibleWith
 Xamarin.Google.ErrorProne.Annotations.ICompatibleWith;com.google.errorprone.annotations.CompatibleWith
 com.google.errorprone.annotations.CompatibleWith;com.google.errorprone.annotations.CompatibleWith
 Xamarin.Google.ErrorProne.Annotations.ICompileTimeConstant, Xamarin.Google.ErrorProne.Annotations;com.google.errorprone.annotations.CompileTimeConstant
 Xamarin.Google.ErrorProne.Annotations.ICompileTimeConstant;com.google.errorprone.annotations.CompileTimeConstant
 com.google.errorprone.annotations.CompileTimeConstant;com.google.errorprone.annotations.CompileTimeConstant
+Xamarin.Google.ErrorProne.Annotations.ICheckReturnValue, Xamarin.Google.ErrorProne.Annotations;com.google.errorprone.annotations.CheckReturnValue
+Xamarin.Google.ErrorProne.Annotations.ICheckReturnValue;com.google.errorprone.annotations.CheckReturnValue
+com.google.errorprone.annotations.CheckReturnValue;com.google.errorprone.annotations.CheckReturnValue
 Xamarin.Google.ErrorProne.Annotations.IDoNotCall, Xamarin.Google.ErrorProne.Annotations;com.google.errorprone.annotations.DoNotCall
 Xamarin.Google.ErrorProne.Annotations.IDoNotCall;com.google.errorprone.annotations.DoNotCall
 com.google.errorprone.annotations.DoNotCall;com.google.errorprone.annotations.DoNotCall
@@ -5092,12 +5098,6 @@ kotlinx.coroutines.flow.StateFlow;kotlinx.coroutines.flow.StateFlow
 Xamarin.KotlinX.Coroutines.ICancellableContinuation, Xamarin.KotlinX.Coroutines.Core.Jvm;kotlinx.coroutines.CancellableContinuation
 Xamarin.KotlinX.Coroutines.ICancellableContinuation;kotlinx.coroutines.CancellableContinuation
 kotlinx.coroutines.CancellableContinuation;kotlinx.coroutines.CancellableContinuation
-Xamarin.KotlinX.Coroutines.IChildHandle, Xamarin.KotlinX.Coroutines.Core.Jvm;kotlinx.coroutines.ChildHandle
-Xamarin.KotlinX.Coroutines.IChildHandle;kotlinx.coroutines.ChildHandle
-kotlinx.coroutines.ChildHandle;kotlinx.coroutines.ChildHandle
-Xamarin.KotlinX.Coroutines.IChildJob, Xamarin.KotlinX.Coroutines.Core.Jvm;kotlinx.coroutines.ChildJob
-Xamarin.KotlinX.Coroutines.IChildJob;kotlinx.coroutines.ChildJob
-kotlinx.coroutines.ChildJob;kotlinx.coroutines.ChildJob
 Xamarin.KotlinX.Coroutines.ICompletableDeferred, Xamarin.KotlinX.Coroutines.Core.Jvm;kotlinx.coroutines.CompletableDeferred
 Xamarin.KotlinX.Coroutines.ICompletableDeferred;kotlinx.coroutines.CompletableDeferred
 kotlinx.coroutines.CompletableDeferred;kotlinx.coroutines.CompletableDeferred
@@ -5116,6 +5116,12 @@ kotlinx.coroutines.CoroutineExceptionHandler;kotlinx.coroutines.CoroutineExcepti
 Xamarin.KotlinX.Coroutines.ICoroutineScope, Xamarin.KotlinX.Coroutines.Core.Jvm;kotlinx.coroutines.CoroutineScope
 Xamarin.KotlinX.Coroutines.ICoroutineScope;kotlinx.coroutines.CoroutineScope
 kotlinx.coroutines.CoroutineScope;kotlinx.coroutines.CoroutineScope
+Xamarin.KotlinX.Coroutines.IChildHandle, Xamarin.KotlinX.Coroutines.Core.Jvm;kotlinx.coroutines.ChildHandle
+Xamarin.KotlinX.Coroutines.IChildHandle;kotlinx.coroutines.ChildHandle
+kotlinx.coroutines.ChildHandle;kotlinx.coroutines.ChildHandle
+Xamarin.KotlinX.Coroutines.IChildJob, Xamarin.KotlinX.Coroutines.Core.Jvm;kotlinx.coroutines.ChildJob
+Xamarin.KotlinX.Coroutines.IChildJob;kotlinx.coroutines.ChildJob
+kotlinx.coroutines.ChildJob;kotlinx.coroutines.ChildJob
 Xamarin.KotlinX.Coroutines.IDeferred, Xamarin.KotlinX.Coroutines.Core.Jvm;kotlinx.coroutines.Deferred
 Xamarin.KotlinX.Coroutines.IDeferred;kotlinx.coroutines.Deferred
 kotlinx.coroutines.Deferred;kotlinx.coroutines.Deferred

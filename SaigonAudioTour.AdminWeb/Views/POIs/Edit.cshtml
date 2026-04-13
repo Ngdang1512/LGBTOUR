@@ -1,0 +1,217 @@
+﻿@model LGBTOUR.AdminWeb.Models.PoiViewModel
+@{
+    ViewData["Title"] = "Sửa Thông Tin Trạm";
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-warning shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold">Sửa Trạm: @Model.Name</h3>
+            </div>
+            <form asp-action="Edit" enctype="multipart/form-data" method="post">
+                <div class="card-body">
+                    <input type="hidden" asp-for="Id" />
+                    
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger px-2 py-1">@ViewBag.Error</div>
+                    }
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="font-weight-bold">Tên địa điểm <span class="text-danger">*</span></label>
+                        <input asp-for="Name" class="form-control" required />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description" class="font-weight-bold">Mô tả</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold">Cập nhật Hình Ảnh</label>
+                        <div class="mb-2 text-center">
+                            @{
+                                var imageUrl = string.IsNullOrEmpty(Model.Image) ? "/images/no-image.png" : $"http://localhost:5117{Model.Image}";
+                            }
+                            <img id="imgPreview" src="@imageUrl"
+                                 style="max-height: 150px; border-radius: 8px; border: 1px solid #ddd; object-fit: cover;"
+                                 onerror="this.src='/images/no-image.png'" alt="Preview" />
+                        </div>
+                        <div class="custom-file mt-2">
+                            <input type="file" name="uploadImage" class="custom-file-input" id="customFile" accept="image/*" onchange="previewImage(event)">
+                            <label class="custom-file-label" for="customFile">Chọn ảnh mới...</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Radius" class="font-weight-bold">Bán kính (m) <span class="text-danger">*</span></label>
+                        <input asp-for="Radius" id="RadiusInput" class="form-control" type="number" required />
+                    </div>
+
+                    <hr />
+                    <h5 class="text-secondary"><i class="fas fa-crosshairs"></i> Vị trí Tọa độ</h5>
+                    <p class="small text-muted mb-2">Bạn có thể nhập tay hoặc click lên bản đồ để lấy tọa độ.</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Lat" class="font-weight-bold text-primary">Vĩ độ (Lat) *</label>
+                                <input asp-for="Lat" id="LatInput" class="form-control border-primary" type="text" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Lng" class="font-weight-bold text-primary">Kinh độ (Lng) *</label>
+                                <input asp-for="Lng" id="LngInput" class="form-control border-primary" type="text" required />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" asp-for="Priority" />
+                    <input type="hidden" asp-for="IsStopStation" />
+                </div>
+                
+                <div class="card-footer bg-white">
+                    <button type="submit" class="btn btn-warning font-weight-bold"><i class="fas fa-save mr-1"></i> Cập Nhật</button>
+                    <a asp-action="Index" class="btn btn-default float-right">Hủy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h3 class="card-title font-weight-bold m-0"><i class="fas fa-map-marker-alt text-danger mr-1"></i> Bản đồ định vị</h3>
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="toggleHeatmap" checked>
+                    <label class="custom-control-label text-white" for="toggleHeatmap">Heatmap</label>
+                </div>
+            </div>
+            <div class="card-body p-1">
+                <div id="map" style="height: 700px; width: 100%; border-radius: 4px; z-index: 1;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // 1. CHUẨN HÓA DỮ LIỆU TỪ C# RA JS (Cực kỳ quan trọng để không bị lỗi màn hình xanh lè)
+        var latString = document.getElementById('LatInput').value.replace(',', '.');
+        var lngString = document.getElementById('LngInput').value.replace(',', '.');
+        
+        // Nếu parse lỗi thì set mặc định về Quận 1
+        var initialLat = parseFloat(latString);
+        var initialLng = parseFloat(lngString);
+        if (isNaN(initialLat) || initialLat === 0) initialLat = 10.7769;
+        if (isNaN(initialLng) || initialLng === 0) initialLng = 106.7009;
+        
+        var initialRadius = parseInt(document.getElementById('RadiusInput').value) || 50;
+
+        // Cập nhật lại 2 ô input bằng số chuẩn (dấu chấm)
+        document.getElementById('LatInput').value = initialLat;
+        document.getElementById('LngInput').value = initialLng;
+
+        // 2. KHỞI TẠO BẢN ĐỒ
+        var map = L.map('map').setView([initialLat, initialLng], 17);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var currentMarker = null;
+        var currentCircle = null;
+
+        // Hàm vẽ ghim và vòng tròn tập trung vào 1 chỗ cho dễ gọi
+        function updateMapMarker(lat, lng, radius) {
+        if(currentMarker) map.removeLayer(currentMarker);
+        if(currentCircle) map.removeLayer(currentCircle);
+
+        currentMarker = L.marker([lat, lng]).addTo(map);
+        currentCircle = L.circle([lat, lng], {
+        color: 'blue', fillColor: '#3388ff', fillOpacity: 0.1, radius: radius
+        }).addTo(map);
+        }
+
+        // Vẽ lần đầu tiên
+        updateMapMarker(initialLat, initialLng, initialRadius);
+
+        // ==========================================
+        // 3. ĐỒNG BỘ 2 CHIỀU: CLICK BẢN ĐỒ -> CẬP NHẬT INPUT
+        // ==========================================
+        map.on('click', function(e) {
+        var radius = parseInt(document.getElementById('RadiusInput').value) || 50;
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        updateMapMarker(lat, lng, radius);
+
+        // Đẩy số xuống ô input
+        document.getElementById('LatInput').value = lat.toFixed(6);
+        document.getElementById('LngInput').value = lng.toFixed(6);
+        });
+
+        // ==========================================
+        // 4. ĐỒNG BỘ 2 CHIỀU: GÕ VÀO INPUT -> BẢN ĐỒ DI CHUYỂN
+        // ==========================================
+        function onManualCoordinateInput() {
+        // Lấy giá trị đang gõ (thay phẩy thành chấm nếu người dùng gõ phẩy)
+        var latVal = document.getElementById('LatInput').value.replace(',', '.');
+        var lngVal = document.getElementById('LngInput').value.replace(',', '.');
+        var radius = parseInt(document.getElementById('RadiusInput').value) || 50;
+
+        var lat = parseFloat(latVal);
+        var lng = parseFloat(lngVal);
+
+        // Chỉ vẽ lại nếu nhập đúng số
+        if (!isNaN(lat) && !isNaN(lng)) {
+        updateMapMarker(lat, lng, radius);
+        map.setView([lat, lng], map.getZoom()); // Dời camera bản đồ đến chỗ vừa gõ
+        }
+        }
+
+        // Bắt sự kiện mỗi khi gõ phím vào 2 ô Lat/Lng
+        document.getElementById('LatInput').addEventListener('input', onManualCoordinateInput);
+        document.getElementById('LngInput').addEventListener('input', onManualCoordinateInput);
+
+        // Cập nhật vòng tròn khi gõ thay đổi Bán kính
+        document.getElementById('RadiusInput').addEventListener('input', function() {
+        onManualCoordinateInput();
+        });
+
+        // ==========================================
+        // 5. HEATMAP & PREVIEW ẢNH
+        // ==========================================
+        var heatLayer = null;
+        function loadHeatmap() {
+        if (typeof L.heatLayer !== 'function') return;
+        var fakeHeatPoints = [
+        [initialLat + 0.0001, initialLng + 0.0001, 0.8],
+        [initialLat + 0.0002, initialLng - 0.0001, 0.9],
+        [initialLat - 0.00015, initialLng + 0.0002, 0.5]
+        ];
+        heatLayer = L.heatLayer(fakeHeatPoints, { radius: 25, blur: 15, maxZoom: 17, gradient: {0.4: 'blue', 0.6: 'lime', 0.8: 'yellow', 1.0: 'red'} }).addTo(map);
+        }
+        setTimeout(loadHeatmap, 500);
+
+        document.getElementById('toggleHeatmap').addEventListener('change', function() {
+        if(this.checked && heatLayer) { map.addLayer(heatLayer); }
+        else if (heatLayer) { map.removeLayer(heatLayer); }
+        });
+
+        function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){ document.getElementById('imgPreview').src = reader.result; };
+        reader.readAsDataURL(event.target.files[0]);
+        event.target.nextElementSibling.innerText = event.target.files[0].name;
+        }
+    </script>
+}

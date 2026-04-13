@@ -1,0 +1,171 @@
+﻿@model LGBTOUR.AdminWeb.Models.PoiViewModel
+@{
+    ViewData["Title"] = "Thêm Trạm Mới";
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-primary shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold"><i class="fas fa-plus-circle mr-1"></i> Thông tin Địa điểm mới</h3>
+            </div>
+            <form asp-action="Create" method="post">
+                <div class="card-body">
+                    
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger px-2 py-1">@ViewBag.Error</div>
+                    }
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="font-weight-bold">Tên địa điểm <span class="text-danger">*</span></label>
+                        <input asp-for="Name" class="form-control" placeholder="VD: Dinh Độc Lập" required />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description" class="font-weight-bold">Mô tả chi tiết</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Nhập nội dung thuyết minh ngắn..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Radius" class="font-weight-bold">Bán kính kích hoạt (m) <span class="text-danger">*</span></label>
+                        <input asp-for="Radius" id="RadiusInput" class="form-control" type="number" value="@(Model?.Radius > 0 ? Model.Radius : 100)" required />
+                        <small class="text-muted">App sẽ tự phát nhạc khi khách vào vùng này.</small>
+                    </div>
+
+                    <hr />
+                    <h5 class="text-primary font-weight-bold"><i class="fas fa-crosshairs"></i> Vị trí Tọa độ</h5>
+                    <p class="small text-muted mb-2">Nhập tay số liệu hoặc click trực tiếp lên bản đồ bên phải.</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Lat" class="font-weight-bold">Vĩ độ (Lat) *</label>
+                                <input asp-for="Lat" id="LatInput" class="form-control border-primary" type="text" placeholder="10.77..." required />
+                                <span asp-validation-for="Lat" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Lng" class="font-weight-bold">Kinh độ (Lng) *</label>
+                                <input asp-for="Lng" id="LngInput" class="form-control border-primary" type="text" placeholder="106.6..." required />
+                                <span asp-validation-for="Lng" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Priority" class="font-weight-bold">Độ ưu tiên</label>
+                        <input asp-for="Priority" class="form-control" type="number" value="1" />
+                    </div>
+
+                    <div class="form-group custom-control custom-switch custom-switch-off-danger custom-switch-on-success mt-3">
+                        <input asp-for="IsStopStation" type="checkbox" class="custom-control-input" id="customSwitch3" checked>
+                            <label class="custom-control-label" for="customSwitch3">Đây là Trạm Dừng (Xe buýt có ghé đón khách)</label>
+                        </div>
+                    </div>
+                
+                    <div class="card-footer bg-white shadow-none border-top">
+                        <button type="submit" class="btn btn-primary font-weight-bold px-4"><i class="fas fa-save mr-1"></i> Lưu Hệ Thống</button>
+                        <a asp-action="Index" class="btn btn-default float-right">Hủy bỏ</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-warning">
+                    <h3 class="card-title font-weight-bold text-dark"><i class="fas fa-map-marked-alt mr-1"></i> Chọn vị trí trên Bản đồ</h3>
+                </div>
+                <div class="card-body p-1">
+                    <div id="map" style="height: 720px; width: 100%; border-radius: 4px; cursor: crosshair;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            // 1. Khởi tạo bản đồ (Mặc định Quận 1 - Chợ Bến Thành)
+            var map = L.map('map').setView([10.7725, 106.6980], 16);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap - LGBTOUR'
+            }).addTo(map);
+
+            var currentMarker = null;
+            var currentCircle = null;
+
+            // 2. Hàm vẽ/cập nhật Ghim và Vòng tròn
+            function updateMapDisplay(lat, lng, radius) {
+            // Xóa cái cũ nếu có
+            if (currentMarker) map.removeLayer(currentMarker);
+            if (currentCircle) map.removeLayer(currentCircle);
+
+            // Tạo cái mới
+            currentMarker = L.marker([lat, lng]).addTo(map);
+            currentCircle = L.circle([lat, lng], {
+            color: '#3388ff',
+            fillColor: '#3388ff',
+            fillOpacity: 0.15,
+            radius: radius
+            }).addTo(map);
+
+            // Cập nhật giá trị vào ô Input
+            document.getElementById('LatInput').value = lat.toFixed(6);
+            document.getElementById('LngInput').value = lng.toFixed(6);
+            }
+
+            // 3. SỰ KIỆN: Click lên bản đồ
+            map.on('click', function(e) {
+            var radius = parseInt(document.getElementById('RadiusInput').value) || 100;
+            updateMapDisplay(e.latlng.lat, e.latlng.lng, radius);
+            });
+
+            // 4. SỰ KIỆN: Nhập tọa độ bằng tay
+            function syncMapFromInputs() {
+            var latStr = document.getElementById('LatInput').value.replace(',', '.');
+            var lngStr = document.getElementById('LngInput').value.replace(',', '.');
+            var radius = parseInt(document.getElementById('RadiusInput').value) || 0;
+
+            var lat = parseFloat(latStr);
+            var lng = parseFloat(lngStr);
+
+            if (!isNaN(lat) && !isNaN(lng)) {
+            // Di chuyển bản đồ và vẽ lại ghim
+            updateMapDisplay(lat, lng, radius);
+            map.panTo([lat, lng]);
+            }
+            }
+
+            document.getElementById('LatInput').addEventListener('input', syncMapFromInputs);
+            document.getElementById('LngInput').addEventListener('input', syncMapFromInputs);
+
+            // 5. SỰ KIỆN: Thay đổi bán kính (vòng tròn co giãn theo)
+            document.getElementById('RadiusInput').addEventListener('input', function(e) {
+            var radius = parseInt(e.target.value) || 0;
+            if (currentCircle) {
+            currentCircle.setRadius(radius);
+            }
+            });
+
+            // 6. XỬ LÝ KHI LOAD LẠI TRANG (Trường hợp Form bị lỗi Validation)
+            window.onload = function() {
+            var lat = parseFloat(document.getElementById('LatInput').value.replace(',', '.'));
+            var lng = parseFloat(document.getElementById('LngInput').value.replace(',', '.'));
+            var radius = parseInt(document.getElementById('RadiusInput').value) || 100;
+
+            if (!isNaN(lat) && !isNaN(lng) && lat !== 0) {
+            updateMapDisplay(lat, lng, radius);
+            map.setView([lat, lng], 17);
+            }
+            };
+        </script>
+    }

@@ -1,0 +1,82 @@
+﻿@model LGBTOUR.AdminWeb.Models.CreateNarrationViewModel
+@{
+    ViewData["Title"] = "Thêm File Thuyết Minh";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card card-success shadow-sm border-0 mt-4">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold"><i class="fas fa-microphone-alt mr-2"></i> Tải Lên File Thuyết Minh Đa Ngôn Ngữ</h3>
+            </div>
+
+            <form asp-action="Create" enctype="multipart/form-data" method="post">
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger px-2 py-1">@ViewBag.Error</div>
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label asp-for="PoiId" class="font-weight-bold">Địa Điểm (POI) <span class="text-danger">*</span></label>
+                            <select asp-for="PoiId" class="form-control" asp-items="ViewBag.PoiList">
+                                <option value="">-- Chọn Trạm cần gắn Audio --</option>
+                            </select>
+                            <span asp-validation-for="PoiId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label asp-for="LanguageCode" class="font-weight-bold">Ngôn Ngữ <span class="text-danger">*</span></label>
+                            <select asp-for="LanguageCode" class="form-control">
+                                <option value="vi">Tiếng Việt (vi)</option>
+                                <option value="en">Tiếng Anh (en)</option>
+                                <option value="ko">Tiếng Hàn (ko)</option>
+                                <option value="zh">Tiếng Trung (zh)</option>
+                                <option value="fr">Tiếng Pháp (fr)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="VoiceType" class="font-weight-bold">Loại Giọng Đọc</label>
+                        <input asp-for="VoiceType" class="form-control" placeholder="VD: Giọng Nữ Miền Nam, AI Text-To-Speech..." />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ContentText" class="font-weight-bold">Kịch Bản Chữ (Text Script) <span class="text-danger">*</span></label>
+                        <textarea asp-for="ContentText" class="form-control" rows="4" placeholder="Nhập nội dung chữ của bài thuyết minh để làm phụ đề hoặc cho Text-to-Speech dự phòng..."></textarea>
+                        <span asp-validation-for="ContentText" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold">File Âm Thanh (.mp3, .wav) <span class="text-danger">*</span></label>
+                        <div class="custom-file">
+                            <input asp-for="AudioFile" type="file" class="custom-file-input" id="customFile" accept="audio/*">
+                                <label class="custom-file-label" for="customFile">Chọn file từ máy tính...</label>
+                            </div>
+                            <span asp-validation-for="AudioFile" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-white text-right">
+                        <a asp-controller="Pois" asp-action="Index" class="btn btn-default mr-2">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-success font-weight-bold">
+                            <i class="fas fa-cloud-upload-alt mr-1"></i> Bắt Đầu Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            // Script nhỏ giúp hiển thị tên file khi chọn xong
+            document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+                var fileName = document.getElementById("customFile").files[0].name;
+                var nextSibling = e.target.nextElementSibling;
+                nextSibling.innerText = fileName;
+            });
+        </script>
+    }

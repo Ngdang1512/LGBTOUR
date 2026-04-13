@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/Solution Items/" />
+  <Project Path="SaigonAudioTour.AdminWeb/SaigonAudioTour.AdminWeb.csproj" />
   <Project Path="SaigonAudioTour.Api/SaigonAudioTour.Api.csproj" Id="ae9ad78a-d34b-46f8-ad62-34c6d8348a38" />
-  <Project Path="SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj" />
+  <Project Path="SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>

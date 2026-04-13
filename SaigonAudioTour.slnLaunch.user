@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "SaigonAudioTour.Api\\SaigonAudioTour.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "SaigonAudioTour.Mobile\\SaigonAudioTour.Mobile.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

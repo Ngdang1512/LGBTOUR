@@ -1,0 +1,41 @@
+﻿@model LGBTOUR.AdminWeb.Models.PoiViewModel
+@{
+    ViewData["Title"] = "Xác nhận Xóa Trạm";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card card-danger shadow-sm border-0">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold"><i class="fas fa-exclamation-triangle mr-2"></i> CẢNH BÁO XÓA DỮ LIỆU</h3>
+            </div>
+            <div class="card-body text-center py-4">
+                
+                <div class="mb-4">
+                    <img src="@(!string.IsNullOrEmpty(Model.Image) ? "https://localhost:7092" + Model.Image : "/images/no-image.png")"
+                         alt="Hình Trạm" class="img-fluid rounded border shadow-sm" style="max-height: 200px; object-fit: cover;" />
+                </div>
+
+                <h4 class="text-danger font-weight-bold mb-2">@Model.Name</h4>
+                <p class="text-muted mb-4">Bạn có chắc chắn muốn xóa trạm này khỏi hệ thống không?</p>
+                
+                <div class="alert alert-warning text-left text-sm mb-0">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    <strong>Lưu ý:</strong> Hành động này không thể hoàn tác. Các bài thuyết minh (Audio) thuộc trạm này cũng sẽ bị hệ thống dọn dẹp theo.
+                </div>
+
+            </div>
+            <div class="card-footer bg-light text-center py-3">
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <a asp-action="Index" class="btn btn-default font-weight-bold mr-2 px-4">
+                        Hủy Bỏ
+                    </a>
+                    <button type="submit" class="btn btn-danger font-weight-bold px-4 shadow-sm">
+                        <i class="fas fa-trash-alt mr-1"></i> Xóa Vĩnh Viễn
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
