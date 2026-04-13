@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 namespace SaigonAudioTour.Api.Entities
 {
     public class POI
@@ -8,22 +9,31 @@ namespace SaigonAudioTour.Api.Entities
 
         [Required]
         [StringLength(200)]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
 
         public string? Description { get; set; }
 
-        public double Lat { get; set; }
-        public double Lng { get; set; }
+        public double Lat { get; set; } //vĩ độ 
+        public double Lng { get; set; }//kinh độ 
 
-        public int Radius { get; set; } // Bán kính kích hoạt (mét)
+        public int Radius { get; set; } //bán kính kích hoạt 
 
-        public string? Image { get; set; }
+        public string? Image { get; set; } //ảnh 
 
-        public int Priority { get; set; } // Mức ưu tiên khi các vùng Geofence chồng lấn
+        public int Priority { get; set; } // độ ưu tiên 
+        public bool IsStopStation { get; set; } // Đánh dấu Trạm xe buýt
 
-        // Quan hệ 1-N (Một POI có nhiều bản dịch và file âm thanh)
-        public virtual ICollection<Narration> Narrations { get; set; } = new List<Narration>();
-        public virtual ICollection<Audio> Audios { get; set; } = new List<Audio>();
-        public virtual ICollection<TourPOI> TourPOIs { get; set; } = new List<TourPOI>();
+        public ICollection<Narration> Narrations { get; set; }
+        
+        public ICollection<TourPOI> TourPOIs { get; set; }
+        public ICollection<UserLog> UserLogs { get; set; }
+
+        public POI()
+        {
+            Name = string.Empty;
+            Narrations = new List<Narration>();
+            TourPOIs = new List<TourPOI>();
+            UserLogs = new List<UserLog>();
+        }
     }
 }

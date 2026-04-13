@@ -4,9 +4,8 @@ public class SubscriptionStore
 {
     public List<PremiumPlan> Plans { get; } = new()
     {
-        new PremiumPlan("premium_month", "Premium tháng", 49000, "VND", 30, "Mở toàn bộ audio + heatmap nâng cao + không quảng cáo"),
-        new PremiumPlan("premium_year", "Premium năm", 299000, "VND", 365, "Toàn bộ tính năng Premium, tiết kiệm chi phí"),
-        new PremiumPlan("pro_month", "Pro tháng", 99000, "VND", 30, "Premium + AI gợi ý lịch trình + thống kê cá nhân")
+        new PremiumPlan("default", "Gói mặc định", 0, "VND", 0, "Truy cập cơ bản"),
+        new PremiumPlan("premium", "Gói Premium", 99000, "VND", 30, "Mở toàn bộ audio + không quảng cáo + ưu tiên trải nghiệm")
     };
 
     public List<PaymentOrder> Orders { get; } = new();
@@ -39,6 +38,12 @@ public class PremiumStatus
 {
     public string UserId { get; set; } = string.Empty;
     public bool IsPremium { get; set; }
-    public string PlanId { get; set; } = string.Empty;
+    public string PlanId { get; set; } = "default";
     public DateTime? PremiumUntil { get; set; }
+}
+
+public class CreateOrderRequest
+{
+    public string UserId { get; set; } = string.Empty;
+    public string PlanId { get; set; } = "premium";
 }

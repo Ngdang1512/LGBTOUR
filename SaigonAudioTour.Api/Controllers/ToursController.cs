@@ -1,7 +1,9 @@
-﻿using SaigonAudioTour.Api.Data;
-using SaigonAudioTour.Api.Entities;
+﻿using SaigonAudioTour.Api.DTOs.Tours;
+using SaigonAudioTour.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SaigonAudioTour.Api.Controllers
 {
@@ -9,52 +11,78 @@ namespace SaigonAudioTour.Api.Controllers
     [ApiController]
     public class ToursController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ITourService _tourService;
 
-        public ToursController(ApplicationDbContext context)
+        public ToursController(ITourService tourService)
         {
-            _context = context;
+            _tourService = tourService;
         }
 
+        // --- DÀNH CHO KHÁCH DU LỊCH (MOBILE APP) ---
+
+        // GET: api/tours
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tour>>> GetTours()
+        [AllowAnonymous] // THÊM MỚI: Mobile App cần lấy danh sách các tuyến để chọn
+        public async Task<ActionResult<IEnumerable<TourDetailDto>>> GetAllTours()
         {
-            return await _context.Tours.ToListAsync();
+            var tours = await _tourService.GetAllToursAsync();
+            return Ok(tours);
         }
 
+        // GET: api/tours/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tour>> GetTour(int id)
+        [AllowAnonymous] // MỞ CỬA: Khách phải xem được chi tiết tuyến xe chứ!
+        public async Task<ActionResult<TourDetailDto>> GetTour(int id)
         {
-            var tour = await _context.Tours.FindAsync(id);
-            if (tour == null) return NotFound();
-            return tour;
+            var tour = await _tourService.GetTourByIdAsync(id);
+            if (tour == null) return NotFound(new { message = "Không tìm thấy Tuyến xe buýt này." });
+
+            return Ok(tour);
         }
 
+
+        // --- DÀNH CHO ADMIN CMS ---
+
+        // POST: api/tours
         [HttpPost]
-        public async Task<ActionResult<Tour>> CreateTour(Tour tour)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<TourDetailDto>> CreateTour([FromBody] CreateTourDto dto)
         {
-            _context.Tours.Add(tour);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetTour), new { id = tour.Id }, tour);
+            var newTour = await _tourService.CreateTourAsync(dto);
+            return CreatedAtAction(nameof(GetTour), new { id = newTour.Id }, newTour);
         }
 
+        // POST: api/tours/5/pois
+        [HttpPost("{tourId}/pois")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddPoiToTour(int tourId, [FromBody] AddPoiToTourDto dto)
+        {
+            var success = await _tourService.AddPoiToTourAsync(tourId, dto);
+            if (!success) return BadRequest(new { message = "Lỗi! Tuyến xe buýt hoặc Trạm đến không tồn tại." });
+
+            return Ok(new { message = "Đã thêm trạm vào Tuyến xe buýt thành công!" });
+        }
+
+        // PUT: api/tours/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTour(int id, Tour tour)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateTour(int id, [FromBody] UpdateTourDto dto)
         {
-            if (id != tour.Id) return BadRequest("ID không khớp");
-            _context.Entry(tour).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
+            var success = await _tourService.UpdateTourAsync(id, dto);
+            if (!success) return NotFound(new { message = "Không tìm thấy Tuyến xe buýt này." });
+
+            return Ok(new { message = "Đã cập nhật thông tin Tuyến xe buýt thành công!" });
         }
 
+        // DELETE: api/tours/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTour(int id)
         {
-            var tour = await _context.Tours.FindAsync(id);
-            if (tour == null) return NotFound();
-            _context.Tours.Remove(tour);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            var success = await _tourService.DeleteTourAsync(id);
+            if (!success) return NotFound(new { message = "Không tìm thấy Tuyến xe buýt này để xóa." });
+
+            return Ok(new { message = "Đã xóa Tuyến xe buýt thành công!" });
         }
     }
 }

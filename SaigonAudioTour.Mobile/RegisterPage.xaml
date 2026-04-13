@@ -20,22 +20,22 @@
                 <VerticalStackLayout Spacing="15">
                     <Border Stroke="#E2E8F0" StrokeThickness="1" Padding="20, 5" BackgroundColor="White">
                         <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                        <Entry Placeholder="Họ và tên" PlaceholderColor="#CBD5E1" TextColor="#0F172A" /> 
+                        <Entry x:Name="FullNameEntry" Placeholder="Họ và tên" PlaceholderColor="#CBD5E1" TextColor="#0F172A" /> 
                     </Border>
 
                     <Border Stroke="#E2E8F0" StrokeThickness="1" Padding="20, 5" BackgroundColor="White">
                         <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                        <Entry Placeholder="Email của bạn" PlaceholderColor="#CBD5E1" TextColor="#0F172A" Keyboard="Email" /> 
+                        <Entry x:Name="EmailEntry" Placeholder="Email của bạn" PlaceholderColor="#CBD5E1" TextColor="#0F172A" Keyboard="Email" /> 
                     </Border>
 
                     <Border Stroke="#E2E8F0" StrokeThickness="1" Padding="20, 5" BackgroundColor="White">
                         <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                        <Entry Placeholder="Mật khẩu" PlaceholderColor="#CBD5E1" TextColor="#0F172A" IsPassword="True" /> 
+                        <Entry x:Name="PasswordEntry" Placeholder="Mật khẩu" PlaceholderColor="#CBD5E1" TextColor="#0F172A" IsPassword="True" /> 
                     </Border>
                     
                     <Border Stroke="#E2E8F0" StrokeThickness="1" Padding="20, 5" BackgroundColor="White">
                         <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                        <Entry Placeholder="Xác nhận mật khẩu" PlaceholderColor="#CBD5E1" TextColor="#0F172A" IsPassword="True" /> 
+                        <Entry x:Name="ConfirmPasswordEntry" Placeholder="Xác nhận mật khẩu" PlaceholderColor="#CBD5E1" TextColor="#0F172A" IsPassword="True" /> 
                     </Border>
                 </VerticalStackLayout>
 

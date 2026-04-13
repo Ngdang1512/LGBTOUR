@@ -2,26 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AdminApp.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using AdminApp.Models;
 
 namespace AdminApp.Controllers
 {
+    [Authorize]
     public class PoisController : Controller
     {
-        private readonly TourDbContext _context;
+        private readonly AdminPoiApiClient _poiApiClient;
 
-        public PoisController(TourDbContext context)
+        public PoisController(AdminPoiApiClient poiApiClient)
         {
-            _context = context;
+            _poiApiClient = poiApiClient;
         }
+
+        private string? GetToken() => User.FindFirst("api_token")?.Value;
 
         // GET: Pois
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pois.ToListAsync());
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token)) return RedirectToAction("Login", "Account");
+
+            var pois = await _poiApiClient.GetAllAsync(token);
+            return View(pois);
         }
 
         // GET: Pois/Details/5
@@ -32,8 +40,10 @@ namespace AdminApp.Controllers
                 return NotFound();
             }
 
-            var poi = await _context.Pois
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token)) return RedirectToAction("Login", "Account");
+
+            var poi = await _poiApiClient.GetByIdAsync(id.Value, token);
             if (poi == null)
             {
                 return NotFound();
@@ -55,11 +65,20 @@ namespace AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Lat,Lng,Radius,Image,AudioPath")] Poi poi)
         {
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token)) return RedirectToAction("Login", "Account");
+
             if (ModelState.IsValid)
             {
-                _context.Add(poi);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var createdId = await _poiApiClient.CreateAsync(poi, token);
+                if (createdId == null || createdId <= 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Không thể tạo POI. Vui lòng kiểm tra API hoặc quyền admin.");
+                    return View(poi);
+                }
+
+                TempData["Success"] = "Đã tạo POI. Bạn có thể gắn ảnh và audio ngay tại trang chỉnh sửa.";
+                return RedirectToAction(nameof(Edit), new { id = createdId.Value });
             }
             return View(poi);
         }
@@ -72,7 +91,10 @@ namespace AdminApp.Controllers
                 return NotFound();
             }
 
-            var poi = await _context.Pois.FindAsync(id);
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token)) return RedirectToAction("Login", "Account");
+
+            var poi = await _poiApiClient.GetByIdAsync(id.Value, token);
             if (poi == null)
             {
                 return NotFound();
@@ -92,24 +114,18 @@ namespace AdminApp.Controllers
                 return NotFound();
             }
 
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token)) return RedirectToAction("Login", "Account");
+
             if (ModelState.IsValid)
             {
-                try
+                var success = await _poiApiClient.UpdateAsync(poi, token);
+                if (!success)
                 {
-                    _context.Update(poi);
-                    await _context.SaveChangesAsync();
+                    ModelState.AddModelError(string.Empty, "Không thể cập nhật POI. Vui lòng kiểm tra API hoặc quyền admin.");
+                    return View(poi);
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PoiExists(poi.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(poi);
@@ -123,8 +139,10 @@ namespace AdminApp.Controllers
                 return NotFound();
             }
 
-            var poi = await _context.Pois
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token)) return RedirectToAction("Login", "Account");
+
+            var poi = await _poiApiClient.GetByIdAsync(id.Value, token);
             if (poi == null)
             {
                 return NotFound();
@@ -138,19 +156,58 @@ namespace AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var poi = await _context.Pois.FindAsync(id);
-            if (poi != null)
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token)) return RedirectToAction("Login", "Account");
+
+            var success = await _poiApiClient.DeleteAsync(id, token);
+            if (!success)
             {
-                _context.Pois.Remove(poi);
+                TempData["Error"] = "Không thể xóa POI. Vui lòng thử lại.";
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PoiExists(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadImage(int id, IFormFile imageFile)
         {
-            return _context.Pois.Any(e => e.Id == id);
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token)) return RedirectToAction("Login", "Account");
+
+            if (imageFile == null || imageFile.Length == 0)
+            {
+                TempData["Error"] = "Vui lòng chọn file hình ảnh.";
+                return RedirectToAction(nameof(Edit), new { id });
+            }
+
+            var success = await _poiApiClient.UploadImageAsync(id, imageFile, token);
+            TempData[success ? "Success" : "Error"] = success
+                ? "Đã upload hình ảnh thành công."
+                : "Upload hình ảnh thất bại.";
+
+            return RedirectToAction(nameof(Edit), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddNarration(int id, string languageCode, string contentText, IFormFile? audioFile)
+        {
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token)) return RedirectToAction("Login", "Account");
+
+            if (string.IsNullOrWhiteSpace(languageCode) || string.IsNullOrWhiteSpace(contentText))
+            {
+                TempData["Error"] = "Vui lòng nhập ngôn ngữ và nội dung thuyết minh.";
+                return RedirectToAction(nameof(Edit), new { id });
+            }
+
+            var success = await _poiApiClient.CreateNarrationAsync(id, languageCode.Trim(), contentText.Trim(), audioFile, token);
+            TempData[success ? "Success" : "Error"] = success
+                ? "Đã lưu dữ liệu audio/thuyết minh thành công."
+                : "Lưu dữ liệu audio/thuyết minh thất bại.";
+
+            return RedirectToAction(nameof(Edit), new { id });
         }
     }
 }

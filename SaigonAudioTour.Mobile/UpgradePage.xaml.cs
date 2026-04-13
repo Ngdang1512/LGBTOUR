@@ -7,7 +7,7 @@ namespace SaigonAudioTour.Mobile;
 public partial class UpgradePage : ContentPage
 {
     private readonly TourApiService _apiService;
-    private readonly string _userId = "demo-user";
+    private readonly string _userId;
 
     public ObservableCollection<PremiumPlan> Plans { get; set; } = new();
     public PremiumPlan? SelectedPlan { get; set; }
@@ -58,7 +58,8 @@ public partial class UpgradePage : ContentPage
     public UpgradePage()
     {
         InitializeComponent();
-        _apiService = new TourApiService();
+        _apiService = IPlatformApplication.Current?.Services.GetService<TourApiService>() ?? new TourApiService();
+        _userId = Preferences.Get(TourApiService.UserIdKey, string.Empty);
         BindingContext = this;
     }
 
@@ -70,9 +71,16 @@ public partial class UpgradePage : ContentPage
 
     private async Task LoadDataAsync()
     {
+        if (string.IsNullOrWhiteSpace(_userId))
+        {
+            await DisplayAlertAsync("Yêu cầu đăng nhập", "Vui lòng đăng nhập để nâng cấp gói.", "OK");
+            await Navigation.PushAsync(new LoginPage());
+            return;
+        }
+
         var plans = await _apiService.GetPremiumPlansAsync();
         Plans = new ObservableCollection<PremiumPlan>(plans);
-        SelectedPlan = Plans.FirstOrDefault();
+        SelectedPlan = Plans.FirstOrDefault(p => p.Id == "premium") ?? Plans.FirstOrDefault();
 
         var status = await _apiService.GetPremiumStatusAsync(_userId);
         IsPremium = status.IsPremium;
@@ -133,9 +141,6 @@ public partial class UpgradePage : ContentPage
             return;
         }
 
-        var purchasedPlan = Plans.FirstOrDefault(p => p.Id == CurrentOrder.PlanId);
-        _apiService.SavePremiumStatusLocal(_userId, CurrentOrder.PlanId, purchasedPlan?.DurationDays ?? 30);
-
         var status = await _apiService.GetPremiumStatusAsync(_userId);
         IsPremium = status.IsPremium;
         PremiumStatusText = BuildPremiumStatusText(status);
@@ -170,9 +175,8 @@ public partial class UpgradePage : ContentPage
 
         return planId.ToLowerInvariant() switch
         {
-            "premium_month" => "Premium tháng",
-            "premium_year" => "Premium năm",
-            "pro_month" => "Pro tháng",
+            "premium" => "Premium",
+            "default" => "Mặc định",
             _ => planId
         };
     }

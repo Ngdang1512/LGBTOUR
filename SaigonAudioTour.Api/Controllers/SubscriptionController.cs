@@ -32,7 +32,7 @@ public class SubscriptionController : ControllerBase
         {
             UserId = userId,
             IsPremium = false,
-            PlanId = "free",
+            PlanId = "default",
             PremiumUntil = null
         });
     }
@@ -40,14 +40,24 @@ public class SubscriptionController : ControllerBase
     [HttpPost("create-order")]
     public IActionResult CreateOrder([FromBody] CreateOrderRequest request)
     {
+        if (string.IsNullOrWhiteSpace(request.UserId))
+        {
+            return BadRequest(new { message = "Thiếu userId." });
+        }
+
         var plan = _store.Plans.FirstOrDefault(p => p.Id == request.PlanId);
         if (plan is null)
         {
             return NotFound(new { message = "Không tìm thấy gói dịch vụ." });
         }
 
+        if (plan.Id == "default")
+        {
+            return BadRequest(new { message = "Gói mặc định không cần thanh toán." });
+        }
+
         var orderId = $"ORD-{DateTime.UtcNow:yyyyMMddHHmmss}-{Random.Shared.Next(1000, 9999)}";
-        var qrPayload = $"lgbtour://pay?orderId={orderId}&amount={plan.Price:0}&plan={plan.Id}";
+        var qrPayload = $"saigonaudiotour://pay?orderId={orderId}&amount={plan.Price:0}&plan={plan.Id}";
         var qrImageUrl = $"https://api.qrserver.com/v1/create-qr-code/?size=320x320&data={Uri.EscapeDataString(qrPayload)}";
 
         var order = new PaymentOrder
@@ -85,7 +95,6 @@ public class SubscriptionController : ControllerBase
         return Ok(order);
     }
 
-    // Endpoint demo: sau khi quét QR xong có thể gọi endpoint này để đổi trạng thái paid
     [HttpPost("mark-paid/{orderId}")]
     public IActionResult MarkPaid(string orderId)
     {
@@ -113,10 +122,4 @@ public class SubscriptionController : ControllerBase
 
         return Ok(new { message = "Kích hoạt Premium thành công.", orderId = order.OrderId });
     }
-}
-
-public class CreateOrderRequest
-{
-    public string UserId { get; set; } = "demo-user";
-    public string PlanId { get; set; } = "premium_month";
 }

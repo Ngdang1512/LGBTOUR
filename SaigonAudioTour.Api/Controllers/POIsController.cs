@@ -1,67 +1,92 @@
-﻿using SaigonAudioTour.Api.Data;
-using SaigonAudioTour.Api.Entities;
+﻿using SaigonAudioTour.Api.DTOs.Pois;
+using SaigonAudioTour.Api.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SaigonAudioTour.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class POIsController : ControllerBase
+    public class PoisController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPoiService _poiService;
 
-        public POIsController(ApplicationDbContext context)
+        public PoisController(IPoiService poiService)
         {
-            _context = context;
+            _poiService = poiService;
         }
 
-        // 1. Lấy danh sách tất cả địa điểm (GET)
+        // --- DÀNH CHO KHÁCH DU LỊCH (MOBILE APP) ---
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<POI>>> GetPOIs()
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<PoiDto>>> GetAllPois()
         {
-            return await _context.POIs.ToListAsync();
+            var result = await _poiService.GetAllPoisAsync();
+            return Ok(result);
         }
 
-        // 2. Lấy chi tiết 1 địa điểm theo ID (GET)
-        [HttpGet("{id}")]
-        public async Task<ActionResult<POI>> GetPOI(int id)
+        [HttpGet("nearby")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetNearbyPoi([FromQuery] double lat, [FromQuery] double lng, [FromQuery] string lang = "vi")
         {
-            var poi = await _context.POIs.FindAsync(id);
-            if (poi == null) return NotFound();
-            return poi;
+            var nearbyPoi = await _poiService.GetNearbyPoiAsync(lat, lng, lang);
+
+            if (nearbyPoi == null)
+            {
+                // Trả về NoContent (204) hoặc Ok kèm null để App biết là không có trạm nào gần
+                return Ok(null);
+            }
+
+            return Ok(nearbyPoi);
         }
 
-        // 3. Thêm địa điểm mới (POST)
+
+        // --- DÀNH CHO ADMIN CMS ---
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<POI>> CreatePOI(POI poi)
+        public async Task<ActionResult<PoiDto>> CreatePoi([FromBody] CreatePoiDto createDto)
         {
-            _context.POIs.Add(poi);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPOI), new { id = poi.Id }, poi);
+            var createdPoi = await _poiService.CreatePoiAsync(createDto);
+            return CreatedAtAction(nameof(GetAllPois), new { id = createdPoi.Id }, createdPoi);
         }
 
-        // 4. Sửa thông tin địa điểm (PUT)
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePOI(int id, POI poi)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdatePoi(int id, [FromBody] UpdatePoiDto dto)
         {
-            if (id != poi.Id) return BadRequest("ID không khớp!");
+            var success = await _poiService.UpdatePoiAsync(id, dto);
+            if (!success) return NotFound(new { message = "Không tìm thấy Trạm/Địa danh này." });
 
-            _context.Entry(poi).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(new { message = "Đã cập nhật thông tin thành công!" });
         }
 
-        // 5. Xóa địa điểm (DELETE)
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePOI(int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeletePoi(int id)
         {
-            var poi = await _context.POIs.FindAsync(id);
-            if (poi == null) return NotFound("Không tìm thấy địa điểm để xóa!");
+            var success = await _poiService.DeletePoiAsync(id);
+            if (!success) return NotFound(new { message = "Không tìm thấy Trạm/Địa danh này để xóa." });
 
-            _context.POIs.Remove(poi);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(new { message = "Đã xóa Trạm/Địa danh thành công!" });
+        }
+
+        [HttpPost("{id}/image")]
+        [Authorize(Roles = "Admin")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadImage(int id, IFormFile imageFile)
+        {
+            var success = await _poiService.UploadImageAsync(id, imageFile);
+
+            if (!success)
+            {
+                return BadRequest(new { message = "Không tìm thấy Trạm, hoặc file ảnh không hợp lệ." });
+            }
+
+            return Ok(new { message = "Đã upload và cập nhật hình ảnh thành công!" });
         }
     }
 }

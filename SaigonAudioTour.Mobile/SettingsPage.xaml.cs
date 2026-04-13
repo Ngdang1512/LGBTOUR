@@ -6,7 +6,6 @@ namespace SaigonAudioTour.Mobile;
 public partial class SettingsPage : ContentPage
 {
     private readonly TourApiService _apiService;
-    private const string DemoUserId = "demo-user";
     private const string SelectedLanguageKey = "SelectedLanguage";
     private const string IsLoggedInKey = "IsLoggedIn";
     private const string UserEmailKey = "UserEmail";
@@ -182,7 +181,7 @@ public partial class SettingsPage : ContentPage
     public SettingsPage()
     {
         InitializeComponent();
-        _apiService = new TourApiService();
+        _apiService = IPlatformApplication.Current?.Services.GetService<TourApiService>() ?? new TourApiService();
         BindingContext = this;
     }
 
@@ -195,76 +194,101 @@ public partial class SettingsPage : ContentPage
 
     private async Task RefreshSettingsStateAsync()
     {
-        var languageCode = Preferences.Get(SelectedLanguageKey, "vi");
-        ApplyLocalizedTexts(languageCode);
+        try
+        {
+            var languageCode = Preferences.Get(SelectedLanguageKey, "vi");
+            ApplyLocalizedTexts(languageCode);
 
-        IsLoggedIn = Preferences.Get(IsLoggedInKey, false);
+            IsLoggedIn = Preferences.Get(IsLoggedInKey, false);
 
         // Profile
-        if (IsLoggedIn)
-        {
-            var savedEmail = Preferences.Get(UserEmailKey, "");
-            var savedName = Preferences.Get(UserFullNameKey, "");
-
-            var user = await _apiService.GetUserProfileAsync();
-            if (user != null)
+            if (IsLoggedIn)
             {
-                CurrentUser = user;
+                var savedEmail = Preferences.Get(UserEmailKey, "");
+                var savedName = Preferences.Get(UserFullNameKey, "");
+
+                var user = await _apiService.GetUserProfileAsync(savedEmail);
+                if (user != null)
+                {
+                    CurrentUser = user;
+                }
+                else
+                {
+                    CurrentUser = new UserProfile
+                    {
+                        FullName = string.IsNullOrWhiteSpace(savedName) ? (languageCode == "vi" ? "Người dùng" : "User") : savedName,
+                        Email = string.IsNullOrWhiteSpace(savedEmail) ? "user@example.com" : savedEmail,
+                        AvatarUrl = ""
+                    };
+                }
             }
             else
             {
                 CurrentUser = new UserProfile
                 {
-                    FullName = string.IsNullOrWhiteSpace(savedName) ? (languageCode == "vi" ? "Người dùng" : "User") : savedName,
-                    Email = string.IsNullOrWhiteSpace(savedEmail) ? "user@example.com" : savedEmail,
+                    FullName = languageCode == "vi" ? "Khách" : "Guest",
+                    Email = languageCode == "vi" ? "Bạn chưa đăng nhập" : "Not signed in",
                     AvatarUrl = ""
                 };
             }
-        }
-        else
-        {
-            CurrentUser = new UserProfile
+
+            // Language
+            CurrentLanguageDisplay = languageCode switch
             {
-                FullName = languageCode == "vi" ? "Khách" : "Guest",
-                Email = languageCode == "vi" ? "Bạn chưa đăng nhập" : "Not signed in",
-                AvatarUrl = ""
+                "en" => "English",
+                "zh" => "中文",
+                "ja" => "日本語",
+                "ko" => "한국어",
+                "fr" => "Français",
+                _ => "Tiếng Việt"
             };
-        }
 
-        // Language
-        CurrentLanguageDisplay = languageCode switch
-        {
-            "en" => "English",
-            "zh" => "中文",
-            "ja" => "日本語",
-            "ko" => "한국어",
-            "fr" => "Français",
-            _ => "Tiếng Việt"
-        };
-
-        // Premium status (không cần reload app, OnAppearing tự refresh)
-        var status = await _apiService.GetPremiumStatusAsync(DemoUserId);
-        if (status.IsPremium)
-        {
-            IsPremium = true;
-            if (languageCode == "vi")
+            // Premium status (không cần reload app, OnAppearing tự refresh)
+            var userId = Preferences.Get(TourApiService.UserIdKey, string.Empty);
+            var status = string.IsNullOrWhiteSpace(userId)
+                ? new PremiumStatus { IsPremium = false, PlanId = "default" }
+                : await _apiService.GetPremiumStatusAsync(userId);
+            if (status.IsPremium)
             {
-                PremiumTitleText = "Bạn đang dùng Premium 👑";
-                PremiumDescriptionText = $"Gói {status.PlanId} còn hạn đến {status.PremiumUntil:dd/MM/yyyy}.";
-                PremiumBenefitText = "Đã mở khóa: toàn bộ audio, trải nghiệm không quảng cáo, quyền lợi ưu tiên.";
-                PremiumButtonText = "Xem gói Premium";
+                IsPremium = true;
+                if (languageCode == "vi")
+                {
+                    PremiumTitleText = "Bạn đang dùng Premium 👑";
+                    PremiumDescriptionText = $"Gói {status.PlanId} còn hạn đến {status.PremiumUntil:dd/MM/yyyy}.";
+                    PremiumBenefitText = "Đã mở khóa: toàn bộ audio, trải nghiệm không quảng cáo, quyền lợi ưu tiên.";
+                    PremiumButtonText = "Xem gói Premium";
+                }
+                else
+                {
+                    PremiumTitleText = "You're on Premium 👑";
+                    PremiumDescriptionText = $"Plan {status.PlanId} is active until {status.PremiumUntil:dd/MM/yyyy}.";
+                    PremiumBenefitText = "Unlocked: full audio, ad-free experience, and priority benefits.";
+                    PremiumButtonText = "View Premium plans";
+                }
             }
             else
             {
-                PremiumTitleText = "You're on Premium 👑";
-                PremiumDescriptionText = $"Plan {status.PlanId} is active until {status.PremiumUntil:dd/MM/yyyy}.";
-                PremiumBenefitText = "Unlocked: full audio, ad-free experience, and priority benefits.";
-                PremiumButtonText = "View Premium plans";
+                IsPremium = false;
+                PremiumTitleText = languageCode == "vi" ? "Nâng cấp Premium" : "Upgrade to Premium";
+                PremiumDescriptionText = languageCode == "vi"
+                    ? "Mở toàn bộ thuyết minh audio, heatmap nâng cao và không quảng cáo."
+                    : "Unlock full audio guides, advanced heatmap, and an ad-free experience.";
+                PremiumBenefitText = string.Empty;
+                PremiumButtonText = languageCode == "vi" ? "Mở trang nâng cấp" : "Open upgrade page";
             }
         }
-        else
+        catch
         {
+            var languageCode = Preferences.Get(SelectedLanguageKey, "vi");
+            IsLoggedIn = Preferences.Get(IsLoggedInKey, false);
+            CurrentUser = new UserProfile
+            {
+                FullName = IsLoggedIn ? Preferences.Get(UserFullNameKey, languageCode == "vi" ? "Người dùng" : "User") : (languageCode == "vi" ? "Khách" : "Guest"),
+                Email = IsLoggedIn ? Preferences.Get(UserEmailKey, "user@example.com") : (languageCode == "vi" ? "Bạn chưa đăng nhập" : "Not signed in"),
+                AvatarUrl = string.Empty
+            };
             IsPremium = false;
+            CurrentLanguageDisplay = languageCode == "vi" ? "Tiếng Việt" : "English";
             PremiumTitleText = languageCode == "vi" ? "Nâng cấp Premium" : "Upgrade to Premium";
             PremiumDescriptionText = languageCode == "vi"
                 ? "Mở toàn bộ thuyết minh audio, heatmap nâng cao và không quảng cáo."
@@ -348,6 +372,8 @@ public partial class SettingsPage : ContentPage
         Preferences.Set(IsLoggedInKey, false);
         Preferences.Remove(UserEmailKey);
         Preferences.Remove(UserFullNameKey);
+        Preferences.Remove(TourApiService.UserIdKey);
+        Preferences.Remove(TourApiService.AuthTokenKey);
 
         await RefreshSettingsStateAsync();
         var languageCode = Preferences.Get(SelectedLanguageKey, "vi");

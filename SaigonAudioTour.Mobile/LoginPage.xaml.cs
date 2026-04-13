@@ -7,10 +7,14 @@ public partial class LoginPage : ContentPage
     private const string IsLoggedInKey = "IsLoggedIn";
     private const string UserEmailKey = "UserEmail";
     private const string UserFullNameKey = "UserFullName";
+    private const string UserIdKey = "UserId";
+    private const string AuthTokenKey = "AuthToken";
+    private readonly TourApiService _apiService;
 
     public LoginPage()
     {
         InitializeComponent();
+        _apiService = IPlatformApplication.Current?.Services.GetService<TourApiService>() ?? new TourApiService();
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
@@ -24,11 +28,18 @@ public partial class LoginPage : ContentPage
             return;
         }
 
-        var fullName = email.Contains('@') ? email.Split('@')[0] : email;
+        var auth = await _apiService.LoginAsync(email, password);
+        if (auth == null)
+        {
+            await DisplayAlertAsync("Đăng nhập thất bại", "Sai email hoặc mật khẩu.", "OK");
+            return;
+        }
 
         Preferences.Set(IsLoggedInKey, true);
-        Preferences.Set(UserEmailKey, email);
-        Preferences.Set(UserFullNameKey, fullName);
+        Preferences.Set(UserEmailKey, auth.Email);
+        Preferences.Set(UserFullNameKey, auth.FullName);
+        Preferences.Set(UserIdKey, auth.UserId.ToString());
+        Preferences.Set(AuthTokenKey, auth.Token);
 
         App.SetRootPage(new AppShell());
     }

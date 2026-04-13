@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace SaigonAudioTour.Api.Migrations
+namespace LGBTOUR.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDB : Migration
+    public partial class Init_V2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
