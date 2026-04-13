@@ -46,9 +46,9 @@ namespace LGBTOUR.Api.Controllers
 
 
         // --- DÀNH CHO ADMIN CMS ---
-
-        [HttpPost]
         [Authorize]
+        [HttpPost]
+        //[Authorize]
         public async Task<ActionResult<PoiDto>> CreatePoi([FromBody] CreatePoiDto createDto)
         {
             var createdPoi = await _poiService.CreatePoiAsync(createDto);

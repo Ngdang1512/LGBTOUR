@@ -1,0 +1,47 @@
+<div class="diagram-box">
+    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Admin as Admin (Web CMS)
+    actor User as Du Khách (Mobile App)
+    participant OS as HĐH Điện thoại (GPS)
+    participant API as C# Backend API
+    participant DB as SQL Server DB
+    participant TTS as Hệ thống AI (External)
+
+    rect rgb(240, 248, 255)
+    Note over Admin, TTS: GIAI ĐOẠN 1: QUẢN TRỊ & TẠO ÂM THANH
+    Admin->>API: Tạo Trạm (POI) & Kịch bản thuyết minh
+    API->>TTS: Gửi Text kịch bản (API Request)
+    TTS-->>API: Trả về file Audio (.mp3)
+    API->>DB: Lưu thông tin POI & Đường dẫn Audio
+    DB-->>API: OK
+    API-->>Admin: Thông báo Thêm thành công
+    end
+
+    rect rgb(240, 253, 244)
+    Note over User, DB: GIAI ĐOẠN 2: ĐỊNH VỊ & TỰ ĐỘNG PHÁT NHẠC
+    User->>OS: Cấp quyền Truy cập Vị trí (Location)
+    
+    loop Tiến trình chạy ngầm (Background)
+        OS-->>User: Liên tục cập nhật Tọa độ (Lat, Lng)
+        User->>API: Bắn tọa độ lên server tìm Trạm lân cận
+        API->>DB: Tính khoảng cách (Thuật toán Haversine)
+        DB-->>API: Trả về Trạm có (Khoảng cách < Bán kính)
+        API-->>User: Phản hồi thông tin Trạm + Link file nhạc
+        User->>User: Ứng dụng tự động phát nhạc
+    end
+    end
+
+    rect rgb(255, 251, 235)
+    Note over Admin, DB: GIAI ĐOẠN 3: GHI NHẬN & VẼ BẢN ĐỒ NHIỆT
+    User->>API: Rời khỏi trạm -> Gửi báo cáo Lịch sử
+    API->>DB: Lưu UserLog (Tọa độ, Thời lượng nghe)
+    
+    Admin->>API: Truy cập trang chủ Dashboard
+    API->>DB: Truy vấn dữ liệu UserLog
+    DB-->>API: Dữ liệu phân nhóm theo Tọa độ & Lượt nghe
+    API-->>Admin: Vẽ Bản đồ nhiệt (Heatmap) & Biểu đồ
+    end
+    </div>
+</div>
