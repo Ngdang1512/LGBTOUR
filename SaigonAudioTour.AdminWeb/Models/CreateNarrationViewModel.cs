@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace LGBTOUR.AdminWeb.Models
+namespace SaigonAudioTour.AdminWeb.Models
 {
     public class CreateNarrationViewModel
     {

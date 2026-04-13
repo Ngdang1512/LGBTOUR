@@ -1,4 +1,4 @@
-﻿namespace LGBTOUR.AdminWeb.Models
+﻿namespace SaigonAudioTour.AdminWeb.Models
 {
     public class PoiStatisticViewModel
     {

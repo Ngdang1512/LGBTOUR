@@ -37,7 +37,6 @@ namespace SaigonAudioTour.Api.Controllers
 
             if (nearbyPoi == null)
             {
-                // Trả về NoContent (204) hoặc Ok kèm null để App biết là không có trạm nào gần
                 return Ok(null);
             }
 
@@ -51,7 +50,9 @@ namespace SaigonAudioTour.Api.Controllers
         public async Task<ActionResult<PoiDto>> CreatePoi([FromBody] CreatePoiDto createDto)
         {
             var createdPoi = await _poiService.CreatePoiAsync(createDto);
-            return CreatedAtAction(nameof(GetAllPois), new { id = createdPoi.Id }, createdPoi);
+
+            // ĐÃ FIX LỖI TẠI ĐÂY: Dùng Ok() thay vì CreatedAtAction để tránh lỗi Routing
+            return Ok(createdPoi);
         }
 
         [HttpPut("{id}")]

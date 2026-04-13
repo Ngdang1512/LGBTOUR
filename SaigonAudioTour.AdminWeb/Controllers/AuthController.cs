@@ -1,11 +1,11 @@
-﻿using LGBTOUR.AdminWeb.Models;
+﻿using SaigonAudioTour.AdminWeb.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace LGBTOUR.AdminWeb.Controllers
+namespace SaigonAudioTour.AdminWeb.Controllers
 {
     public class AuthController : Controller
     {
@@ -35,7 +35,7 @@ namespace LGBTOUR.AdminWeb.Controllers
             var client = _httpClientFactory.CreateClient("ApiClient");
 
             // 1. Gửi request Login tới API
-            var response = await client.PostAsJsonAsync("api/Auth/login", new
+            var response = await client.PostAsJsonAsync("api/Auth/admin-login", new
             {
                 username = model.Username,
                 password = model.Password

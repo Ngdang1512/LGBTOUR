@@ -1,9 +1,9 @@
-﻿using LGBTOUR.AdminWeb.Models;
+﻿using SaigonAudioTour.AdminWeb.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 
-namespace LGBTOUR.AdminWeb.Controllers
+namespace SaigonAudioTour.AdminWeb.Controllers
 {
     [Authorize]
     public class ToursController : Controller

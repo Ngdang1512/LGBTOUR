@@ -7,7 +7,7 @@
         "Action": "Start"
       },
       {
-        "Path": "SaigonAudioTour.Mobile\\SaigonAudioTour.Mobile.csproj",
+        "Path": "SaigonAudioTour.AdminWeb\\SaigonAudioTour.AdminWeb.csproj",
         "Action": "Start"
       }
     ]

@@ -1,50 +1,77 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SaigonAudioTour.AdminWeb</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - Saigon Audio Tour Admin</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SaigonAudioTour.AdminWeb.styles.css" asp-append-version="true" />
+
+    <style>
+        body { background-color: #f4f6f9; overflow-x: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        #wrapper { display: flex; width: 100vw; min-height: 100vh; }
+        
+        /* CỘT MENU TRÁI (SIDEBAR) */
+        #sidebar { width: 250px; background-color: #343a40; color: white; flex-shrink: 0; display: flex; flex-direction: column; }
+        #sidebar .brand { padding: 20px; font-size: 1.2rem; font-weight: bold; text-align: center; border-bottom: 1px solid #4b545c; color: white; text-transform: uppercase; letter-spacing: 1px;}
+        #sidebar .user-panel { padding: 15px 20px; border-bottom: 1px solid #4b545c; }
+        #sidebar .menu-title { font-size: 0.8rem; color: #8fd19e; padding: 15px 20px 5px; text-transform: uppercase; font-weight: bold; }
+        #sidebar .nav-link { color: #c2c7d0; padding: 12px 20px; display: block; text-decoration: none; transition: 0.2s; }
+        #sidebar .nav-link:hover, #sidebar .nav-link.active { background-color: rgba(255,255,255,0.1); color: #fff; }
+        #sidebar .nav-link i { width: 25px; text-align: center; }
+
+        /* VÙNG NỘI DUNG PHẢI */
+        #content-wrapper { flex-grow: 1; display: flex; flex-direction: column; width: calc(100% - 250px); }
+        .top-navbar { background-color: #fff; height: 60px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .main-content { padding: 20px; flex-grow: 1; }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SaigonAudioTour.AdminWeb</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div id="wrapper">
+        <div id="sidebar" class="shadow">
+            <div class="brand">
+                <i class="fas fa-headphones-alt text-warning mr-2"></i> SAIGON TOUR
+            </div>
+            <div class="user-panel">
+                Xin chào, <strong>@(User.Identity?.Name ?? "Admin")!</strong>
+            </div>
+            
+            <a href="/Home/Index" class="nav-link"><i class="fas fa-tachometer-alt text-info"></i> Dashboard Thống Kê</a>
+            
+            <div class="menu-title">Quản Lý Dữ Liệu</div>
+            <a href="/Pois/Index" class="nav-link"><i class="fas fa-map-marker-alt text-danger"></i> Điểm đến (POI)</a>
+            <a href="/Tours/Index" class="nav-link"><i class="fas fa-bus text-warning"></i> Tuyến Xe Buýt</a>
+            <a href="/Narrations/Create" class="nav-link"><i class="fas fa-microphone-alt text-success"></i> File Thuyết Minh</a>
+        </div>
+
+        <div id="content-wrapper">
+            <div class="top-navbar">
+                <div>
+                    <button class="btn btn-light"><i class="fas fa-bars"></i></button>
+                </div>
+                <div>
+                    <a href="/Auth/Logout" class="btn btn-outline-danger btn-sm font-weight-bold"><i class="fas fa-sign-out-alt mr-1"></i> Đăng xuất</a>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+            <div class="main-content">
+                @RenderBody()
+            </div>
+            
+            <footer class="bg-white p-3 text-center text-muted border-top text-sm">
+                Copyright &copy; 2026 <strong>Saigon Audio Tour</strong>. Đồ án C Sharp.
+            </footer>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - SaigonAudioTour.AdminWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,10 +1,10 @@
-﻿using LGBTOUR.AdminWeb.Models;
+﻿using SaigonAudioTour.AdminWeb.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net.Http.Headers;
 
-namespace LGBTOUR.AdminWeb.Controllers
+namespace SaigonAudioTour.AdminWeb.Controllers
 {
     [Authorize]
     public class NarrationsController : Controller

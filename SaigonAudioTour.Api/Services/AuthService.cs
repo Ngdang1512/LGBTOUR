@@ -23,9 +23,14 @@ namespace SaigonAudioTour.Api.Services
             _config = config;
         }
 
+        // ========================================================
+        // 1. DÀNH CHO APP MOBILE (Khách hàng đăng nhập bằng Email)
+        // ========================================================
         public async Task<AuthResultDto?> LoginAsync(LoginDto dto)
         {
+            // Đã fix lỗi thiếu dấu ngoặc ở đây:
             var email = (dto.Username ?? string.Empty).Trim().ToLowerInvariant();
+
             var user = await _context.Users.FirstOrDefaultAsync(a => a.Email == email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
@@ -42,6 +47,33 @@ namespace SaigonAudioTour.Api.Services
             };
         }
 
+        // ========================================================
+        // 2. DÀNH CHO WEB ADMIN (Ban quản lý đăng nhập bằng Username)
+        // ========================================================
+        public async Task<AuthResultDto?> AdminLoginAsync(LoginDto dto)
+        {
+            var username = (dto.Username ?? string.Empty).Trim();
+
+            // Lấy từ bảng Admins
+            var admin = await _context.Admins.AsNoTracking().FirstOrDefaultAsync(a => a.Username == username);
+
+            if (admin == null || !BCrypt.Net.BCrypt.Verify(dto.Password, admin.PasswordHash))
+                return null;
+
+            var token = CreateJwt(admin.Username, "Admin");
+
+            return new AuthResultDto
+            {
+                Token = token,
+                UserId = admin.Id,
+                Email = admin.Username,
+                FullName = string.IsNullOrWhiteSpace(admin.FullName) ? admin.Username : admin.FullName
+            };
+        }
+
+        // ========================================================
+        // 3. ĐĂNG KÝ TÀI KHOẢN MỚI (Dành cho App)
+        // ========================================================
         public async Task<AuthResultDto?> RegisterAsync(RegisterDto dto)
         {
             var email = (dto.Email ?? string.Empty).Trim().ToLowerInvariant();
@@ -71,25 +103,9 @@ namespace SaigonAudioTour.Api.Services
             };
         }
 
-        public async Task<AuthResultDto?> AdminLoginAsync(LoginDto dto)
-        {
-            var username = (dto.Username ?? string.Empty).Trim();
-            var admin = await _context.Admins.AsNoTracking().FirstOrDefaultAsync(a => a.Username == username);
-
-            if (admin == null || !BCrypt.Net.BCrypt.Verify(dto.Password, admin.PasswordHash))
-                return null;
-
-            var token = CreateJwt(admin.Username, "Admin");
-
-            return new AuthResultDto
-            {
-                Token = token,
-                UserId = admin.Id,
-                Email = admin.Username,
-                FullName = string.IsNullOrWhiteSpace(admin.FullName) ? admin.Username : admin.FullName
-            };
-        }
-
+        // ========================================================
+        // 4. LẤY THÔNG TIN PROFILE
+        // ========================================================
         public async Task<AuthResultDto?> GetProfileByEmailAsync(string email)
         {
             var normalized = (email ?? string.Empty).Trim().ToLowerInvariant();
@@ -105,6 +121,9 @@ namespace SaigonAudioTour.Api.Services
             };
         }
 
+        // ========================================================
+        // 5. HÀM TẠO JWT TOKEN CHUNG
+        // ========================================================
         private string CreateJwt(string username, string role)
         {
             var jwtSettings = _config.GetSection("JwtSettings");

@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SaigonAudioTour.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f17dfde7bb8989a1734e80e18f4a1ef675700089")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5523a330fdd5109fff746bc4247806f98ea201da")]
 [assembly: System.Reflection.AssemblyProductAttribute("SaigonAudioTour.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SaigonAudioTour.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
