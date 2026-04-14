@@ -47,15 +47,7 @@ public partial class MainPage : ContentPage
 
         _apiService ??= IPlatformApplication.Current?.Services.GetService<TourApiService>();
 
-        if (_allPlaces.Count == 0)
-        {
-            await LoadDataAsync();
-        }
-        else
-        {
-            SyncNarratingState();
-            FilterPlaces();
-        }
+        await LoadDataAsync();
     }
 
     private async Task LoadDataAsync()
@@ -72,7 +64,7 @@ public partial class MainPage : ContentPage
                 var places = await _apiService.GetProjectPlacesAsync();
 
                 _allPlaces = (places ?? new List<Place>())
-                    .Where(p => p != null && p.Latitude != 0 && p.Longitude != 0)
+                    .Where(p => p != null)
                     .OrderByDescending(p => p.Priority)
                     .ToList();
 
