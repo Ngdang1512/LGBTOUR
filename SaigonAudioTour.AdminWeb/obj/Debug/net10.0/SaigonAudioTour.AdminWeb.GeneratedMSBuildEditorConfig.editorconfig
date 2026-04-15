@@ -11,89 +11,89 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = SaigonAudioTour.AdminWeb
 build_property.RootNamespace = SaigonAudioTour.AdminWeb
-build_property.ProjectDir = C:\Users\dell\source\repos\Đồ an C#\SaigonAudioTour\SaigonAudioTour.AdminWeb\
+build_property.ProjectDir = /Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\dell\source\repos\Đồ an C#\SaigonAudioTour\SaigonAudioTour.AdminWeb
+build_property.MSBuildProjectDirectory = /Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Auth/Login.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxMb2dpbi5jc2h0bWw=
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Auth/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXV0aC9Mb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Narrations/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmFycmF0aW9uc1xDcmVhdGUuY3NodG1s
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Narrations/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTmFycmF0aW9ucy9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/POIs/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUE9Jc1xDcmVhdGUuY3NodG1s
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/POIs/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUE9Jcy9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/POIs/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUE9Jc1xEZWxldGUuY3NodG1s
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/POIs/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUE9Jcy9EZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/POIs/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUE9Jc1xFZGl0LmNzaHRtbA==
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/POIs/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUE9Jcy9FZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/POIs/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUE9Jc1xJbmRleC5jc2h0bWw=
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/POIs/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUE9Jcy9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Shared/Error.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG91cnNcQ3JlYXRlLmNzaHRtbA==
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVG91cnMvQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG91cnNcRGVsZXRlLmNzaHRtbA==
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVG91cnMvRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG91cnNcRGV0YWlscy5jc2h0bWw=
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVG91cnMvRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG91cnNcRWRpdC5jc2h0bWw=
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVG91cnMvRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/EditRoute.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG91cnNcRWRpdFJvdXRlLmNzaHRtbA==
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/EditRoute.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVG91cnMvRWRpdFJvdXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG91cnNcSW5kZXguY3NodG1s
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Tours/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVG91cnMvSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/_ViewImports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/_ViewStart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/dell/source/repos/Đồ an C\#/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Shared/_Layout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = b-4lqmfkag4d
+[/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.AdminWeb/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-njhh7yngyk
