@@ -1,6 +1,7 @@
 using SaigonAudioTour.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using SaigonAudioTour.Api.Data;
+using SaigonAudioTour.Api.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace SaigonAudioTour.Api.Controllers;
@@ -11,11 +12,19 @@ public class SubscriptionController : ControllerBase
 {
     private readonly SubscriptionStore _store;
     private readonly ApplicationDbContext _context;
+    private readonly IPaymentGatewayOrchestrator _paymentOrchestrator;
+    private readonly ILogger<SubscriptionController> _logger;
 
-    public SubscriptionController(SubscriptionStore store, ApplicationDbContext context)
+    public SubscriptionController(
+        SubscriptionStore store,
+        ApplicationDbContext context,
+        IPaymentGatewayOrchestrator paymentOrchestrator,
+        ILogger<SubscriptionController> logger)
     {
         _store = store;
         _context = context;
+        _paymentOrchestrator = paymentOrchestrator ?? throw new ArgumentNullException(nameof(paymentOrchestrator));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     [HttpGet("plans")]
@@ -59,8 +68,13 @@ public class SubscriptionController : ControllerBase
         });
     }
 
+    /// <summary>
+    /// Create payment order using production gateway (VNPay).
+    /// Returns payment URL for user to complete transaction.
+    /// Supports idempotency - duplicate requests return cached response.
+    /// </summary>
     [HttpPost("create-order")]
-    public IActionResult CreateOrder([FromBody] CreateOrderRequest request)
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.UserId))
         {
@@ -83,74 +97,120 @@ public class SubscriptionController : ControllerBase
             return BadRequest(new { message = "Tài khoản của bạn đã là Premium." });
         }
 
-        var orderId = $"ORD-{DateTime.UtcNow:yyyyMMddHHmmss}-{Random.Shared.Next(1000, 9999)}";
-        var qrPayload = $"saigonaudiotour://pay?orderId={orderId}&amount={plan.Price:0}&plan={plan.Id}";
-        var qrImageUrl = $"https://api.qrserver.com/v1/create-qr-code/?size=320x320&data={Uri.EscapeDataString(qrPayload)}";
-
-        var order = new PaymentOrder
+        try
         {
-            OrderId = orderId,
-            UserId = request.UserId,
-            PlanId = plan.Id,
-            Amount = plan.Price,
-            Currency = plan.Currency,
-            Status = "pending",
-            ExpiresAt = DateTime.UtcNow.AddMinutes(15),
-            QrImageUrl = qrImageUrl,
-            CreatedAt = DateTime.UtcNow
-        };
+            var orderId = $"ORD-{DateTime.UtcNow:yyyyMMddHHmmss}-{Random.Shared.Next(1000, 9999)}";
+            
+            // Use production payment gateway (VNPay)
+            var paymentResponse = await _paymentOrchestrator.CreatePaymentAsync(
+                orderId,
+                request.UserId,
+                plan.Id,
+                plan.Price,
+                "http://localhost:8000/payment/return", // Return URL
+                "http://localhost:5000/api/payment/webhook/vnpay" // Webhook URL
+            );
 
-        _store.Orders.Add(order);
+            if (!paymentResponse.Success)
+            {
+                _logger.LogWarning("Payment creation failed: {Message}", paymentResponse.Message);
+                return BadRequest(new { message = paymentResponse.Message });
+            }
 
-        return Ok(order);
+            // For backward compatibility with mobile app, return PaymentOrder format
+            var order = new PaymentOrder
+            {
+                OrderId = paymentResponse.OrderId,
+                UserId = request.UserId,
+                PlanId = plan.Id,
+                Amount = plan.Price,
+                Currency = plan.Currency,
+                Status = "pending",
+                ExpiresAt = DateTime.UtcNow.AddMinutes(15),
+                QrImageUrl = paymentResponse.QrCode ?? paymentResponse.PaymentUrl ?? string.Empty,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            return Ok(order);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating order for user {UserId}", request.UserId);
+            return StatusCode(500, new { message = "Lỗi tạo yêu cầu thanh toán." });
+        }
     }
 
     [HttpGet("order-status/{orderId}")]
-    public IActionResult GetOrderStatus(string orderId)
+    public async Task<IActionResult> GetOrderStatus(string orderId)
     {
-        var order = _store.Orders.FirstOrDefault(o => o.OrderId == orderId);
-        if (order is null)
+        try
         {
-            return NotFound(new { message = "Không tìm thấy đơn hàng." });
-        }
+            var (status, message) = await _paymentOrchestrator.GetPaymentStatusAsync(orderId);
 
-        if (order.Status == "pending" && DateTime.UtcNow > order.ExpiresAt)
+            var order = _context.PaymentTransactions
+                .FirstOrDefault(t => t.OrderId == orderId);
+
+            if (order == null)
+            {
+                return NotFound(new { message = "Không tìm thấy đơn hàng." });
+            }
+
+            return Ok(new
+            {
+                OrderId = order.OrderId,
+                UserId = order.UserId,
+                Status = order.Status.ToString(),
+                Amount = order.Amount,
+                CreatedAt = order.CreatedAt,
+                UpdatedAt = order.UpdatedAt,
+                Message = message
+            });
+        }
+        catch (Exception ex)
         {
-            order.Status = "expired";
+            _logger.LogError(ex, "Error getting order status for {OrderId}", orderId);
+            return StatusCode(500, new { message = "Lỗi truy vấn trạng thái." });
         }
-
-        return Ok(order);
     }
 
+    /// <summary>
+    /// Manual payment confirmation - called when webhook fails.
+    /// Should only be used for testing/fallback scenarios.
+    /// </summary>
     [HttpPost("mark-paid/{orderId}")]
     public IActionResult MarkPaid(string orderId)
     {
-        var order = _store.Orders.FirstOrDefault(o => o.OrderId == orderId);
-        if (order is null)
+        var transaction = _context.PaymentTransactions
+            .FirstOrDefault(t => t.OrderId == orderId);
+
+        if (transaction == null)
         {
             return NotFound(new { message = "Không tìm thấy đơn hàng." });
         }
 
-        if (order.Status == "expired")
+        if (transaction.Status != PaymentTransactionStatus.Pending)
         {
-            return BadRequest(new { message = "Đơn hàng đã hết hạn." });
+            return BadRequest(new { message = $"Trạng thái đơn hàng không phù hợp: {transaction.Status}" });
         }
 
-        order.Status = "paid";
+        // Mark as completed
+        transaction.Status = PaymentTransactionStatus.Completed;
+        transaction.ConfirmedAt = DateTime.UtcNow;
+        transaction.UpdatedAt = DateTime.UtcNow;
 
-        var plan = _store.Plans.First(p => p.Id == order.PlanId);
-        _store.UserPremium[order.UserId] = new PremiumStatus
+        // Activate subscription
+        if (int.TryParse(transaction.UserId, out var userId))
         {
-            UserId = order.UserId,
-            IsPremium = true,
-            PlanId = plan.Id,
-            Status = "premium",
-            PremiumUntil = DateTime.UtcNow.AddDays(plan.DurationDays)
-        };
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                user.SubscriptionStatus = "premium";
+            }
+        }
 
-        UpdateUserSubscriptionStatus(order.UserId, "premium");
+        _context.SaveChanges();
 
-        return Ok(new { message = "Kích hoạt Premium thành công.", orderId = order.OrderId });
+        return Ok(new { message = "Kích hoạt Premium thành công.", orderId = transaction.OrderId });
     }
 
     [HttpPost("cancel/{userId}")]

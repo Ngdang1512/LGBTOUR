@@ -18,6 +18,7 @@ namespace SaigonAudioTour.Api.Data
         public DbSet<UserLog> UserLogs { get; set; }
         public DbSet<AppUser> Users { get; set; }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

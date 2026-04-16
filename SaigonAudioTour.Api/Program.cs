@@ -25,6 +25,11 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITtsService, MockTtsService>();
 builder.Services.AddSingleton<SubscriptionStore>();
 
+// Payment Gateway Services
+builder.Services.AddScoped<IPaymentGatewayService, VNPayAdapter>();
+builder.Services.AddScoped<IPaymentGatewayOrchestrator, PaymentGatewayOrchestrator>();
+builder.Services.AddHttpClient<VNPayAdapter>();
+
 // 2. DATABASE
 var sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 var useSqlServer = CanConnectSqlServer(sqlConnection);
