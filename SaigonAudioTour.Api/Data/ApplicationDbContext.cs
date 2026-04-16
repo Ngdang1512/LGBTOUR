@@ -19,6 +19,12 @@ namespace SaigonAudioTour.Api.Data
         public DbSet<AppUser> Users { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
+        
+        // RBAC & 2FA
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<AdminRole> AdminRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +55,45 @@ namespace SaigonAudioTour.Api.Data
                 entity.ToTable("Users");
                 entity.HasIndex(u => u.Email).IsUnique();
             });
+
+            // ========== RBAC Configuration ==========
+            // Role-Permission many-to-many
+            modelBuilder.Entity<RolePermission>()
+                .HasKey(rp => new { rp.RoleId, rp.PermissionId });
+
+            modelBuilder.Entity<RolePermission>()
+                .HasOne(rp => rp.Role)
+                .WithMany()
+                .HasForeignKey(rp => rp.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RolePermission>()
+                .HasOne(rp => rp.Permission)
+                .WithMany()
+                .HasForeignKey(rp => rp.PermissionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Admin-Role many-to-many
+            modelBuilder.Entity<AdminRole>()
+                .HasKey(ar => new { ar.AdminId, ar.RoleId });
+
+            modelBuilder.Entity<AdminRole>()
+                .HasOne(ar => ar.Admin)
+                .WithMany()
+                .HasForeignKey(ar => ar.AdminId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AdminRole>()
+                .HasOne(ar => ar.Role)
+                .WithMany(r => r.AdminRoles)
+                .HasForeignKey(ar => ar.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Role-Permission relationship via junction table
+            modelBuilder.Entity<Role>()
+                .HasMany(r => r.Permissions)
+                .WithMany(p => p.Roles)
+                .UsingEntity<RolePermission>();
         }
     }
 }

@@ -30,6 +30,10 @@ builder.Services.AddScoped<IPaymentGatewayService, VNPayAdapter>();
 builder.Services.AddScoped<IPaymentGatewayOrchestrator, PaymentGatewayOrchestrator>();
 builder.Services.AddHttpClient<VNPayAdapter>();
 
+// Security & RBAC Services
+builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
+builder.Services.AddScoped<ITwoFactorAuthService, TwoFactorAuthService>();
+
 // 2. DATABASE
 var sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 var useSqlServer = CanConnectSqlServer(sqlConnection);
@@ -128,6 +132,9 @@ using (var scope = app.Services.CreateScope())
     MigrateLegacyUsers(context);
 
     SeedDefaultPois(context);
+    
+    // Seed RBAC roles and permissions
+    RbacSeeding.SeedRolesAndPermissionsAsync(context).Wait();
 }
 
 // 8. MIDDLEWARE PIPELINE (THỨ TỰ BẮT BUỘC)

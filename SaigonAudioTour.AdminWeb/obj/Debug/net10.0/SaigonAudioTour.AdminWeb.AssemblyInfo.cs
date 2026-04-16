@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SaigonAudioTour.AdminWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+76ea784b37d4f117f34633f1d0559288f864c052")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+28e690f6aff46a1832a2dcbb7ea6711359362283")]
 [assembly: System.Reflection.AssemblyProductAttribute("SaigonAudioTour.AdminWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SaigonAudioTour.AdminWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
