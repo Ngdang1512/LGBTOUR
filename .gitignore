@@ -22,6 +22,10 @@ TestResults/
 # Logs
 *.log
 
+# Local API SQLite data
+SaigonAudioTour.Api/App_Data/*.db
+SaigonAudioTour.Api/App_Data/*.db-*
+
 # Local secrets / env
 **/appsettings.Development.json
 

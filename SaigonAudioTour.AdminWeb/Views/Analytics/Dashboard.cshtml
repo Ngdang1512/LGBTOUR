@@ -1,6 +1,8 @@
 @model SaigonAudioTour.AdminWeb.Controllers.HeatmapData
 @{
     ViewData["Title"] = "Analytics Dashboard";
+    var revenue = ViewBag.RevenueSummary as SaigonAudioTour.AdminWeb.Controllers.RevenueSummary
+        ?? new SaigonAudioTour.AdminWeb.Controllers.RevenueSummary();
 }
 
 <div class="container mt-4">
@@ -17,6 +19,54 @@
             <strong>⚠️ Cảnh báo:</strong> @ViewBag.Error
         </div>
     }
+
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <small class="text-muted">Doanh thu 7 ngày</small>
+                    <h4 class="text-success mb-0" id="kpiRevenue">@revenue.TotalRevenue.ToString("N0") đ</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <small class="text-muted">Vé đã bán</small>
+                    <h4 class="mb-0" id="kpiTickets">@revenue.TicketsSold</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <small class="text-muted">Premium hiện tại</small>
+                    <h4 class="text-primary mb-0" id="kpiPremiumUsers">@revenue.ActivePremiumUsers/@revenue.TotalUsers</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <small class="text-muted">Tỷ lệ chuyển đổi</small>
+                    <h4 class="mb-0" id="kpiConversion">@revenue.ConversionRate.ToString("0.##")%</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">💰 Xu hướng doanh thu & mua Premium (7 ngày)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="revenueTrendChart" style="max-height: 320px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <!-- Heatmap Chart -->
@@ -117,9 +167,82 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script>
         $(document).ready(function() {
+            loadRevenueSummary();
+            loadRevenueTrend();
             loadChartData();
             updateStats();
         });
+
+        function loadRevenueSummary() {
+            $.get('@Url.Action("RevenueSummary", "Analytics")?days=7', function(response) {
+                if (!response || !response.success || !response.data) return;
+
+                const d = response.data;
+                $('#kpiRevenue').text((d.totalRevenue || 0).toLocaleString('vi-VN') + ' đ');
+                $('#kpiTickets').text((d.ticketsSold || 0).toLocaleString('vi-VN'));
+                $('#kpiPremiumUsers').text(`${d.activePremiumUsers || 0}/${d.totalUsers || 0}`);
+                $('#kpiConversion').text(`${(d.conversionRate || 0).toLocaleString('vi-VN')}%`);
+            });
+        }
+
+        function loadRevenueTrend() {
+            $.get('@Url.Action("RevenueTrend", "Analytics")?days=7', function(response) {
+                if (!response || !response.labels || response.labels.length === 0) return;
+
+                const ctx = document.getElementById('revenueTrendChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: response.labels,
+                        datasets: [
+                            {
+                                label: 'Doanh thu (VND)',
+                                data: response.datasets[0].data,
+                                borderColor: 'rgb(34, 197, 94)',
+                                backgroundColor: 'rgba(34, 197, 94, 0.2)',
+                                yAxisID: 'yRevenue',
+                                tension: 0.3
+                            },
+                            {
+                                label: 'Mua Premium',
+                                data: response.datasets[1].data,
+                                type: 'bar',
+                                borderColor: 'rgb(59, 130, 246)',
+                                backgroundColor: 'rgba(59, 130, 246, 0.4)',
+                                yAxisID: 'yCount'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        },
+                        scales: {
+                            yRevenue: {
+                                type: 'linear',
+                                position: 'left',
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toLocaleString('vi-VN');
+                                    }
+                                }
+                            },
+                            yCount: {
+                                type: 'linear',
+                                position: 'right',
+                                beginAtZero: true,
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        }
 
         function loadChartData() {
             $.get('@Url.Action("ChartData", "Analytics")', function(response) {

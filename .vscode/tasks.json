@@ -23,8 +23,23 @@
 			"label": "Reinstall Android App",
 			"type": "shell",
 			"command": "bash",
-			"args": ["/Users/admin/Code/SaigonAudioTour/scripts/reinstall_android.sh"],
+			"args": [
+				"/Users/admin/Code/SaigonAudioTour/scripts/reinstall_android.sh"
+			],
 			"isBackground": false
+		},
+		{
+			"label": "Run API (5117)",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"run",
+				"--project",
+				"/Users/admin/Code/SaigonAudioTour/SaigonAudioTour.Api/SaigonAudioTour.Api.csproj",
+				"--urls",
+				"http://0.0.0.0:5117"
+			],
+			"isBackground": true
 		}
 	]
 }

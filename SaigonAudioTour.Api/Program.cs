@@ -37,6 +37,9 @@ builder.Services.AddScoped<ITwoFactorAuthService, TwoFactorAuthService>();
 // 2. DATABASE
 var sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 var useSqlServer = CanConnectSqlServer(sqlConnection);
+var sqlitePathConfig = builder.Configuration.GetValue<string>("DatabaseSettings:SqlitePath");
+var sqlitePath = ResolveSqlitePath(builder.Environment.ContentRootPath, sqlitePathConfig);
+Directory.CreateDirectory(Path.GetDirectoryName(sqlitePath)!);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -46,7 +49,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     }
     else
     {
-        var sqlitePath = Path.Combine(AppContext.BaseDirectory, "saigonaudiotour.db");
         options.UseSqlite($"Data Source={sqlitePath}");
     }
 });
@@ -114,7 +116,14 @@ using (var scope = app.Services.CreateScope())
     }
     else
     {
-        context.Database.EnsureCreated();
+        try
+        {
+            context.Database.Migrate();
+        }
+        catch
+        {
+            context.Database.EnsureCreated();
+        }
     }
 
     if (!context.Admins.Any(a => a.Username == "MinhVy"))
@@ -176,6 +185,21 @@ static bool CanConnectSqlServer(string connectionString)
     }
 }
 
+static string ResolveSqlitePath(string contentRootPath, string? configuredPath)
+{
+    if (string.IsNullOrWhiteSpace(configuredPath))
+    {
+        return Path.Combine(contentRootPath, "App_Data", "saigonaudiotour.db");
+    }
+
+    if (Path.IsPathRooted(configuredPath))
+    {
+        return configuredPath;
+    }
+
+    return Path.Combine(contentRootPath, configuredPath);
+}
+
 static void SeedDefaultPois(ApplicationDbContext context)
 {
     var defaultPois = new[]
@@ -207,15 +231,7 @@ static void SeedDefaultPois(ApplicationDbContext context)
                 Priority = seedPoi.Priority,
                 IsStopStation = seedPoi.IsStopStation
             });
-            continue;
         }
-
-        existingPoi.Description = seedPoi.Description;
-        existingPoi.Lat = seedPoi.Lat;
-        existingPoi.Lng = seedPoi.Lng;
-        existingPoi.Radius = seedPoi.Radius;
-        existingPoi.Priority = seedPoi.Priority;
-        existingPoi.IsStopStation = seedPoi.IsStopStation;
     }
 
     context.SaveChanges();

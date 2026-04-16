@@ -159,6 +159,8 @@ public partial class UpgradePage : ContentPage
             return;
         }
 
+        EnsureQrImageUrl(CurrentOrder);
+
         OrderInfoText = $"Mã đơn: {CurrentOrder.OrderId}\nSố tiền: {CurrentOrder.Amount:N0} {CurrentOrder.Currency}\nHết hạn: {CurrentOrder.ExpiresAt:HH:mm dd/MM}";
         IsOrderVisible = true;
 
@@ -266,5 +268,48 @@ public partial class UpgradePage : ContentPage
         OnPropertyChanged(nameof(CurrentOrder));
         OnPropertyChanged(nameof(OrderInfoText));
         await DisplayAlertAsync("Thành công", "Đã huỷ gói Premium.", "OK");
+    }
+
+    private static void EnsureQrImageUrl(PaymentOrder order)
+    {
+        if (order == null)
+        {
+            return;
+        }
+
+        if (LooksLikeImageUrl(order.QrImageUrl))
+        {
+            return;
+        }
+
+        var dataForQr = !string.IsNullOrWhiteSpace(order.PaymentUrl)
+            ? order.PaymentUrl
+            : order.QrImageUrl;
+
+        if (string.IsNullOrWhiteSpace(dataForQr))
+        {
+            return;
+        }
+
+        order.QrImageUrl = $"https://api.qrserver.com/v1/create-qr-code/?size=320x320&data={Uri.EscapeDataString(dataForQr)}";
+    }
+
+    private static bool LooksLikeImageUrl(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            return false;
+        }
+
+        if (!Uri.TryCreate(url, UriKind.Absolute, out _))
+        {
+            return false;
+        }
+
+        return url.Contains("create-qr-code", StringComparison.OrdinalIgnoreCase)
+               || url.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+               || url.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
+               || url.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
+               || url.EndsWith(".webp", StringComparison.OrdinalIgnoreCase);
     }
 }

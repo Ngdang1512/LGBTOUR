@@ -19,6 +19,7 @@ public class PaymentOrder
     public string Currency { get; set; } = "VND";
     public string Status { get; set; } = "pending";
     public DateTime ExpiresAt { get; set; }
+    public string PaymentUrl { get; set; } = string.Empty;
     public string QrImageUrl { get; set; } = string.Empty;
 }
 

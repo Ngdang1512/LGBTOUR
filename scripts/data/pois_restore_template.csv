@@ -1,0 +1,11 @@
+name,description,lat,lng,radius,image,priority,isStopStation
+Chợ Bến Thành,"",10.77252,106.69805,70,,10,1
+Nhà hát Thành phố,"",10.77662,106.70326,65,,9,1
+Trụ sở Ủy ban Nhân dân TP.HCM,"",10.77695,106.69949,60,,8,1
+Dinh Độc Lập,"",10.77713,106.69531,60,,7,1
+Nhà thờ Đức Bà,"",10.77978,106.69902,58,,6,1
+Bưu điện Thành phố,"",10.77956,106.70049,55,,5,1
+Bảo tàng Chứng tích Chiến tranh,"",10.77937,106.69134,55,,4,1
+Bảo tàng Lịch sử,"",10.78693,106.70252,55,,3,1
+Thảo Cầm Viên Sài Gòn,"",10.78743,106.70452,60,,2,1
+Saigon Skydeck,"",10.77168,106.70411,60,,1,1

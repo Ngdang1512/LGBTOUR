@@ -1,10 +1,13 @@
+using Microsoft.Maui.Storage;
 using SaigonAudioTour.Mobile.Models;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace SaigonAudioTour.Mobile.Services;
 
 public class PoiApiService
 {
+    private const string PlacesCacheKey = "PoiApiService_CachedPlaces";
     private readonly HttpClient _httpClient;
 
     public PoiApiService(HttpClient httpClient)
@@ -17,10 +20,55 @@ public class PoiApiService
         try
         {
             var pois = await _httpClient.GetFromJsonAsync<List<PoiApiDto>>("api/pois") ?? new List<PoiApiDto>();
-            return pois
+            var places = pois
                 .OrderByDescending(p => p.Priority)
                 .Select(MapPlace)
                 .ToList();
+
+            if (places.Count > 0)
+            {
+                CachePlaces(places);
+                return places;
+            }
+        }
+        catch
+        {
+            // ignore and fallback to cache
+        }
+
+        var cachedPlaces = TryGetCachedPlaces();
+        if (cachedPlaces.Count > 0)
+        {
+            return cachedPlaces;
+        }
+
+        return new List<Place>();
+    }
+
+    private void CachePlaces(List<Place> places)
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(places);
+            Preferences.Default.Set(PlacesCacheKey, json);
+        }
+        catch
+        {
+            // ignore cache failures
+        }
+    }
+
+    private static List<Place> TryGetCachedPlaces()
+    {
+        try
+        {
+            var json = Preferences.Default.Get(PlacesCacheKey, string.Empty);
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                return new List<Place>();
+            }
+
+            return JsonSerializer.Deserialize<List<Place>>(json) ?? new List<Place>();
         }
         catch
         {

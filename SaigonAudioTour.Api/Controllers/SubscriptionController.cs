@@ -117,6 +117,13 @@ public class SubscriptionController : ControllerBase
                 return BadRequest(new { message = paymentResponse.Message });
             }
 
+            var paymentUrl = paymentResponse.PaymentUrl ?? string.Empty;
+            var qrImageUrl = !string.IsNullOrWhiteSpace(paymentResponse.QrCode)
+                ? paymentResponse.QrCode
+                : (!string.IsNullOrWhiteSpace(paymentUrl)
+                    ? $"https://api.qrserver.com/v1/create-qr-code/?size=320x320&data={Uri.EscapeDataString(paymentUrl)}"
+                    : string.Empty);
+
             // For backward compatibility with mobile app, return PaymentOrder format
             var order = new PaymentOrder
             {
@@ -127,7 +134,8 @@ public class SubscriptionController : ControllerBase
                 Currency = plan.Currency,
                 Status = "pending",
                 ExpiresAt = DateTime.UtcNow.AddMinutes(15),
-                QrImageUrl = paymentResponse.QrCode ?? paymentResponse.PaymentUrl ?? string.Empty,
+                PaymentUrl = paymentUrl,
+                QrImageUrl = qrImageUrl,
                 CreatedAt = DateTime.UtcNow
             };
 
