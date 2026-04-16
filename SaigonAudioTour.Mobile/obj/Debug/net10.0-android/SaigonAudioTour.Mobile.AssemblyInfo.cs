@@ -13,15 +13,9 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SaigonAudioTour.Mobile")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< Updated upstream:SaigonAudioTour.Mobile/obj/Debug/net10.0-android/SaigonAudioTour.Mobile.AssemblyInfo.cs
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+d2ce54e7a0498a1eabdfe0b78b0848ae76dbd46d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+b07ed971e311d044a6d00333149659b4ad2e3f2a")]
 [assembly: System.Reflection.AssemblyProductAttribute("SaigonAudioTour.Mobile")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SaigonAudioTour.Mobile")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+ab91b46eef9c689bb1e0f6e9e5e1af0cb3c0cf48")]
-[assembly: System.Reflection.AssemblyProductAttribute("LGBTOUR.Mobile")]
-[assembly: System.Reflection.AssemblyTitleAttribute("LGBTOUR.Mobile")]
->>>>>>> Stashed changes:LGBTOUR.Mobile/obj/Debug/net10.0-android/LGBTOUR.Mobile.AssemblyInfo.cs
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Android36.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Android21.0")]

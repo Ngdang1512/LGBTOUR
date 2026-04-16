@@ -1,4 +1,0 @@
-wwwroot\css\custom-swagger.css
-wwwroot\uploads\41e4cdc7-b073-4a51-8c15-6023b0e9586a_80313477-b26a-4840-9ed8-d07d0a1c65df.jfif
-wwwroot\uploads\4219be67-927e-4964-8c62-41acd2109dbf_helo.jfif
-C:\Users\dell\source\repos\Đồ an C#\SaigonAudioTour\SaigonAudioTour.Api\wwwroot\css\custom-swagger.css

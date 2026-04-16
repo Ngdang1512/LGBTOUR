@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+
+# IDE / Editor
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build output
+**/bin/
+**/obj/
+
+# .NET tooling
+*.cache
+*.pdb
+*.mdb
+TestResults/
+
+# Logs
+*.log
+
+# Local secrets / env
+**/appsettings.Development.json
+
+# MAUI / Xamarin generated artifacts
+*.xcuserstate
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+
+# Node (if added later)
+node_modules/

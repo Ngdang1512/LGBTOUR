@@ -7,6 +7,12 @@
     -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" package="com.companyname.saigonaudiotour.mobile" android:versionName="1.0">
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="36" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
   <application android:allowBackup="true" android:supportsRtl="true" android:theme="@style/Maui.MainTheme" android:label="Saigon Audio Tour" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:usesCleartextTraffic="true" android:name="crc649e408905a1cccc33.MainApplication" android:debuggable="true" android:extractNativeLibs="true">
