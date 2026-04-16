@@ -2,6 +2,7 @@
 using SaigonAudioTour.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -24,6 +25,18 @@ namespace SaigonAudioTour.Api.Controllers
         public async Task<ActionResult<IEnumerable<PoiStatisticDto>>> GetTopPois([FromQuery] int top = 5)
         {
             var result = await _userLogService.GetTopListenedPoisAsync(top);
+            return Ok(result);
+        }
+
+        // GET: api/dashboard/heatmap
+        [HttpGet("heatmap")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<HeatmapDataDto>> GetHeatmap(
+            [FromQuery] DateTime? startDate = null, 
+            [FromQuery] DateTime? endDate = null, 
+            [FromQuery] string? groupBy = "poi")
+        {
+            var result = await _userLogService.GetHeatmapDataAsync(startDate, endDate, groupBy);
             return Ok(result);
         }
 

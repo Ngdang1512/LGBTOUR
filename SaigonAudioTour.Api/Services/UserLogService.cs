@@ -2,6 +2,7 @@
 using SaigonAudioTour.Api.DTOs.UserLogs;
 using SaigonAudioTour.Api.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,6 +31,31 @@ namespace SaigonAudioTour.Api.Services
                 .OrderByDescending(stat => stat.TotalListens)
                 .Take(top)
                 .ToListAsync();
+        }
+
+        public async Task<HeatmapDataDto> GetHeatmapDataAsync(DateTime? startDate = null, DateTime? endDate = null, string? groupBy = "poi")
+        {
+            startDate ??= DateTime.Now.AddMonths(-1);
+            endDate ??= DateTime.Now;
+
+            var query = _context.UserLogs
+                .AsNoTracking()
+                .Where(log => log.POIId != null && log.EventType == "Nghe Audio" 
+                    && log.CreatedAt >= startDate && log.CreatedAt <= endDate);
+
+            var heatmapItems = await query
+                .GroupBy(log => new { log.POIId, log.POI.Name })
+                .Select(group => new HeatmapItemDto
+                {
+                    PoiId = group.Key.POIId.Value,
+                    PoiName = group.Key.Name ?? "Trạm đã bị xóa",
+                    VisitCount = group.Count(),
+                    AvgDuration = (int)group.Average(log => log.DurationSeconds ?? 0)
+                })
+                .OrderByDescending(x => x.VisitCount)
+                .ToListAsync();
+
+            return new HeatmapDataDto { HeatmapData = heatmapItems };
         }
 
         public async Task RecordListenEventAsync(string userId, int poiId, int duration)

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaigonAudioTour PRD - Đặc Tả Yêu Cầu Sản Phẩm v2.0</title>
+    <title>Saigon Audio Tour - PRD v3.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
     <style>
@@ -99,7 +99,7 @@
     <aside class="sidebar">
         <div class="sidebar-header">
             <h1>📍 SaigonAudioTour</h1>
-            <p>PRD v2.0 - Báo Cáo Đặc Tả Công Nghệ</p>
+            <p>PRD v3.0 - Báo Cáo Đặc Tả & Traceability</p>
         </div>
         
         <div class="nav-group">
@@ -127,6 +127,11 @@
             <div class="nav-title">🔌 IV. API & Data</div>
             <a href="#api-spec" class="nav-link">10. REST API Endpoints</a>
             <a href="#error-handling" class="nav-link">11. Xử Lý Lỗi & Response</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title">🧭 V. Traceability</div>
+            <a href="#traceability" class="nav-link">12. FR → API → Screen Mapping</a>
         </div>
     </aside>
 
@@ -1150,11 +1155,84 @@ Response: 200 OK
                 </div> --> 
             </section>
 
+            <!-- Section 12: Traceability -->
+            <section id="traceability" class="section">
+                <div class="section-header">
+                    <div class="section-number">12</div>
+                    <h3 class="section-title">FR → API → Screen Mapping</h3>
+                </div>
+                <p class="content-text">
+                    Bảng traceability dùng để đối chiếu yêu cầu chức năng (FR) với endpoint backend và màn hình thực thi trên Mobile/Admin.
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>FR</th>
+                            <th>API Endpoint</th>
+                            <th>Mobile Screen / Service</th>
+                            <th>Admin Screen</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>FR-01</strong> Auth</td>
+                            <td>/api/Auth/login, /api/Auth/register, /api/Auth/admin-login, /api/Auth/profile</td>
+                            <td>LoginPage, RegisterPage, SettingsPage, AuthApiService</td>
+                            <td>Auth/Login</td>
+                            <td><span style="color: var(--success); font-weight: 700;">Done</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>FR-02</strong> POI Management</td>
+                            <td>/api/Pois (GET/POST/PUT/DELETE), /api/Pois/{id}/image</td>
+                            <td>MainPage, MapPage, DetailPage, PoiApiService</td>
+                            <td>POIs/Index, POIs/Create, POIs/Edit, POIs/Delete</td>
+                            <td><span style="color: var(--success); font-weight: 700;">Done</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>FR-03</strong> Tour Management</td>
+                            <td>/api/Tours (GET/POST/PUT/DELETE), /api/Tours/{tourId}/pois</td>
+                            <td>MainPage, MapPage</td>
+                            <td>Tours/Index, Tours/Create, Tours/Edit, Tours/Delete</td>
+                            <td><span style="color: var(--success); font-weight: 700;">Done</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>FR-04</strong> Narration</td>
+                            <td>/api/Narrations/{poiId}, /api/Narrations (POST)</td>
+                            <td>NarrationEngine, GeofencingService</td>
+                            <td>Narrations/Create</td>
+                            <td><span style="color: var(--success); font-weight: 700;">Done</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>FR-05</strong> Geofencing Auto-play</td>
+                            <td>/api/Pois, /api/Narrations/{poiId}</td>
+                            <td>MapPage, MainPage, GeofencingService</td>
+                            <td>N/A</td>
+                            <td><span style="color: var(--success); font-weight: 700;">Done</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>FR-07</strong> Subscription Premium</td>
+                            <td>/api/Subscription/plans, /api/Subscription/user/{id}/status, /api/Subscription/create-order, /api/Subscription/mark-paid/{orderId}, /api/Subscription/cancel/{userId}</td>
+                            <td>UpgradePage, SettingsPage, SubscriptionApiService</td>
+                            <td>N/A</td>
+                            <td><span style="color: var(--success); font-weight: 700;">Done</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>FR-08</strong> Analytics</td>
+                            <td>/api/Dashboard/record-listen, /api/Dashboard/top-pois</td>
+                            <td>MainPage (ghi event listen)</td>
+                            <td>Dashboard (một phần)</td>
+                            <td><span style="color: var(--warning); font-weight: 700;">Partial</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
             <!-- Footer Section -->
             <section class="section" style="background: linear-gradient(135deg, var(--primary-dark) 0%, #0D2137 100%); color: white; text-align: center;">
-                <h3 style="color: white; margin-bottom: 1rem;">✅ Document Version: 2.0</h3>
+                <h3 style="color: white; margin-bottom: 1rem;">✅ Document Version: 3.0</h3>
                 <p style="color: rgba(255,255,255,0.9);">
-                    <strong>Ngày cập nhật:</strong> 15 November 2024 | 
+                    <strong>Ngày cập nhật:</strong> 16 April 2026 | 
                     
                     
                 </p>
