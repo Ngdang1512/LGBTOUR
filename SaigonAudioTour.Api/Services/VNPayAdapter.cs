@@ -72,11 +72,8 @@ public class VNPayAdapter : IPaymentGatewayService
                 { "vnp_ReturnUrl", _config[RETURN_URL_KEY] ?? request.ReturnUrl }
             };
 
-            // Add metadata if provided
-            if (request.Metadata != null && request.Metadata.ContainsKey("userId"))
-            {
-                paymentParams["vnp_TxnRef"] = $"{request.OrderId}_{request.Metadata["userId"]}";
-            }
+            // Keep TxnRef stable and equal to local orderId so webhook/status mapping is deterministic.
+            paymentParams["vnp_TxnRef"] = request.OrderId;
 
             // Generate secure hash
             var sortedParams = paymentParams.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);

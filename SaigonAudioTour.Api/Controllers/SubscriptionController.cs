@@ -36,11 +36,7 @@ public class SubscriptionController : ControllerBase
     [HttpGet("user/{userId}/status")]
     public IActionResult GetUserStatus(string userId)
     {
-        if (_store.UserPremium.TryGetValue(userId, out var status))
-        {
-            return Ok(status);
-        }
-
+        // DB is the source of truth for persisted subscription state.
         if (int.TryParse(userId, out var parsedUserId))
         {
             var user = _context.Users.AsNoTracking().FirstOrDefault(u => u.Id == parsedUserId);
@@ -56,6 +52,12 @@ public class SubscriptionController : ControllerBase
                     PremiumUntil = isPremium ? DateTime.UtcNow.AddDays(30) : null
                 });
             }
+        }
+
+        // Fallback to in-memory state for non-persisted/demo flows.
+        if (_store.UserPremium.TryGetValue(userId, out var status))
+        {
+            return Ok(status);
         }
 
         return Ok(new PremiumStatus
@@ -100,6 +102,9 @@ public class SubscriptionController : ControllerBase
         try
         {
             var orderId = $"ORD-{DateTime.UtcNow:yyyyMMddHHmmss}-{Random.Shared.Next(1000, 9999)}";
+            var apiBaseUrl = $"{Request.Scheme}://{Request.Host}";
+            var returnUrl = $"{apiBaseUrl}/api/payment/webhook/vnpay";
+            var webhookUrl = returnUrl;
             
             // Use production payment gateway (VNPay)
             var paymentResponse = await _paymentOrchestrator.CreatePaymentAsync(
@@ -107,8 +112,8 @@ public class SubscriptionController : ControllerBase
                 request.UserId,
                 plan.Id,
                 plan.Price,
-                "http://localhost:8000/payment/return", // Return URL
-                "http://localhost:5000/api/payment/webhook/vnpay" // Webhook URL
+                returnUrl,
+                webhookUrl
             );
 
             if (!paymentResponse.Success)
@@ -213,6 +218,15 @@ public class SubscriptionController : ControllerBase
             if (user != null)
             {
                 user.SubscriptionStatus = "premium";
+
+                _store.UserPremium[transaction.UserId] = new PremiumStatus
+                {
+                    UserId = transaction.UserId,
+                    IsPremium = true,
+                    PlanId = "premium",
+                    Status = "premium",
+                    PremiumUntil = DateTime.UtcNow.AddDays(30)
+                };
             }
         }
 
@@ -240,17 +254,21 @@ public class SubscriptionController : ControllerBase
 
     private bool IsUserPremium(string userId)
     {
+        if (int.TryParse(userId, out var parsedUserId))
+        {
+            var isPremiumInDb = _context.Users.AsNoTracking().Any(user => user.Id == parsedUserId && user.SubscriptionStatus == "premium");
+            if (isPremiumInDb)
+            {
+                return true;
+            }
+        }
+
         if (_store.UserPremium.TryGetValue(userId, out var premiumStatus))
         {
             return premiumStatus.IsPremium;
         }
 
-        if (!int.TryParse(userId, out var parsedUserId))
-        {
-            return false;
-        }
-
-        return _context.Users.AsNoTracking().Any(user => user.Id == parsedUserId && user.SubscriptionStatus == "premium");
+        return false;
     }
 
     private void UpdateUserSubscriptionStatus(string userId, string subscriptionStatus)

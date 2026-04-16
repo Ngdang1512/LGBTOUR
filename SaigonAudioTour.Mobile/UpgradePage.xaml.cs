@@ -174,12 +174,6 @@ public partial class UpgradePage : ContentPage
         if (CurrentOrder == null) return;
 
         var ok = await _apiService.MarkOrderPaidAsync(CurrentOrder.OrderId);
-        if (!ok)
-        {
-            await DisplayAlertAsync("Lỗi", "Không cập nhật được thanh toán.", "OK");
-            return;
-        }
-
         var status = await _apiService.GetPremiumStatusAsync(_userId);
         if (status == null)
         {
@@ -190,6 +184,12 @@ public partial class UpgradePage : ContentPage
         {
             IsPremium = status.IsPremium;
             PremiumStatusText = BuildPremiumStatusText(status);
+        }
+
+        if (!ok && status?.IsPremium != true)
+        {
+            await DisplayAlertAsync("Lỗi", "Không cập nhật được thanh toán.", "OK");
+            return;
         }
 
         IsOrderVisible = false;

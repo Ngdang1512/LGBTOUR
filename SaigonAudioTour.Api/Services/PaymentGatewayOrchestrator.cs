@@ -216,9 +216,15 @@ public class PaymentGatewayOrchestrator : IPaymentGatewayOrchestrator
             if (gatewayName == "VNPay")
             {
                 if (root.TryGetProperty("vnp_TxnRef", out var txnRef))
-                    orderId = txnRef.GetString();
+                    orderId = NormalizeOrderId(txnRef.GetString());
                 if (root.TryGetProperty("vnp_ResponseCode", out var respCode) && respCode.TryGetInt32(out var code))
-                    status = code == 00 ? PaymentStatus.Completed : code == 02 ? PaymentStatus.Failed : PaymentStatus.Pending;
+                    status = code switch
+                    {
+                        00 => PaymentStatus.Completed,
+                        24 => PaymentStatus.Cancelled,
+                        02 => PaymentStatus.Failed,
+                        _ => PaymentStatus.Pending
+                    };
             }
 
             if (string.IsNullOrWhiteSpace(orderId) || status == null)
@@ -281,6 +287,23 @@ public class PaymentGatewayOrchestrator : IPaymentGatewayOrchestrator
         PaymentStatus.Refunded => "Đã hoàn tiền",
         _ => "Trạng thái không xác định"
     };
+
+    private static string? NormalizeOrderId(string? txnRef)
+    {
+        if (string.IsNullOrWhiteSpace(txnRef))
+        {
+            return txnRef;
+        }
+
+        // Backward compatibility: older implementation appended "_{userId}".
+        var separatorIndex = txnRef.IndexOf('_');
+        if (separatorIndex > 0)
+        {
+            return txnRef[..separatorIndex];
+        }
+
+        return txnRef;
+    }
 }
 
 /// <summary>
