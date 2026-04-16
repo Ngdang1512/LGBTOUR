@@ -24,8 +24,9 @@ public class PaymentOrder
 
 public class PremiumStatus
 {
-    public string UserId { get; set; } = "demo-user";
+    public string UserId { get; set; } = string.Empty;
     public bool IsPremium { get; set; }
     public string PlanId { get; set; } = "free";
+    public string Status { get; set; } = "free";
     public DateTime? PremiumUntil { get; set; }
 }

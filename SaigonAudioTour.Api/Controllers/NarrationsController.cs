@@ -8,7 +8,6 @@ namespace SaigonAudioTour.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class NarrationsController : ControllerBase
     {
         private readonly INarrationService _narrationService;
@@ -18,8 +17,23 @@ namespace SaigonAudioTour.Api.Controllers
             _narrationService = narrationService;
         }
 
+        // GET: api/narrations/{poiId}?lang=vi
+        [HttpGet("{poiId:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetNarrationByPoi(int poiId, [FromQuery] string? lang = "vi")
+        {
+            var result = await _narrationService.GetNarrationByPoiAndLanguageAsync(poiId, lang);
+            if (result == null)
+            {
+                return NotFound(new { message = "Không tìm thấy nội dung thuyết minh cho địa điểm này." });
+            }
+
+            return Ok(result);
+        }
+
         // POST: api/narrations
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateNarration([FromForm] CreateNarrationDto dto)
         {

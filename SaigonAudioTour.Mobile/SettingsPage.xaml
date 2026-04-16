@@ -6,9 +6,26 @@
              Shell.NavBarIsVisible="False">
 
     <ScrollView VerticalScrollBarVisibility="Never">
-        <VerticalStackLayout Padding="20, 50, 20, 40" Spacing="30">
-            
-            <Label Text="{Binding AccountTitleText}" TextColor="#0F172A" FontSize="28" FontAttributes="Bold" />
+        <VerticalStackLayout Padding="20, 50, 20, 40" Spacing="24">
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" VerticalOptions="Center">
+                <Button Text="←"
+                        Clicked="OnBackClicked"
+                        BackgroundColor="White"
+                        TextColor="#0F172A"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        CornerRadius="20"
+                        BorderColor="#E2E8F0"
+                        BorderWidth="1" />
+
+                <Label Grid.Column="1"
+                       Text="{Binding AccountTitleText}"
+                       TextColor="#0F172A"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center" />
+            </Grid>
 
             <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="20">
                 <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
@@ -64,6 +81,13 @@
                                 Clicked="OnUpgradeClicked"
                                 BackgroundColor="{Binding PremiumButtonBackgroundColor}"
                                 TextColor="{Binding PremiumButtonTextColor}"
+                                HeightRequest="44"
+                                CornerRadius="10" />
+                        <Button Text="{Binding CancelPremiumButtonText}"
+                                Clicked="OnCancelPremiumClicked"
+                                IsVisible="{Binding CanCancelPremium}"
+                                BackgroundColor="#EF4444"
+                                TextColor="White"
                                 HeightRequest="44"
                                 CornerRadius="10" />
                     </VerticalStackLayout>

@@ -29,6 +29,13 @@
                            TextColor="{StaticResource TextColor}" />
                     <Label x:Name="GpsStatusLabel" Text="Đang tìm GPS..." FontSize="12"
                            TextColor="{StaticResource TextSecondary}" />
+                    <Label Text="{Binding ActiveGeofenceLabelText}"
+                           IsVisible="{Binding IsActiveGeofenceVisible}"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="#7C3AED" />
+                    <Label Text="Vòng geofence: xanh = xa, vàng = gần, đỏ = kích hoạt" FontSize="11"
+                           TextColor="{StaticResource TextSecondary}" />
                 </VerticalStackLayout>
                 
                 <!-- GPS Indicator -->

@@ -1,5 +1,6 @@
 using SaigonAudioTour.Mobile.Models;
 using SaigonAudioTour.Mobile.Services;
+using SaigonAudioTour.Mobile.Services.Geofencing;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
 using System.Globalization;
@@ -17,11 +18,21 @@ public partial class MapPage : ContentPage
     };
 
     private readonly List<Place> _places = new();
-    private TourApiService? _apiService;
+    private PoiApiService? _apiService;
+    private GeofenceSessionState? _geofenceSessionState;
     private List<Place> _lastOrderedStops = new();
     private bool _hasRenderedMap;
     private bool _isMapKeyMissing;
     private bool _isFallbackMode;
+    private CancellationTokenSource? _geofenceVizCts;
+    private bool _geofenceVizLoopStarted;
+    private bool _geofenceStateHooked;
+    private int _activeGeofencePoiId = -1;
+    private double _activeGeofenceDistanceMeters;
+    private Location? _lastGeofenceVizLocation;
+    private DateTimeOffset _lastGeofenceVizRefreshAt = DateTimeOffset.MinValue;
+    private const double GeofenceVizMinMoveMeters = 20;
+    private static readonly TimeSpan GeofenceVizMaxStaleInterval = TimeSpan.FromMinutes(5);
 
 #if ANDROID
     private const bool PreferCompatMap = true;
@@ -51,6 +62,13 @@ public partial class MapPage : ContentPage
         }
     }
 
+    public bool IsActiveGeofenceVisible => _activeGeofencePoiId > 0;
+
+    public string ActiveGeofenceLabelText
+        => _activeGeofencePoiId > 0
+            ? $"Đang phát thuyết minh tại {_geofenceSessionState?.ActivePoi?.Name ?? $"POI #{_activeGeofencePoiId}"} • Cách {FormatDistance(_activeGeofenceDistanceMeters)}"
+            : string.Empty;
+
     public MapPage()
     {
         InitializeComponent();
@@ -72,6 +90,15 @@ public partial class MapPage : ContentPage
 
         ValidateMapProvider();
 
+        _geofenceSessionState ??= IPlatformApplication.Current?.Services.GetService<GeofenceSessionState>();
+        if (_geofenceSessionState != null && !_geofenceStateHooked)
+        {
+            _geofenceSessionState.Changed += OnGeofenceStateChanged;
+            _geofenceStateHooked = true;
+        }
+
+        SyncActiveGeofenceState();
+
         if (_places.Count == 0)
         {
             await LoadDataAsync();
@@ -89,6 +116,20 @@ public partial class MapPage : ContentPage
         {
             GpsStatusLabel.Text = "Đang dùng OpenStreetMap (compat mode).";
             await LoadOsmFallbackAsync();
+        }
+
+        StartGeofenceVisualizationLoop();
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        StopGeofenceVisualizationLoop();
+
+        if (_geofenceSessionState != null && _geofenceStateHooked)
+        {
+            _geofenceSessionState.Changed -= OnGeofenceStateChanged;
+            _geofenceStateHooked = false;
         }
     }
 
@@ -116,14 +157,14 @@ public partial class MapPage : ContentPage
     {
         try
         {
-            _apiService ??= IPlatformApplication.Current?.Services.GetService<TourApiService>();
+            _apiService ??= IPlatformApplication.Current?.Services.GetService<PoiApiService>();
             if (_apiService == null)
             {
                 GpsStatusLabel.Text = "Không khởi tạo được dữ liệu bản đồ.";
                 return;
             }
 
-            var places = await _apiService.GetProjectPlacesAsync();
+            var places = await _apiService.GetPlacesAsync();
             _places.Clear();
             _places.AddRange((places ?? new List<Place>())
                 .Where(p => p != null && p.Latitude != 0 && p.Longitude != 0));
@@ -134,7 +175,7 @@ public partial class MapPage : ContentPage
         }
     }
 
-    private async Task LoadPinsAndHeatAsync()
+    private async Task LoadPinsAndHeatAsync(Location? currentLocation = null)
     {
         MyMap.Pins.Clear();
         MyMap.MapElements.Clear();
@@ -180,6 +221,7 @@ public partial class MapPage : ContentPage
             var p = orderedStops[idx];
             var isStart = idx == 0;
             var isEnd = idx == orderedStops.Count - 1;
+            var isActive = p.Id == _activeGeofencePoiId;
             var poiEmoji = GetPoiEmoji(p);
 
             // Điểm cuối trùng điểm đầu (vòng khép kín), không thêm pin trùng
@@ -194,30 +236,16 @@ public partial class MapPage : ContentPage
                     ? $"🟢🏁 {p.Name}"
                     : isEnd
                         ? $"🔴 {p.Name}"
-                        : $"{idx + 1}. {poiEmoji} {p.Name}",
+                        : isActive
+                            ? $"🔊 {idx + 1}. {poiEmoji} {p.Name}"
+                            : $"{idx + 1}. {poiEmoji} {p.Name}",
                 Address = p.Location,
                 Location = new Location(p.Latitude, p.Longitude),
                 Type = PinType.Place
             });
         }
 
-        // Đánh dấu rõ điểm bắt đầu/kết thúc (cùng 1 vị trí Chợ Bến Thành)
-        var start = orderedStops[0];
-        var startCenter = new Location(start.Latitude, start.Longitude);
-        MyMap.MapElements.Add(new Circle
-        {
-            Center = startCenter,
-            Radius = Distance.FromMeters(70),
-            StrokeColor = Color.FromArgb("#16A34A"),
-            FillColor = Color.FromArgb("#16A34A").WithAlpha(0.16f)
-        });
-        MyMap.MapElements.Add(new Circle
-        {
-            Center = startCenter,
-            Radius = Distance.FromMeters(45),
-            StrokeColor = Color.FromArgb("#DC2626"),
-            FillColor = Color.FromArgb("#DC2626").WithAlpha(0.14f)
-        });
+        await AddGeofenceCirclesToNativeMapAsync(orderedStops, currentLocation);
 
         var first = orderedStops.First();
         MyMap.MoveToRegion(MapSpan.FromCenterAndRadius(
@@ -241,7 +269,7 @@ public partial class MapPage : ContentPage
         await global::Microsoft.Maui.ApplicationModel.Map.Default.OpenAsync(location, new MapLaunchOptions { Name = first.Name });
     }
 
-    private async Task LoadOsmFallbackAsync()
+    private async Task LoadOsmFallbackAsync(Location? currentLocation = null)
     {
                 var points = _places
             .Where(p => p.Latitude != 0 && p.Longitude != 0)
@@ -272,7 +300,7 @@ public partial class MapPage : ContentPage
                         var lat = p.Latitude.ToString(CultureInfo.InvariantCulture);
                         var lon = p.Longitude.ToString(CultureInfo.InvariantCulture);
                         var popup = JsonSerializer.Serialize($"{p.Name}<br/>{p.Location}");
-                        var iconHtmlJson = JsonSerializer.Serialize(GetOsmIconHtml(p, isStart));
+                        var iconHtmlJson = JsonSerializer.Serialize(GetOsmIconHtml(p, isStart, p.Id == _activeGeofencePoiId));
 
                         markersBuilder.AppendLine($"var icon{idx}=L.divIcon({{className:'poi-wrap',html:{iconHtmlJson},iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-12]}});");
                         markersBuilder.AppendLine($"L.marker([{lat}, {lon}], {{icon: icon{idx}}}).addTo(map).bindPopup({popup});");
@@ -293,6 +321,7 @@ public partial class MapPage : ContentPage
                         .Select(i => $"bounds.extend([{orderedStops[i].Latitude.ToString(CultureInfo.InvariantCulture)}, {orderedStops[i].Longitude.ToString(CultureInfo.InvariantCulture)}]);"));
 
                 var markerScript = markersBuilder.ToString();
+                var geofenceScript = await BuildGeofenceCircleScriptsAsync(orderedStops, currentLocation);
 
                 var html = $@"
 <!DOCTYPE html>
@@ -344,6 +373,9 @@ public partial class MapPage : ContentPage
                 
                 console.log('Adding markers: {orderedStops.Count} points');
                 {markerScript}
+
+                console.log('Adding geofence circles...');
+                {geofenceScript}
                 
                 console.log('Fitting bounds...');
                 if (map.fitBounds) {{
@@ -401,12 +433,277 @@ public partial class MapPage : ContentPage
         return "📍";
     }
 
-    private static string GetOsmIconHtml(Place place, bool isStart)
+    private static string GetOsmIconHtml(Place place, bool isStart, bool isActive)
     {
-        var emoji = isStart ? "🏁" : GetPoiEmoji(place);
-        var cssClass = isStart ? "poi-chip start" : "poi-chip";
+        var emoji = isStart ? "🏁" : isActive ? "🔊" : GetPoiEmoji(place);
+        var cssClass = isStart ? "poi-chip start" : isActive ? "poi-chip active" : "poi-chip";
         return $"<div class='{cssClass}'>{emoji}</div>";
     }
+
+    private async Task RefreshGeofenceVisualizationAsync()
+    {
+        if (_places.Count == 0)
+        {
+            return;
+        }
+
+        var currentLocation = await GetCurrentLocationSafeAsync();
+        if (!ShouldRefreshGeofenceVisualization(currentLocation))
+        {
+            return;
+        }
+
+        if (IsFallbackMode)
+        {
+            await LoadOsmFallbackAsync(currentLocation);
+            return;
+        }
+
+        await LoadPinsAndHeatAsync(currentLocation);
+    }
+
+    private void StartGeofenceVisualizationLoop()
+    {
+        if (_geofenceVizLoopStarted)
+        {
+            return;
+        }
+
+        _geofenceVizLoopStarted = true;
+        _geofenceVizCts = new CancellationTokenSource();
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                while (!_geofenceVizCts.IsCancellationRequested)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(30), _geofenceVizCts.Token);
+                    if (_geofenceVizCts.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                    await MainThread.InvokeOnMainThreadAsync(RefreshGeofenceVisualizationAsync);
+                }
+            }
+            catch
+            {
+                // ignore cancellation/errors when leaving page
+            }
+        });
+    }
+
+    private void StopGeofenceVisualizationLoop()
+    {
+        _geofenceVizLoopStarted = false;
+        _geofenceVizCts?.Cancel();
+        _geofenceVizCts?.Dispose();
+        _geofenceVizCts = null;
+    }
+
+    private bool ShouldRefreshGeofenceVisualization(Location? currentLocation)
+    {
+        if (_lastGeofenceVizLocation == null)
+        {
+            return true;
+        }
+
+        if (currentLocation == null)
+        {
+            return DateTimeOffset.UtcNow - _lastGeofenceVizRefreshAt >= GeofenceVizMaxStaleInterval;
+        }
+
+        var movedMeters = GeofenceHelper.CalculateHaversineDistance(
+            _lastGeofenceVizLocation.Latitude,
+            _lastGeofenceVizLocation.Longitude,
+            currentLocation.Latitude,
+            currentLocation.Longitude);
+
+        if (movedMeters >= GeofenceVizMinMoveMeters)
+        {
+            return true;
+        }
+
+        return DateTimeOffset.UtcNow - _lastGeofenceVizRefreshAt >= GeofenceVizMaxStaleInterval;
+    }
+
+    private async Task<Location?> GetCurrentLocationSafeAsync()
+    {
+        try
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                if (status != PermissionStatus.Granted)
+                {
+                    return null;
+                }
+            }
+
+            return await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(4)));
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private async Task AddGeofenceCirclesToNativeMapAsync(List<Place> orderedStops, Location? currentLocation)
+    {
+        foreach (var poi in orderedStops.Where(p => p.Latitude != 0 && p.Longitude != 0))
+        {
+            var center = new Location(poi.Latitude, poi.Longitude);
+            var distanceToUser = currentLocation == null
+                ? double.MaxValue
+                : GeofenceHelper.CalculateHaversineDistance(currentLocation.Latitude, currentLocation.Longitude, poi.Latitude, poi.Longitude);
+
+            var strokeColor = GetGeofenceStrokeColor(distanceToUser, poi.TriggerRadius, poi.Id == _activeGeofencePoiId);
+            var fillColor = strokeColor.WithAlpha(0.14f);
+
+            MyMap.MapElements.Add(new Circle
+            {
+                Center = center,
+                Radius = Distance.FromMeters(Math.Max(20, poi.TriggerRadius)),
+                StrokeColor = strokeColor,
+                FillColor = fillColor,
+                StrokeWidth = 3
+            });
+
+            if (poi.Id == _activeGeofencePoiId)
+            {
+                MyMap.MapElements.Add(new Circle
+                {
+                    Center = center,
+                    Radius = Distance.FromMeters(Math.Max(30, poi.TriggerRadius + 15)),
+                    StrokeColor = Color.FromArgb("#8B5CF6"),
+                    FillColor = Color.FromArgb("#8B5CF6").WithAlpha(0.10f),
+                    StrokeWidth = 2
+                });
+            }
+        }
+
+        if (currentLocation != null)
+        {
+            MyMap.MapElements.Add(new Circle
+            {
+                Center = currentLocation,
+                Radius = Distance.FromMeters(10),
+                StrokeColor = Color.FromArgb("#0EA5E9"),
+                FillColor = Color.FromArgb("#0EA5E9").WithAlpha(0.35f),
+                StrokeWidth = 2
+            });
+        }
+
+        _lastGeofenceVizLocation = currentLocation;
+        _lastGeofenceVizRefreshAt = DateTimeOffset.UtcNow;
+    }
+
+    private async Task<string> BuildGeofenceCircleScriptsAsync(List<Place> orderedStops, Location? currentLocation)
+    {
+        var sb = new StringBuilder();
+
+        foreach (var poi in orderedStops.Where(p => p.Latitude != 0 && p.Longitude != 0))
+        {
+            var distanceToUser = currentLocation == null
+                ? double.MaxValue
+                : GeofenceHelper.CalculateHaversineDistance(currentLocation.Latitude, currentLocation.Longitude, poi.Latitude, poi.Longitude);
+
+            var strokeColor = GetGeofenceStrokeColor(distanceToUser, poi.TriggerRadius, poi.Id == _activeGeofencePoiId);
+            var fillColor = strokeColor.WithAlpha(0.18f);
+
+            var lat = poi.Latitude.ToString(CultureInfo.InvariantCulture);
+            var lon = poi.Longitude.ToString(CultureInfo.InvariantCulture);
+            var radius = Math.Max(20, poi.TriggerRadius).ToString(CultureInfo.InvariantCulture);
+            var strokeHex = ColorToHex(strokeColor);
+            var fillHex = ColorToHex(fillColor);
+
+            sb.AppendLine($"L.circle([{lat}, {lon}], {{ radius: {radius}, color: '{strokeHex}', fillColor: '{fillHex}', fillOpacity: 0.18, weight: 2 }}).addTo(map);");
+
+            if (poi.Id == _activeGeofencePoiId)
+            {
+                var haloRadius = Math.Max(30, poi.TriggerRadius + 15).ToString(CultureInfo.InvariantCulture);
+                sb.AppendLine($"L.circle([{lat}, {lon}], {{ radius: {haloRadius}, color: '#8B5CF6', fillColor: '#8B5CF6', fillOpacity: 0.10, weight: 2 }}).addTo(map);");
+            }
+        }
+
+        if (currentLocation != null)
+        {
+            var lat = currentLocation.Latitude.ToString(CultureInfo.InvariantCulture);
+            var lon = currentLocation.Longitude.ToString(CultureInfo.InvariantCulture);
+            sb.AppendLine($"L.circle([{lat}, {lon}], {{ radius: 10, color: '#0EA5E9', fillColor: '#0EA5E9', fillOpacity: 0.35, weight: 2 }}).addTo(map);");
+        }
+
+        _lastGeofenceVizLocation = currentLocation;
+        _lastGeofenceVizRefreshAt = DateTimeOffset.UtcNow;
+
+        return sb.ToString();
+    }
+
+    private static Color GetGeofenceStrokeColor(double distanceToUser, int triggerRadius, bool isActive)
+    {
+        if (isActive)
+        {
+            return Color.FromArgb("#8B5CF6");
+        }
+
+        if (distanceToUser <= triggerRadius)
+        {
+            return Color.FromArgb("#DC2626");
+        }
+
+        if (distanceToUser <= triggerRadius + 50)
+        {
+            return Color.FromArgb("#F59E0B");
+        }
+
+        return Color.FromArgb("#16A34A");
+    }
+
+    private void SyncActiveGeofenceState()
+    {
+        if (_geofenceSessionState?.HasActivePoi != true)
+        {
+            _activeGeofencePoiId = -1;
+            _activeGeofenceDistanceMeters = 0;
+            OnPropertyChanged(nameof(IsActiveGeofenceVisible));
+            OnPropertyChanged(nameof(ActiveGeofenceLabelText));
+            return;
+        }
+
+        _activeGeofencePoiId = _geofenceSessionState.ActivePoiId;
+        _activeGeofenceDistanceMeters = _geofenceSessionState.DistanceMeters;
+        OnPropertyChanged(nameof(ActiveGeofenceLabelText));
+        OnPropertyChanged(nameof(IsActiveGeofenceVisible));
+        OnPropertyChanged(nameof(ActiveGeofenceLabelText));
+    }
+
+    private async void OnGeofenceStateChanged(object? sender, EventArgs e)
+    {
+        SyncActiveGeofenceState();
+
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+        {
+            if (_places.Count == 0)
+            {
+                return;
+            }
+
+            await RefreshGeofenceVisualizationAsync();
+        });
+    }
+
+    private static string ColorToHex(Color color)
+    {
+        var red = (int)(255 * color.Red);
+        var green = (int)(255 * color.Green);
+        var blue = (int)(255 * color.Blue);
+        return $"#{red:X2}{green:X2}{blue:X2}";
+    }
+
+    private static string FormatDistance(double meters)
+        => meters < 1000 ? $"{Math.Round(meters)} m" : $"{meters / 1000:0.0} km";
 
     private void AddColoredRouteSegmentsToNativeMapInstance(List<Location> path)
     {

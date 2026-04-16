@@ -1,7 +1,6 @@
 ﻿using SaigonAudioTour.AdminWeb.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SaigonAudioTour.AdminWeb.Models; // Đã sửa theo tên Project mới
 using System.Net.Http.Headers;
 
 namespace SaigonAudioTour.AdminWeb.Controllers

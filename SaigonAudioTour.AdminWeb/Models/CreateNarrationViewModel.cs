@@ -17,6 +17,6 @@ namespace SaigonAudioTour.AdminWeb.Models
         public string? VoiceType { get; set; }
 
         [Required(ErrorMessage = "Vui lòng chọn file MP3/WAV")]
-        public IFormFile AudioFile { get; set; }
+        public IFormFile? AudioFile { get; set; }
     }
 }

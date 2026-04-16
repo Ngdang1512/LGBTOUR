@@ -1,4 +1,5 @@
 using SaigonAudioTour.Mobile.Models;
+using SaigonAudioTour.Mobile.Services;
 using Microsoft.Maui.Media;
 
 namespace SaigonAudioTour.Mobile;
@@ -6,17 +7,22 @@ namespace SaigonAudioTour.Mobile;
 public partial class DetailPage : ContentPage
 {
     private const string NarratingPlaceKey = "NarratingPlaceId";
+    private readonly SubscriptionApiService _subscriptionApiService;
 
     public Place? SelectedPlace { get; set; }
     
     // Biến dùng để dừng âm thanh ngay lập tức
     private CancellationTokenSource _cts = new();
+    private bool _hasAutoPlayed;
 
     public DetailPage(Place? place = null)
     {
         InitializeComponent();
         SelectedPlace = place;
         BindingContext = this; 
+
+        _subscriptionApiService = IPlatformApplication.Current?.Services.GetService<SubscriptionApiService>()
+            ?? throw new InvalidOperationException("SubscriptionApiService chưa được đăng ký DI.");
 
         // Khởi tạo danh sách ngôn ngữ cho Picker
         LanguagePicker.ItemsSource = new List<string> { 
@@ -28,7 +34,7 @@ public partial class DetailPage : ContentPage
             "🇫🇷 Français"
         };
 
-        var savedLanguage = Preferences.Get("SelectedLanguage", "vi");
+        var savedLanguage = Preferences.Get(StorageKeys.NarrationLanguage, AppLanguageService.GetAppLanguage());
         LanguagePicker.SelectedIndex = savedLanguage switch
         {
             "en" => 1,
@@ -38,6 +44,32 @@ public partial class DetailPage : ContentPage
             "fr" => 5,
             _ => 0
         };
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (_hasAutoPlayed || SelectedPlace == null)
+        {
+            return;
+        }
+
+        var userId = Preferences.Get(StorageKeys.UserId, string.Empty);
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return;
+        }
+
+        var premiumStatus = await _subscriptionApiService.GetPremiumStatusAsync(userId);
+        if (premiumStatus?.IsPremium != true)
+        {
+            return;
+        }
+
+        _hasAutoPlayed = true;
+        await Task.Delay(250);
+        OnPlayClicked(this, EventArgs.Empty);
     }
 
     private async void OnPlayClicked(object sender, EventArgs e)
@@ -52,7 +84,7 @@ public partial class DetailPage : ContentPage
         string textToRead = SelectedPlace.TtsScript;
         var selectedLang = LanguagePicker.SelectedItem as string;
         var selectedCode = GetLanguageCode(selectedLang);
-        Preferences.Set("SelectedLanguage", selectedCode);
+        AppLanguageService.SetNarrationLanguage(selectedCode);
         Preferences.Set(NarratingPlaceKey, SelectedPlace.Id);
 
         // Demo translation theo ngôn ngữ đã chọn

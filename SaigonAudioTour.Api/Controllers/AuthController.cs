@@ -59,7 +59,8 @@ namespace SaigonAudioTour.Api.Controllers
                 fullName = profile.FullName,
                 email = profile.Email,
                 avatarUrl = string.Empty,
-                userId = profile.UserId
+                userId = profile.UserId,
+                subscriptionStatus = profile.SubscriptionStatus
             });
         }
     }

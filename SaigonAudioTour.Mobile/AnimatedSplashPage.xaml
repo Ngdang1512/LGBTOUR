@@ -33,13 +33,39 @@
 
             <!-- Brand Label -->
             <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
-                            <Label x:Name="BrandLabel" Text="SAT" FontSize="42" FontAttributes="Bold" 
-                       TextColor="White" HorizontalOptions="Center" Opacity="0"
-                       TranslationY="20"/>
-                       
-                            <Label x:Name="SubtitleLabel" Text="Saigon Audio Tour" FontSize="16" 
-                       TextColor="{StaticResource PrimaryLight}" HorizontalOptions="Center" Opacity="0"
-                       TranslationY="20" CharacterSpacing="1"/>
+                <Grid WidthRequest="320" HeightRequest="56" HorizontalOptions="Center">
+                    <Label x:Name="SatLabel"
+                           Text="SAT"
+                           FontSize="42"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Opacity="0"
+                           TranslationX="0"
+                           TranslationY="14"
+                           CharacterSpacing="8" />
+
+                    <Label x:Name="FullBrandLabel"
+                           Text="Saigon Audio Tour"
+                           FontSize="31"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Opacity="0"
+                           TranslationX="38"
+                           CharacterSpacing="0.8" />
+                </Grid>
+
+                <Label x:Name="SubtitleLabel"
+                       Text="City tour thuyết minh tự động"
+                       FontSize="15"
+                       TextColor="{StaticResource PrimaryLight}"
+                       HorizontalOptions="Center"
+                       Opacity="0"
+                       TranslationY="14"
+                       CharacterSpacing="0.8"/>
             </VerticalStackLayout>
 
             <!-- Slogan -->

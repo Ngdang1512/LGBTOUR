@@ -37,7 +37,12 @@
                         <label class="font-weight-bold">Cập nhật Hình Ảnh</label>
                         <div class="mb-2 text-center">
                             @{
-                                var imageUrl = string.IsNullOrEmpty(Model.Image) ? "/images/no-image.png" : $"http://localhost:5117{Model.Image}";
+                                var rawImage = Model.Image;
+                                var imageUrl = string.IsNullOrWhiteSpace(rawImage)
+                                    ? "/images/no-image.png"
+                                    : (rawImage.Trim().StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                                        ? rawImage.Trim()
+                                        : $"http://localhost:5117{(rawImage.Trim().StartsWith("/") ? rawImage.Trim() : "/" + rawImage.Trim())}");
                             }
                             <img id="imgPreview" src="@imageUrl"
                                  style="max-height: 150px; border-radius: 8px; border: 1px solid #ddd; object-fit: cover;"

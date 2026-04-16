@@ -39,6 +39,7 @@ public class PremiumStatus
     public string UserId { get; set; } = string.Empty;
     public bool IsPremium { get; set; }
     public string PlanId { get; set; } = "default";
+    public string Status { get; set; } = "free";
     public DateTime? PremiumUntil { get; set; }
 }
 

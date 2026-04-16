@@ -2,6 +2,7 @@
 using SaigonAudioTour.Api.DTOs.Narrations;
 using SaigonAudioTour.Api.Entities;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Linq;
@@ -93,6 +94,71 @@ namespace SaigonAudioTour.Api.Services
                 ContentText = narration.ContentText,
                 AudioUrl = narration.AudioUrl,
                 VoiceType = narration.VoiceType
+            };
+        }
+
+        public async Task<NarrationDto?> GetNarrationByPoiAndLanguageAsync(int poiId, string? languageCode)
+        {
+            var normalizedLang = string.IsNullOrWhiteSpace(languageCode)
+                ? "vi"
+                : languageCode.Trim().ToLowerInvariant();
+
+            var narration = await _context.Narrations
+                .AsNoTracking()
+                .Where(n => n.POI_Id == poiId)
+                .OrderBy(n => n.Id)
+                .FirstOrDefaultAsync(n => n.LanguageCode.ToLower() == normalizedLang);
+
+            narration ??= await _context.Narrations
+                .AsNoTracking()
+                .Where(n => n.POI_Id == poiId)
+                .OrderBy(n => n.Id)
+                .FirstOrDefaultAsync(n => n.LanguageCode.ToLower() == "vi");
+
+            narration ??= await _context.Narrations
+                .AsNoTracking()
+                .Where(n => n.POI_Id == poiId)
+                .OrderBy(n => n.Id)
+                .FirstOrDefaultAsync();
+
+            if (narration == null)
+            {
+                return null;
+            }
+
+            var audioUrl = narration.AudioUrl;
+            if (string.IsNullOrWhiteSpace(audioUrl))
+            {
+                var audio = await _context.Audios
+                    .AsNoTracking()
+                    .Where(a => a.POI_Id == poiId)
+                    .OrderBy(a => a.Id)
+                    .FirstOrDefaultAsync(a => a.LanguageCode.ToLower() == narration.LanguageCode.ToLower());
+
+                audio ??= await _context.Audios
+                    .AsNoTracking()
+                    .Where(a => a.POI_Id == poiId)
+                    .OrderBy(a => a.Id)
+                    .FirstOrDefaultAsync(a => a.LanguageCode.ToLower() == "vi");
+
+                audio ??= await _context.Audios
+                    .AsNoTracking()
+                    .Where(a => a.POI_Id == poiId)
+                    .OrderBy(a => a.Id)
+                    .FirstOrDefaultAsync();
+
+                audioUrl = audio?.AudioUrl;
+            }
+
+            return new NarrationDto
+            {
+                Id = narration.Id,
+                LanguageCode = narration.LanguageCode,
+                ContentText = narration.ContentText ?? string.Empty,
+                AudioUrl = audioUrl,
+                DurationSeconds = narration.DurationSeconds,
+                VoiceType = narration.VoiceType,
+                TranslatedName = narration.TranslatedName ?? string.Empty
             };
         }
     }

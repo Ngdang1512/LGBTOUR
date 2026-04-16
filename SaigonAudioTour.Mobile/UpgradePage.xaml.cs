@@ -6,8 +6,9 @@ namespace SaigonAudioTour.Mobile;
 
 public partial class UpgradePage : ContentPage
 {
-    private readonly TourApiService _apiService;
+    private readonly SubscriptionApiService _apiService;
     private readonly string _userId;
+    private bool _hasShownIntroModal;
 
     public ObservableCollection<PremiumPlan> Plans { get; set; } = new();
     public PremiumPlan? SelectedPlan { get; set; }
@@ -21,6 +22,8 @@ public partial class UpgradePage : ContentPage
         ? "🎉 Premium đang hoạt động. Bạn đã mở toàn bộ tính năng cao cấp."
         : "Chọn gói bên dưới để nâng cấp tài khoản.";
 
+    public bool ShowCancelSection => IsPremium;
+
     private bool _isPremium;
     public bool IsPremium
     {
@@ -30,6 +33,7 @@ public partial class UpgradePage : ContentPage
             _isPremium = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(ShowPurchaseSection));
+            OnPropertyChanged(nameof(ShowCancelSection));
             OnPropertyChanged(nameof(PremiumStatusBackground));
             OnPropertyChanged(nameof(PremiumStatusColor));
             OnPropertyChanged(nameof(PremiumHintText));
@@ -58,8 +62,9 @@ public partial class UpgradePage : ContentPage
     public UpgradePage()
     {
         InitializeComponent();
-        _apiService = IPlatformApplication.Current?.Services.GetService<TourApiService>() ?? new TourApiService();
-        _userId = Preferences.Get(TourApiService.UserIdKey, string.Empty);
+        _apiService = IPlatformApplication.Current?.Services.GetService<SubscriptionApiService>()
+            ?? throw new InvalidOperationException("SubscriptionApiService chưa được đăng ký DI.");
+        _userId = Preferences.Get(StorageKeys.UserId, string.Empty);
         BindingContext = this;
     }
 
@@ -67,6 +72,12 @@ public partial class UpgradePage : ContentPage
     {
         base.OnAppearing();
         await LoadDataAsync();
+
+        if (!IsPremium && !_hasShownIntroModal && Plans.Count > 0)
+        {
+            _hasShownIntroModal = true;
+            await ShowPremiumIntroModalAsync();
+        }
     }
 
     private async Task LoadDataAsync()
@@ -83,10 +94,18 @@ public partial class UpgradePage : ContentPage
         SelectedPlan = Plans.FirstOrDefault(p => p.Id == "premium") ?? Plans.FirstOrDefault();
 
         var status = await _apiService.GetPremiumStatusAsync(_userId);
-        IsPremium = status.IsPremium;
-        PremiumStatusText = BuildPremiumStatusText(status);
+        if (status == null)
+        {
+            IsPremium = false;
+            PremiumStatusText = "Trạng thái: Không thể lấy dữ liệu từ API";
+        }
+        else
+        {
+            IsPremium = status.IsPremium;
+            PremiumStatusText = BuildPremiumStatusText(status);
+        }
 
-        if (status.IsPremium)
+        if (status?.IsPremium == true)
         {
             CurrentOrder = null;
             IsOrderVisible = false;
@@ -100,6 +119,18 @@ public partial class UpgradePage : ContentPage
         OnPropertyChanged(nameof(PremiumStatusText));
     }
 
+    private async Task ShowPremiumIntroModalAsync()
+    {
+        var title = "✨ Premium";
+        var message = "Mở khóa audio tự động, giao diện không quảng cáo và quyền lợi ưu tiên. Bạn có thể xem gói ngay bây giờ.";
+
+        var result = await this.DisplayAlertAsync(title, message, "Xem gói", "Để sau");
+        if (result)
+        {
+            IsOrderVisible = true;
+        }
+    }
+
     private void OnPlanSelected(object? sender, SelectionChangedEventArgs e)
     {
         SelectedPlan = e.CurrentSelection.FirstOrDefault() as PremiumPlan;
@@ -108,6 +139,12 @@ public partial class UpgradePage : ContentPage
 
     private async void OnCreateOrderClicked(object sender, EventArgs e)
     {
+        if (IsPremium)
+        {
+            await DisplayAlertAsync("Premium", "Tài khoản của bạn đã là Premium rồi.", "OK");
+            return;
+        }
+
         var plan = SelectedPlan ?? Plans.FirstOrDefault();
         if (plan == null)
         {
@@ -142,8 +179,16 @@ public partial class UpgradePage : ContentPage
         }
 
         var status = await _apiService.GetPremiumStatusAsync(_userId);
-        IsPremium = status.IsPremium;
-        PremiumStatusText = BuildPremiumStatusText(status);
+        if (status == null)
+        {
+            IsPremium = false;
+            PremiumStatusText = "Trạng thái: Không thể lấy dữ liệu từ API";
+        }
+        else
+        {
+            IsPremium = status.IsPremium;
+            PremiumStatusText = BuildPremiumStatusText(status);
+        }
 
         IsOrderVisible = false;
         CurrentOrder = null;
@@ -159,7 +204,7 @@ public partial class UpgradePage : ContentPage
     {
         if (!status.IsPremium || !status.PremiumUntil.HasValue)
         {
-            return "Trạng thái: Free";
+            return $"Trạng thái: {GetStatusDisplayName(status.Status)}";
         }
 
         var untilLocal = status.PremiumUntil.Value.ToLocalTime();
@@ -179,5 +224,47 @@ public partial class UpgradePage : ContentPage
             "default" => "Mặc định",
             _ => planId
         };
+    }
+
+    private static string GetStatusDisplayName(string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status)) return "Free";
+
+        return status.ToLowerInvariant() switch
+        {
+            "premium" => "Premium",
+            "cancelled" => "Đã huỷ",
+            "free" => "Free",
+            _ => status
+        };
+    }
+
+    private async void OnCancelSubscriptionClicked(object sender, EventArgs e)
+    {
+        if (!IsPremium)
+        {
+            return;
+        }
+
+        var confirm = await DisplayAlertAsync("Huỷ gói", "Bạn muốn huỷ gói Premium hiện tại?", "Huỷ gói", "Giữ lại");
+        if (!confirm)
+        {
+            return;
+        }
+
+        var ok = await _apiService.CancelSubscriptionAsync(_userId);
+        if (!ok)
+        {
+            await DisplayAlertAsync("Lỗi", "Không huỷ được gói đăng ký.", "OK");
+            return;
+        }
+
+        await LoadDataAsync();
+        IsOrderVisible = false;
+        CurrentOrder = null;
+        OrderInfoText = string.Empty;
+        OnPropertyChanged(nameof(CurrentOrder));
+        OnPropertyChanged(nameof(OrderInfoText));
+        await DisplayAlertAsync("Thành công", "Đã huỷ gói Premium.", "OK");
     }
 }

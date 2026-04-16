@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using SaigonAudioTour.Mobile.Services.Geofencing;
 using SaigonAudioTour.Mobile.Services;
-using Microsoft.Maui.Controls.Hosting; // Đảm bảo import đúng thư mục chứa TourApiService
+using Microsoft.Maui.Devices;
 
 namespace SaigonAudioTour.Mobile;
 
@@ -18,8 +19,31 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // 1. Đăng ký Service gọi API (Tồn tại duy nhất trong suốt vòng đời app)
-        builder.Services.AddSingleton<TourApiService>();
+        // 1. Đăng ký HttpClient gọi API (Android emulator dùng 10.0.2.2)
+        builder.Services.AddSingleton(_ =>
+        {
+            var baseAddress = DeviceInfo.Platform == DevicePlatform.Android
+                ? "http://10.0.2.2:5117/"
+                : "http://localhost:5117/";
+
+            return new HttpClient
+            {
+                BaseAddress = new Uri(baseAddress),
+                Timeout = TimeSpan.FromSeconds(12)
+            };
+        });
+
+        // 2. Đăng ký các service gọi API thật theo từng module
+        builder.Services.AddSingleton<AuthApiService>();
+        builder.Services.AddSingleton<PoiApiService>();
+        builder.Services.AddSingleton<SubscriptionApiService>();
+        builder.Services.AddSingleton<NarrationApiService>();
+        builder.Services.AddSingleton<UserLogService>();
+
+        // 3. Đăng ký Geofencing & Narration Engine
+        builder.Services.AddSingleton<GeofenceSessionState>();
+        builder.Services.AddSingleton<GeofencingService>();
+        builder.Services.AddSingleton<NarrationEngine>();
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -7,6 +7,7 @@ public class Place
     public string Location { get; set; } = "";
     public string ImageUrl { get; set; } = "";
     public string Rating { get; set; } = "0";
+    public bool HasRating => !string.IsNullOrWhiteSpace(Rating);
     public string Category { get; set; } = "";
     
     // Các trường dữ liệu mới phục vụ định vị và Thuyết minh

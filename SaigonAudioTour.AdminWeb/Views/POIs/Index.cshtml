@@ -32,13 +32,26 @@
                 
                 @foreach (var item in Model)
                 {
+                    var imageUrl = string.Empty;
+                    var rawImage = item.Image;
+                    if (!string.IsNullOrWhiteSpace(rawImage))
+                    {
+                        var normalizedImage = rawImage.Trim();
+                        imageUrl = normalizedImage.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                            ? normalizedImage
+                            : $"http://localhost:5117{(normalizedImage.StartsWith("/") ? normalizedImage : "/" + normalizedImage)}";
+                    }
                     <tr>
                         <td class="align-middle text-center fw-bold">@item.Id</td>
                         <td class="align-middle text-center">
-                            @if (!string.IsNullOrEmpty(item.Image))
+                            @if (!string.IsNullOrWhiteSpace(imageUrl))
                             {
-                                // Sửa lại domain 7092 cho khớp với cổng API của ông để load ảnh
-                                <img src="https://localhost:7092@(item.Image)" alt="IMG" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;" />
+                                <img src="@imageUrl"
+                                     alt="IMG"
+                                     class="img-thumbnail"
+                                     style="width: 60px; height: 60px; object-fit: cover;"
+                                     loading="lazy"
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/60x60?text=No+Image';" />
                             }
                             else
                             {

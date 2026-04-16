@@ -5,6 +5,7 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+        Services.AppLanguageService.ApplyCurrentAppLanguage();
     }
 
     protected override Window CreateWindow(IActivationState? activationState)

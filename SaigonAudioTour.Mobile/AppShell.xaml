@@ -9,18 +9,21 @@
 
     <TabBar>
         <ShellContent
+            x:Name="MainShellContent"
             Route="main"
             Title="Khám phá"
             Icon="icon_home.png"
             ContentTemplate="{DataTemplate local:MainPage}" />
 
         <ShellContent
+            x:Name="MapShellContent"
             Route="map"
             Title="Bản đồ"
             Icon="icon_map.png"
             ContentTemplate="{DataTemplate local:MapPage}" />
 
         <ShellContent
+            x:Name="SettingsShellContent"
             Route="settings"
             Title="Cài đặt"
             Icon="icon_profile.png"

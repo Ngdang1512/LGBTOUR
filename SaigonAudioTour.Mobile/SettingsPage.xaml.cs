@@ -5,8 +5,8 @@ namespace SaigonAudioTour.Mobile;
 
 public partial class SettingsPage : ContentPage
 {
-    private readonly TourApiService _apiService;
-    private const string SelectedLanguageKey = "SelectedLanguage";
+    private readonly AuthApiService _authApiService;
+    private readonly SubscriptionApiService _subscriptionApiService;
     private const string IsLoggedInKey = "IsLoggedIn";
     private const string UserEmailKey = "UserEmail";
     private const string UserFullNameKey = "UserFullName";
@@ -28,6 +28,7 @@ public partial class SettingsPage : ContentPage
             _isLoggedIn = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(ShowLoginActions));
+            OnPropertyChanged(nameof(CanCancelPremium));
         }
     }
 
@@ -48,8 +49,11 @@ public partial class SettingsPage : ContentPage
             OnPropertyChanged(nameof(PremiumBenefitColor));
             OnPropertyChanged(nameof(PremiumButtonBackgroundColor));
             OnPropertyChanged(nameof(PremiumButtonTextColor));
+            OnPropertyChanged(nameof(CanCancelPremium));
         }
     }
+
+    public bool CanCancelPremium => IsLoggedIn && IsPremium;
 
     public string PremiumCardBackgroundColor => IsPremium ? "#ECFDF5" : "#FFF7ED";
     public string PremiumCardStrokeColor => IsPremium ? "#86EFAC" : "#FDBA74";
@@ -171,6 +175,13 @@ public partial class SettingsPage : ContentPage
         set { _premiumButtonText = value; OnPropertyChanged(); }
     }
 
+    private string _cancelPremiumButtonText = "Huỷ gói Premium";
+    public string CancelPremiumButtonText
+    {
+        get => _cancelPremiumButtonText;
+        set { _cancelPremiumButtonText = value; OnPropertyChanged(); }
+    }
+
     private string _premiumBenefitText = "";
     public string PremiumBenefitText
     {
@@ -181,7 +192,10 @@ public partial class SettingsPage : ContentPage
     public SettingsPage()
     {
         InitializeComponent();
-        _apiService = IPlatformApplication.Current?.Services.GetService<TourApiService>() ?? new TourApiService();
+        _authApiService = IPlatformApplication.Current?.Services.GetService<AuthApiService>()
+            ?? throw new InvalidOperationException("AuthApiService chưa được đăng ký DI.");
+        _subscriptionApiService = IPlatformApplication.Current?.Services.GetService<SubscriptionApiService>()
+            ?? throw new InvalidOperationException("SubscriptionApiService chưa được đăng ký DI.");
         BindingContext = this;
     }
 
@@ -192,11 +206,22 @@ public partial class SettingsPage : ContentPage
         await RefreshSettingsStateAsync();
     }
 
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        if (Navigation.NavigationStack.Count > 1)
+        {
+            await Navigation.PopAsync();
+            return;
+        }
+
+        await Shell.Current.GoToAsync("//main");
+    }
+
     private async Task RefreshSettingsStateAsync()
     {
         try
         {
-            var languageCode = Preferences.Get(SelectedLanguageKey, "vi");
+            var languageCode = AppLanguageService.GetAppLanguage();
             ApplyLocalizedTexts(languageCode);
 
             IsLoggedIn = Preferences.Get(IsLoggedInKey, false);
@@ -207,7 +232,7 @@ public partial class SettingsPage : ContentPage
                 var savedEmail = Preferences.Get(UserEmailKey, "");
                 var savedName = Preferences.Get(UserFullNameKey, "");
 
-                var user = await _apiService.GetUserProfileAsync(savedEmail);
+                var user = await _authApiService.GetUserProfileAsync(savedEmail);
                 if (user != null)
                 {
                     CurrentUser = user;
@@ -233,21 +258,13 @@ public partial class SettingsPage : ContentPage
             }
 
             // Language
-            CurrentLanguageDisplay = languageCode switch
-            {
-                "en" => "English",
-                "zh" => "中文",
-                "ja" => "日本語",
-                "ko" => "한국어",
-                "fr" => "Français",
-                _ => "Tiếng Việt"
-            };
+            CurrentLanguageDisplay = AppLanguageService.ToDisplayName(languageCode);
 
             // Premium status (không cần reload app, OnAppearing tự refresh)
-            var userId = Preferences.Get(TourApiService.UserIdKey, string.Empty);
+            var userId = Preferences.Get(StorageKeys.UserId, string.Empty);
             var status = string.IsNullOrWhiteSpace(userId)
                 ? new PremiumStatus { IsPremium = false, PlanId = "default" }
-                : await _apiService.GetPremiumStatusAsync(userId);
+                : await _subscriptionApiService.GetPremiumStatusAsync(userId) ?? new PremiumStatus { IsPremium = false, PlanId = "default" };
             if (status.IsPremium)
             {
                 IsPremium = true;
@@ -279,7 +296,7 @@ public partial class SettingsPage : ContentPage
         }
         catch
         {
-            var languageCode = Preferences.Get(SelectedLanguageKey, "vi");
+            var languageCode = AppLanguageService.GetAppLanguage();
             IsLoggedIn = Preferences.Get(IsLoggedInKey, false);
             CurrentUser = new UserProfile
             {
@@ -288,7 +305,7 @@ public partial class SettingsPage : ContentPage
                 AvatarUrl = string.Empty
             };
             IsPremium = false;
-            CurrentLanguageDisplay = languageCode == "vi" ? "Tiếng Việt" : "English";
+            CurrentLanguageDisplay = AppLanguageService.ToDisplayName(languageCode);
             PremiumTitleText = languageCode == "vi" ? "Nâng cấp Premium" : "Upgrade to Premium";
             PremiumDescriptionText = languageCode == "vi"
                 ? "Mở toàn bộ thuyết minh audio, heatmap nâng cao và không quảng cáo."
@@ -300,17 +317,16 @@ public partial class SettingsPage : ContentPage
 
     private async void OnUpgradeClicked(object sender, EventArgs e)
     {
-        var languageCode = Preferences.Get(SelectedLanguageKey, "vi");
+        var languageCode = AppLanguageService.GetAppLanguage();
 
         if (IsPremium)
         {
             await DisplayAlertAsync(
                 "Premium",
                 languageCode == "vi"
-                    ? "Bạn đang dùng Premium. Có thể mua thêm tại trang quản lý gói nếu muốn gia hạn."
-                    : "You are already on Premium. You can still purchase another plan to extend it.",
+                    ? "Bạn đang dùng Premium. Bạn có thể huỷ gói ngay trong trang cài đặt nếu cần."
+                    : "You are already on Premium. You can cancel the plan directly from Settings if needed.",
                 "OK");
-            await Navigation.PushAsync(new UpgradePage());
             return;
         }
 
@@ -319,7 +335,7 @@ public partial class SettingsPage : ContentPage
 
     private async void OnLanguageTapped(object sender, TappedEventArgs e)
     {
-        var currentCode = Preferences.Get(SelectedLanguageKey, "vi");
+        var currentCode = AppLanguageService.GetAppLanguage();
         var isVi = currentCode == "vi";
 
         var selected = await DisplayActionSheetAsync(
@@ -353,7 +369,7 @@ public partial class SettingsPage : ContentPage
             return;
         }
 
-        Preferences.Set(SelectedLanguageKey, languageCode);
+        AppLanguageService.SetAppLanguage(languageCode);
         await RefreshSettingsStateAsync();
     }
 
@@ -372,14 +388,63 @@ public partial class SettingsPage : ContentPage
         Preferences.Set(IsLoggedInKey, false);
         Preferences.Remove(UserEmailKey);
         Preferences.Remove(UserFullNameKey);
-        Preferences.Remove(TourApiService.UserIdKey);
-        Preferences.Remove(TourApiService.AuthTokenKey);
+        Preferences.Remove(StorageKeys.UserId);
+        Preferences.Remove(StorageKeys.AuthToken);
 
         await RefreshSettingsStateAsync();
-        var languageCode = Preferences.Get(SelectedLanguageKey, "vi");
+        var languageCode = AppLanguageService.GetAppLanguage();
         await DisplayAlertAsync(
             languageCode == "vi" ? "Thông báo" : "Notice",
             languageCode == "vi" ? "Bạn đã đăng xuất." : "You have signed out.",
+            "OK");
+    }
+
+    private async void OnCancelPremiumClicked(object sender, EventArgs e)
+    {
+        var languageCode = AppLanguageService.GetAppLanguage();
+
+        if (!CanCancelPremium)
+        {
+            return;
+        }
+
+        var confirm = await DisplayAlertAsync(
+            languageCode == "vi" ? "Huỷ gói Premium" : "Cancel Premium",
+            languageCode == "vi"
+                ? "Bạn chắc chắn muốn huỷ gói Premium hiện tại?"
+                : "Are you sure you want to cancel your current Premium plan?",
+            languageCode == "vi" ? "Huỷ gói" : "Cancel plan",
+            languageCode == "vi" ? "Giữ lại" : "Keep plan");
+
+        if (!confirm)
+        {
+            return;
+        }
+
+        var userId = Preferences.Get(StorageKeys.UserId, string.Empty);
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            await DisplayAlertAsync(
+                languageCode == "vi" ? "Lỗi" : "Error",
+                languageCode == "vi" ? "Không tìm thấy tài khoản đăng nhập." : "No signed-in account found.",
+                "OK");
+            return;
+        }
+
+        var ok = await _subscriptionApiService.CancelSubscriptionAsync(userId);
+        if (!ok)
+        {
+            await DisplayAlertAsync(
+                languageCode == "vi" ? "Lỗi" : "Error",
+                languageCode == "vi" ? "Không thể huỷ gói, vui lòng thử lại." : "Unable to cancel the plan. Please try again.",
+                "OK");
+            return;
+        }
+
+        await RefreshSettingsStateAsync();
+        await DisplayAlertAsync(
+            languageCode == "vi" ? "Thành công" : "Success",
+            languageCode == "vi" ? "Đã huỷ gói Premium." : "Premium plan has been cancelled.",
             "OK");
     }
 
@@ -401,5 +466,6 @@ public partial class SettingsPage : ContentPage
         SupportSectionText = isVi ? "HỖ TRỢ" : "SUPPORT";
         HelpCenterLabelText = isVi ? "Trung tâm trợ giúp" : "Help Center";
         LogoutButtonText = isVi ? "Đăng xuất" : "Sign out";
+        CancelPremiumButtonText = isVi ? "Huỷ gói Premium" : "Cancel Premium";
     }
 }

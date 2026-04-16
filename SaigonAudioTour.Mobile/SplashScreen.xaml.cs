@@ -79,18 +79,29 @@ public partial class SplashScreen : ContentPage, INotifyPropertyChanged
             return;
         }
 
-        // Save selected language to preferences
-        Preferences.Set("SelectedLanguage", SelectedLanguage.Code);
+        // Save selected app language to preferences
+        Services.AppLanguageService.SetAppLanguage(SelectedLanguage.Code);
+
+        if (string.IsNullOrWhiteSpace(Preferences.Get(Services.StorageKeys.NarrationLanguage, string.Empty)))
+        {
+            Services.AppLanguageService.SetNarrationLanguage(SelectedLanguage.Code);
+        }
 
         // Chuyển về MainPage theo root NavigationPage
-        App.SetRootPage(new NavigationPage(new MainPage()));
+        App.SetRootPage(new AppShell());
     }
 
     private async void OnSkip()
     {
-        // Use default Vietnamese
-        Preferences.Set("SelectedLanguage", "vi");
-        App.SetRootPage(new NavigationPage(new MainPage()));
+        // Use default Vietnamese for the app language
+        Services.AppLanguageService.SetAppLanguage("vi");
+
+        if (string.IsNullOrWhiteSpace(Preferences.Get(Services.StorageKeys.NarrationLanguage, string.Empty)))
+        {
+            Services.AppLanguageService.SetNarrationLanguage("vi");
+        }
+
+        App.SetRootPage(new AppShell());
     }
 
     protected override async void OnAppearing()

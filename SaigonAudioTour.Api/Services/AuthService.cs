@@ -43,7 +43,8 @@ namespace SaigonAudioTour.Api.Services
                 Token = token,
                 UserId = user.Id,
                 Email = user.Email,
-                FullName = string.IsNullOrWhiteSpace(user.FullName) ? user.Email : user.FullName
+                FullName = string.IsNullOrWhiteSpace(user.FullName) ? user.Email : user.FullName,
+                SubscriptionStatus = user.SubscriptionStatus
             };
         }
 
@@ -86,7 +87,8 @@ namespace SaigonAudioTour.Api.Services
             {
                 Email = email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                FullName = dto.FullName.Trim()
+                FullName = dto.FullName.Trim(),
+                SubscriptionStatus = "free"
             };
 
             _context.Users.Add(user);
@@ -99,7 +101,8 @@ namespace SaigonAudioTour.Api.Services
                 Token = token,
                 UserId = user.Id,
                 Email = user.Email,
-                FullName = string.IsNullOrWhiteSpace(user.FullName) ? user.Email : user.FullName
+                FullName = string.IsNullOrWhiteSpace(user.FullName) ? user.Email : user.FullName,
+                SubscriptionStatus = user.SubscriptionStatus
             };
         }
 
@@ -117,7 +120,8 @@ namespace SaigonAudioTour.Api.Services
                 Token = string.Empty,
                 UserId = user.Id,
                 Email = user.Email,
-                FullName = string.IsNullOrWhiteSpace(user.FullName) ? user.Email : user.FullName
+                FullName = string.IsNullOrWhiteSpace(user.FullName) ? user.Email : user.FullName,
+                SubscriptionStatus = user.SubscriptionStatus
             };
         }
 

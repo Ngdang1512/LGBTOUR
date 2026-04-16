@@ -20,5 +20,9 @@ namespace SaigonAudioTour.Api.Entities
 
         [MaxLength(255)]
         public string? AvatarUrl { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string SubscriptionStatus { get; set; } = "free";
     }
 }

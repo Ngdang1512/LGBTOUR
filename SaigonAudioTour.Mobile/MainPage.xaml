@@ -8,15 +8,15 @@
              BackgroundColor="{StaticResource BgColor}"
              Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="20, 50, 20, 10" RowSpacing="20">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="20, 50, 20, 10" RowSpacing="20">
             
             <!-- Header with Avatar -->
             <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
                 <VerticalStackLayout VerticalOptions="Center" Spacing="2">
-                    <Label Text="Chào mừng bạn! 👋" 
+                    <Label Text="{Binding WelcomeText}" 
                            TextColor="{StaticResource TextSecondary}" FontSize="14" 
                               CharacterSpacing="0.5" />
-                          <Label Text="Tuyến bus 2 tầng Quận 1" 
+                          <Label Text="{Binding RouteTitleText}" 
                            TextColor="{StaticResource TextColor}" FontSize="26" 
                            FontAttributes="Bold" />
                 </VerticalStackLayout>
@@ -42,11 +42,44 @@
                 </Grid>
             </Border>
 
+            <!-- Geofence Active Banner -->
+            <Border Grid.Row="2"
+                    IsVisible="{Binding IsGeofenceBannerVisible}"
+                    BackgroundColor="{Binding GeofenceBannerBackground}"
+                    Stroke="{Binding GeofenceBannerStroke}"
+                    StrokeThickness="1"
+                    Padding="14">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="14" />
+                </Border.StrokeShape>
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                    <Label Text="🔔" FontSize="22" VerticalOptions="Center" />
+                    <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="{Binding ActivePoiBannerTitle}" FontSize="15" FontAttributes="Bold" TextColor="{Binding GeofenceBannerTitleColor}" />
+                        <Label Text="{Binding ActivePoiSubtitle}" FontSize="11" TextColor="#4F46E5" LineBreakMode="TailTruncation" />
+                        <Label Text="{Binding ActivePoiDistanceText}" FontSize="11" TextColor="#4338CA" />
+                    </VerticalStackLayout>
+                    <HorizontalStackLayout Grid.Column="2" Spacing="8" VerticalOptions="Center">
+                        <Button Text="Chi tiết"
+                                Clicked="OnOpenActivePoiDetailClicked"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White"
+                                CornerRadius="10"
+                                Padding="12,8" />
+                        <Button Text="✕"
+                                Clicked="OnDismissGeofenceBannerClicked"
+                                BackgroundColor="Transparent"
+                                TextColor="#4338CA"
+                                Padding="8,4" />
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
             <!-- Recommendations -->
-                     <Label Grid.Row="2" Text="🚌 Tuyến xe buýt 2 tầng" FontSize="16" FontAttributes="Bold" 
+                                         <Label Grid.Row="3" Text="{Binding RouteSectionTitleText}" FontSize="16" FontAttributes="Bold" 
                    TextColor="{StaticResource TextColor}" />
 
-            <CollectionView Grid.Row="3"
+            <CollectionView Grid.Row="4"
                             ItemsSource="{Binding DisplayPlaces}"
                             SelectionMode="None"
                             ItemSizingStrategy="MeasureFirstItem"
@@ -72,21 +105,14 @@
                                 <!-- Image -->
                                 <Grid Grid.Row="0">
                                     <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
-                                    <BoxView Opacity="0.65" VerticalOptions="End" HeightRequest="70">
-                                        <BoxView.Background>
-                                            <LinearGradientBrush EndPoint="0,1">
-                                                <GradientStop Color="#00131F" Offset="0.0" />
-                                                <GradientStop Color="#AA0F172A" Offset="1.0" />
-                                            </LinearGradientBrush>
-                                        </BoxView.Background>
-                                    </BoxView>
                                 </Grid>
                                 
                                 <!-- Badge (Rating) -->
                                 <Border Grid.Row="0" Margin="8" Padding="8, 4" 
                                        BackgroundColor="{StaticResource PrimaryLight}"
                                        Stroke="Transparent" HorizontalOptions="End"
-                                       VerticalOptions="Start">
+                                        VerticalOptions="Start"
+                                        IsVisible="{Binding HasRating}">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
                                     <Label Text="{Binding Rating, StringFormat='⭐ {0}'}" FontSize="11" 
                                            TextColor="{StaticResource PrimaryDark}" FontAttributes="Bold" />

@@ -16,6 +16,7 @@ namespace SaigonAudioTour.AdminWeb.Models
 
         public int Radius { get; set; }
         public string? Image { get; set; }
+        public string? ImageUrl { get; set; }
         public int Priority { get; set; }
         public bool IsStopStation { get; set; }
         public int NarrationCount { get; set; } // Số lượng bài thuyết minh đang có

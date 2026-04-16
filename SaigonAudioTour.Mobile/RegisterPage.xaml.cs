@@ -3,16 +3,13 @@ namespace SaigonAudioTour.Mobile;
 public partial class RegisterPage : ContentPage
 {
     private const string IsLoggedInKey = "IsLoggedIn";
-    private const string UserEmailKey = "UserEmail";
-    private const string UserFullNameKey = "UserFullName";
-    private const string UserIdKey = "UserId";
-    private const string AuthTokenKey = "AuthToken";
-    private readonly Services.TourApiService _apiService;
+    private readonly Services.AuthApiService _apiService;
 
     public RegisterPage()
     {
         InitializeComponent();
-        _apiService = IPlatformApplication.Current?.Services.GetService<Services.TourApiService>() ?? new Services.TourApiService();
+        _apiService = IPlatformApplication.Current?.Services.GetService<Services.AuthApiService>()
+            ?? throw new InvalidOperationException("AuthApiService chưa được đăng ký DI.");
     }
 
     // Hàm khi user bấm nút Đăng ký
@@ -43,10 +40,10 @@ public partial class RegisterPage : ContentPage
         }
 
         Preferences.Set(IsLoggedInKey, true);
-        Preferences.Set(UserEmailKey, created.Email);
-        Preferences.Set(UserFullNameKey, created.FullName);
-        Preferences.Set(UserIdKey, created.UserId.ToString());
-        Preferences.Set(AuthTokenKey, created.Token);
+        Preferences.Set(Services.StorageKeys.UserEmail, created.Email);
+        Preferences.Set(Services.StorageKeys.UserFullName, created.FullName);
+        Preferences.Set(Services.StorageKeys.UserId, created.UserId.ToString());
+        Preferences.Set(Services.StorageKeys.AuthToken, created.Token);
 
         await DisplayAlertAsync("Thông báo", "Tạo tài khoản thành công!", "OK");
         App.SetRootPage(new AppShell());

@@ -195,11 +195,6 @@ namespace SaigonAudioTour.Api.Services
 
         private static string ResolveImageUrl(POI poi)
         {
-            if (PoiContentCatalog.TryGetValue(poi.Name, out var content))
-            {
-                return content.ImageUrl;
-            }
-
             if (!string.IsNullOrWhiteSpace(poi.Image))
             {
                 return poi.Image.StartsWith("http", StringComparison.OrdinalIgnoreCase)

@@ -265,7 +265,8 @@ static void MigrateLegacyUsers(ApplicationDbContext context)
             Email = legacyUser.Email,
             PasswordHash = legacyUser.PasswordHash,
             FullName = legacyUser.FullName,
-            AvatarUrl = null
+            AvatarUrl = null,
+            SubscriptionStatus = "free"
         });
 
         existingEmails.Add(legacyUser.Email);

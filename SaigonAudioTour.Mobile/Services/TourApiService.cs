@@ -11,15 +11,22 @@ public class TourApiService
     public const string UserFullNameKey = "UserFullName";
     public const string AuthTokenKey = "AuthToken";
 
-    private static readonly HttpClient _httpClient = new()
-    {
-        BaseAddress = DeviceInfo.Platform == DevicePlatform.Android
-            ? new Uri("http://10.0.2.2:5117/")
-            : new Uri("http://localhost:5117/")
-    };
+    private readonly HttpClient _httpClient;
 
     public TourApiService()
+        : this(new HttpClient
+        {
+            BaseAddress = new Uri(DeviceInfo.Platform == DevicePlatform.Android
+                ? "http://10.0.2.2:5117/"
+                : "http://localhost:5117/"),
+            Timeout = TimeSpan.FromSeconds(12)
+        })
     {
+    }
+
+    public TourApiService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
     }
 
     public async Task<AuthResult?> LoginAsync(string email, string password)
@@ -61,7 +68,7 @@ public class TourApiService
         }
     }
 
-    // 1. Dữ liệu giả lập cho bản đồ: tuyến xe buýt 2 tầng Quận 1
+    // 1. Lấy dữ liệu tuyến từ API thật
     public async Task<List<Place>> GetRoutePlacesAsync()
     {
         try
@@ -78,13 +85,13 @@ public class TourApiService
         }
     }
 
-    // 2. Dữ liệu danh sách Trang chủ: đồng bộ tuyến xe buýt 2 tầng Quận 1
+    // 2. Danh sách Trang chủ lấy từ API
     public async Task<List<Place>> GetAllPlacesAsync()
     {
         return await GetRoutePlacesAsync();
     }
 
-    // 3. Dữ liệu giả lập cho Trang cá nhân
+    // 3. Hồ sơ người dùng từ API
     public async Task<UserProfile?> GetUserProfileAsync(string email)
     {
         try
@@ -104,7 +111,7 @@ public class TourApiService
         }
     }
 
-    // 4. Dữ liệu cho đồ án: tuyến xe buýt 2 tầng Quận 1
+    // 4. Dữ liệu map/tour từ API
     public async Task<List<Place>> GetProjectPlacesAsync()
     {
         return await GetRoutePlacesAsync();
@@ -120,11 +127,7 @@ public class TourApiService
         }
         catch
         {
-            return new List<PremiumPlan>
-            {
-                new() { Id = "default", Name = "Gói mặc định", Price = 0, Currency = "VND", DurationDays = 0, Features = "Truy cập cơ bản" },
-                new() { Id = "premium", Name = "Gói Premium", Price = 99000, Currency = "VND", DurationDays = 30, Features = "Mở toàn bộ audio + không quảng cáo + ưu tiên trải nghiệm" }
-            };
+            return new List<PremiumPlan>();
         }
     }
 
@@ -167,20 +170,50 @@ public class TourApiService
         }
     }
 
-    public async Task<PremiumStatus> GetPremiumStatusAsync(string userId)
+    public async Task<PremiumStatus?> GetPremiumStatusAsync(string userId)
     {
         try
         {
-            var status = await _httpClient.GetFromJsonAsync<PremiumStatus>($"api/subscription/user/{userId}/status");
-            return status ?? new PremiumStatus { UserId = userId, IsPremium = false, PlanId = "default" };
+            return await _httpClient.GetFromJsonAsync<PremiumStatus>($"api/subscription/user/{userId}/status");
         }
         catch
         {
-            return new PremiumStatus { UserId = userId, IsPremium = false, PlanId = "default" };
+            return null;
         }
     }
 
-    private static Place MapPlace(PoiApiDto p)
+    public async Task<NarrationContent?> GetNarrationByPoiAsync(int poiId, string languageCode)
+    {
+        try
+        {
+            var lang = string.IsNullOrWhiteSpace(languageCode) ? "vi" : languageCode.Trim().ToLowerInvariant();
+            var dto = await _httpClient.GetFromJsonAsync<NarrationApiDto>($"api/narrations/{poiId}?lang={lang}");
+            if (dto == null)
+            {
+                return null;
+            }
+
+            var audioUrl = dto.AudioUrl ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(audioUrl) && audioUrl.StartsWith("/"))
+            {
+                audioUrl = $"{_httpClient.BaseAddress?.ToString().TrimEnd('/')}{audioUrl}";
+            }
+
+            return new NarrationContent
+            {
+                PoiId = poiId,
+                LanguageCode = string.IsNullOrWhiteSpace(dto.LanguageCode) ? lang : dto.LanguageCode,
+                ContentText = dto.ContentText ?? string.Empty,
+                AudioUrl = audioUrl
+            };
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private Place MapPlace(PoiApiDto p)
     {
         var imageUrl = p.ImageUrl ?? p.Image ?? string.Empty;
         if (!string.IsNullOrWhiteSpace(imageUrl) && imageUrl.StartsWith("/"))
@@ -198,7 +231,7 @@ public class TourApiService
             Latitude = p.Lat,
             Longitude = p.Lng,
             ImageUrl = imageUrl,
-            Rating = "4.7",
+            Rating = string.Empty,
             Category = p.IsStopStation ? "Trạm dừng" : "Điểm tham quan",
             TriggerRadius = p.Radius <= 0 ? 50 : p.Radius,
             Priority = p.Priority,
@@ -225,11 +258,26 @@ public class TourApiService
         public bool IsStopStation { get; set; }
     }
 
+    private sealed class NarrationApiDto
+    {
+        public string? LanguageCode { get; set; }
+        public string? ContentText { get; set; }
+        public string? AudioUrl { get; set; }
+    }
+
     public sealed class AuthResult
     {
         public string Token { get; set; } = string.Empty;
         public int UserId { get; set; }
         public string Email { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
+    }
+
+    public sealed class NarrationContent
+    {
+        public int PoiId { get; set; }
+        public string LanguageCode { get; set; } = "vi";
+        public string ContentText { get; set; } = string.Empty;
+        public string AudioUrl { get; set; } = string.Empty;
     }
 }
