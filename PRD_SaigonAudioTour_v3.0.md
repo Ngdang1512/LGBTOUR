@@ -2,8 +2,13 @@
 
 **Version:** 3.0  
 **Date:** 2026-04-16  
-**Status:** Proposed (refined from v2.0 + codebase audit)  
+**Status:** Phase A-C Delivery In Progress (Phases A & B Complete)  
 **Owner:** Product / Engineering
+
+**Delivery Timeline:**
+- ✅ **Phase A (Apr 15):** Heatmap Analytics Dashboard
+- ✅ **Phase B (Apr 16):** VNPay Payment Gateway (Production)
+- ✅ **Phase C (Apr 16):** RBAC & 2FA Infrastructure
 
 ---
 
@@ -58,10 +63,19 @@ Mục tiêu chính:
 - Đa ngôn ngữ UI/narration (vi, en, zh, ja, ko, fr).
 
 ### 4.2 Out-of-Scope (tạm thời)
-- Cổng thanh toán production (VNPay/MoMo/Stripe chính thức).
-- 2FA và quản trị RBAC nhiều cấp chi tiết.
+- Authorization middleware (endpoint-level enforcement) - core done.
+- 2FA admin UI (verification flow in web portal).
 - Offline full sync + conflict resolution hoàn chỉnh.
-- Heatmap analytics production-grade trên admin dashboard.
+- MoMo/Stripe gateway adapters (VNPay implemented).
+
+### 4.3 Recently Completed (Phase B-C)
+- ✅ Production payment gateway (VNPay) with HMAC SHA512 signatures.
+- ✅ Webhook IPN handling for payment confirmation.
+- ✅ Idempotency protection (duplicate payment prevention).
+- ✅ RBAC (Role-Based Access Control) with 3 system roles.
+- ✅ 2FA TOTP implementation with QR code generation.
+- ✅ Permission-based authorization service.
+- ✅ Role/Permission seeding on startup.
 
 ---
 
@@ -75,8 +89,10 @@ Mục tiêu chính:
 | FR-04 | Narration Management | P0 | Admin upload audio + content theo POI/language |
 | FR-05 | Geofencing Auto-Play | P0 | App kiểm tra vị trí định kỳ; vào vùng POI thì trigger narration; chống phát lặp trong phiên |
 | FR-06 | Map Experience | P1 | Hiển thị POI/tuyến trên bản đồ; fallback OSM khi thiếu provider key |
-| FR-07 | Subscription Premium | P1 | Lấy plans; tạo order mock; mark-paid; hủy gói; đồng bộ trạng thái user |
-| FR-08 | User Analytics (basic) | P1 | Ghi listen event; truy vấn top POI được nghe |
+| FR-07 | Subscription Premium | P1 | Lấy plans; tạo order production gateway; webhook validation; hủy gói; đồng bộ trạng thái user |
+| FR-08 | User Analytics (basic) | P1 | Ghi listen event; truy vấn top POI được nghe; heatmap dashboard |
+| FR-11 | RBAC Admin Control | P2 | Multiple roles per admin; permission-based access; audit trail |
+| FR-12 | 2FA Authentication | P2 | TOTP setup with QR code; verification during login; compatible with authenticator apps |
 | FR-09 | Localization | P1 | Đổi app language và narration language theo cài đặt |
 | FR-10 | Settings & Account | P1 | Hiển thị profile, trạng thái premium, logout/login flow |
 
