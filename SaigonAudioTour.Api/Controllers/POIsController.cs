@@ -90,9 +90,9 @@ namespace SaigonAudioTour.Api.Controllers
             return Ok(new { message = "Đã upload và cập nhật hình ảnh thành công!" });
         }
 
-        // --- SEED DEMO DATA (Development Only) ---
+        // --- SEED DEMO DATA (Admin Only) ---
         [HttpPost("seed-demo")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SeedDemoData()
         {
             try

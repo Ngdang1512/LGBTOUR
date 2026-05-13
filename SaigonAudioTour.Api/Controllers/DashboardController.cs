@@ -27,7 +27,7 @@ namespace SaigonAudioTour.Api.Controllers
 
         // GET: api/dashboard/top-pois
         [HttpGet("top-pois")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<PoiStatisticDto>>> GetTopPois([FromQuery] int top = 5)
         {
             var result = await _userLogService.GetTopListenedPoisAsync(top);
@@ -36,7 +36,7 @@ namespace SaigonAudioTour.Api.Controllers
 
         // GET: api/dashboard/heatmap
         [HttpGet("heatmap")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<HeatmapDataDto>> GetHeatmap(
             [FromQuery] DateTime? startDate = null, 
             [FromQuery] DateTime? endDate = null, 

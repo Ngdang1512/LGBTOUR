@@ -1,5 +1,7 @@
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
 
 # IDE / Editor
 .vs/
@@ -8,31 +10,43 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.swp
 
 # Build output
 **/bin/
 **/obj/
 
 # .NET tooling
-*.cache
 *.pdb
 *.mdb
 TestResults/
+*.nupkg
 
 # Logs
 *.log
+logs/
 
-# Local API SQLite data
+# Local database
 SaigonAudioTour.Api/App_Data/*.db
 SaigonAudioTour.Api/App_Data/*.db-*
+SaigonAudioTour.Api/App_Data/*.db-shm
+SaigonAudioTour.Api/App_Data/*.db-wal
 
-# Local secrets / env
+# Local secrets / env — JANGAN COMMIT
 **/appsettings.Development.json
+**/appsettings.Production.json
+**/secrets.json
 
-# MAUI / Xamarin generated artifacts
+# MAUI / Android / iOS artifacts
+*.apk
+*.idsig
+*.aab
 *.xcuserstate
 *.xcodeproj/project.xcworkspace/
 *.xcodeproj/xcuserdata/
+*.xcarchive
 
-# Node (if added later)
+# Node
 node_modules/
+dist/
+.next/
