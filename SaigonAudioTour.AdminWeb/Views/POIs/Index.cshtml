@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<SaigonAudioTour.AdminWeb.Models.PoiViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration _config
 @{
     ViewData["Title"] = "Quản lý Điểm đến (POI)";
+    var apiBase = (_config["Realtime:ApiBaseUrl"] ?? "http://localhost:5117").TrimEnd('/');
 }
 
 <div class="card shadow-sm border-0">
@@ -39,7 +41,7 @@
                         var normalizedImage = rawImage.Trim();
                         imageUrl = normalizedImage.StartsWith("http", StringComparison.OrdinalIgnoreCase)
                             ? normalizedImage
-                            : $"http://localhost:5117{(normalizedImage.StartsWith("/") ? normalizedImage : "/" + normalizedImage)}";
+                            : $"{apiBase}{(normalizedImage.StartsWith("/") ? normalizedImage : "/" + normalizedImage)}";
                     }
                     <tr>
                         <td class="align-middle text-center fw-bold">@item.Id</td>

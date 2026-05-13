@@ -70,5 +70,23 @@ namespace SaigonAudioTour.Api.Services
             });
             await _context.SaveChangesAsync();
         }
+
+        /// <summary>
+        /// Generic event logging for SignalR telemetry
+        /// </summary>
+        public async Task LogEventAsync(string userId, int? poiId, string eventType, double? lat = null, double? lng = null, long? durationSeconds = null)
+        {
+            _context.UserLogs.Add(new UserLog
+            {
+                UserId = userId,
+                POIId = poiId,
+                EventType = eventType,
+                Lat = lat,
+                Lng = lng,
+                DurationSeconds = durationSeconds,
+                CreatedAt = DateTime.Now
+            });
+            await _context.SaveChangesAsync();
+        }
     }
 }

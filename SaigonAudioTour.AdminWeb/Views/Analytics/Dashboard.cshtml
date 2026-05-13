@@ -56,6 +56,26 @@
     </div>
 
     <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <small class="text-muted">Thiết bị đang sử dụng (5 phút gần nhất)</small>
+                    <h4 class="text-info mb-0" id="kpiOnlineUsers">0</h4>
+                    <div class="small text-muted" id="kpiActiveAccounts">0 tài khoản</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <small class="text-muted">Thiết bị active gần đây</small>
+                    <div id="onlineUsersList" class="small text-muted mt-2">Đang tải...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
         <div class="col">
             <div class="card shadow-sm">
                 <div class="card-header bg-dark text-white">
@@ -171,7 +191,42 @@
             loadRevenueTrend();
             loadChartData();
             updateStats();
+            loadActiveUsers();
+            setInterval(loadActiveUsers, 30000);
         });
+
+        function loadActiveUsers() {
+            $.get('@Url.Action("ActiveUsers", "Analytics")?minutes=5', function(response) {
+                if (!response || !response.success || !response.data) return;
+
+                const d = response.data;
+                const activeDevices = d.activeDevices || d.activeUsers || 0;
+                const activeAccounts = d.activeAccounts || 0;
+                $('#kpiOnlineUsers').text(activeDevices.toLocaleString('vi-VN'));
+                $('#kpiActiveAccounts').text(`${activeAccounts.toLocaleString('vi-VN')} tài khoản`);
+
+                const items = d.items || [];
+                if (items.length === 0) {
+                    $('#onlineUsersList').text('Chưa có heartbeat trong 5 phút gần nhất.');
+                    return;
+                }
+
+                const html = items.slice(0, 8)
+                    .map(x => {
+                        const user = (x.userId || '').length > 18
+                            ? (x.userId || '').substring(0, 18) + '...'
+                            : (x.userId || 'unknown');
+                        const device = (x.deviceId || '').length > 14
+                            ? (x.deviceId || '').substring(0, 14) + '...'
+                            : (x.deviceId || 'unknown-device');
+                        const lastSeen = x.lastSeenAt ? new Date(x.lastSeenAt).toLocaleTimeString('vi-VN') : '-';
+                        return `<div>• <strong>${user}</strong> · <span>${device}</span> <span class="text-secondary">(${lastSeen})</span></div>`;
+                    })
+                    .join('');
+
+                $('#onlineUsersList').html(html);
+            });
+        }
 
         function loadRevenueSummary() {
             $.get('@Url.Action("RevenueSummary", "Analytics")?days=7', function(response) {

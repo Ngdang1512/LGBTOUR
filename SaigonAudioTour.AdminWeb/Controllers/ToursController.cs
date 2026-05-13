@@ -29,6 +29,21 @@ namespace SaigonAudioTour.AdminWeb.Controllers
             return View(new List<TourViewModel>());
         }
 
+        // GET: Chi tiết Tuyến xe
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var response = await client.GetAsync($"api/Tours/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var tour = await response.Content.ReadFromJsonAsync<TourViewModel>();
+                if (tour != null) return View(tour);
+            }
+            return RedirectToAction("Index");
+        }
+
         // GET: Form tạo tuyến mới
         [HttpGet]
         public IActionResult Create()
@@ -109,6 +124,71 @@ namespace SaigonAudioTour.AdminWeb.Controllers
 
             ViewBag.Error = "Có lỗi xảy ra khi cập nhật Tuyến xe!";
             return View(model);
+        }
+
+        // GET: Trang kéo thả lộ trình
+        [HttpGet]
+        public async Task<IActionResult> EditRoute(int id)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+
+            var tourTask = client.GetAsync($"api/Tours/{id}");
+            var poisTask = client.GetAsync("api/pois");
+            await Task.WhenAll(tourTask, poisTask);
+
+            var tourResponse = await tourTask;
+            var poisResponse = await poisTask;
+
+            if (!tourResponse.IsSuccessStatusCode) return RedirectToAction("Index");
+
+            var tourDetail = await tourResponse.Content.ReadFromJsonAsync<TourDetailResponse>();
+            var allPois = poisResponse.IsSuccessStatusCode
+                ? await poisResponse.Content.ReadFromJsonAsync<List<PoiViewModel>>() ?? new()
+                : new List<PoiViewModel>();
+
+            if (tourDetail == null) return RedirectToAction("Index");
+
+            var routePoiIds = tourDetail.Pois.OrderBy(p => p.DisplayOrder).Select(p => p.PoiId).ToHashSet();
+
+            var vm = new TourRouteViewModel
+            {
+                TourId = tourDetail.Id,
+                TourName = tourDetail.Name,
+                RoutePois = tourDetail.Pois.OrderBy(p => p.DisplayOrder)
+                    .Select(p => new PoiItemViewModel { Id = p.PoiId, Name = p.PoiName }).ToList(),
+                AvailablePois = allPois
+                    .Where(p => !routePoiIds.Contains(p.Id))
+                    .Select(p => new PoiItemViewModel { Id = p.Id, Name = p.Name }).ToList()
+            };
+
+            return View(vm);
+        }
+
+        // POST: Lưu thứ tự lộ trình
+        [HttpPost]
+        public async Task<IActionResult> SaveRoute(int tourId, string orderedPoiIds)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = User.FindFirst("JWToken")?.Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var ids = (orderedPoiIds ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => int.TryParse(s.Trim(), out var n) ? n : 0)
+                .Where(n => n > 0)
+                .ToList();
+
+            var response = await client.PutAsJsonAsync($"api/Tours/{tourId}/route", ids);
+
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Đã lưu lộ trình thành công!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Có lỗi xảy ra khi lưu lộ trình!";
+            }
+            return RedirectToAction("Index");
         }
 
         // GET: Hiển thị form Xác nhận Xóa

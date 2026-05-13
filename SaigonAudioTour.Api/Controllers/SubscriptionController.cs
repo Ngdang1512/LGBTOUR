@@ -1,4 +1,5 @@
 using SaigonAudioTour.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SaigonAudioTour.Api.Data;
 using SaigonAudioTour.Api.Entities;
@@ -42,14 +43,16 @@ public class SubscriptionController : ControllerBase
             var user = _context.Users.AsNoTracking().FirstOrDefault(u => u.Id == parsedUserId);
             if (user != null)
             {
-                var isPremium = string.Equals(user.SubscriptionStatus, "premium", StringComparison.OrdinalIgnoreCase);
+                var premiumExpiry = user.PremiumExpiresAt;
+                var isPremium = string.Equals(user.SubscriptionStatus, "premium", StringComparison.OrdinalIgnoreCase)
+                                && (premiumExpiry == null || premiumExpiry > DateTime.UtcNow);
                 return Ok(new PremiumStatus
                 {
                     UserId = userId,
                     IsPremium = isPremium,
                     PlanId = isPremium ? "premium" : "default",
-                    Status = string.IsNullOrWhiteSpace(user.SubscriptionStatus) ? "free" : user.SubscriptionStatus,
-                    PremiumUntil = isPremium ? DateTime.UtcNow.AddDays(30) : null
+                    Status = isPremium ? "premium" : "free",
+                    PremiumUntil = isPremium ? premiumExpiry : null
                 });
             }
         }
@@ -187,10 +190,10 @@ public class SubscriptionController : ControllerBase
     }
 
     /// <summary>
-    /// Manual payment confirmation - called when webhook fails.
-    /// Should only be used for testing/fallback scenarios.
+    /// Manual payment confirmation - admin only fallback when webhook fails.
     /// </summary>
     [HttpPost("mark-paid/{orderId}")]
+    [Authorize(Roles = "Admin")]
     public IActionResult MarkPaid(string orderId)
     {
         var transaction = _context.PaymentTransactions
@@ -211,13 +214,15 @@ public class SubscriptionController : ControllerBase
         transaction.ConfirmedAt = DateTime.UtcNow;
         transaction.UpdatedAt = DateTime.UtcNow;
 
-        // Activate subscription
+        // Activate subscription with real expiry date
+        var expiresAt = DateTime.UtcNow.AddDays(30);
         if (int.TryParse(transaction.UserId, out var userId))
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
             if (user != null)
             {
                 user.SubscriptionStatus = "premium";
+                user.PremiumExpiresAt = expiresAt;
 
                 _store.UserPremium[transaction.UserId] = new PremiumStatus
                 {
@@ -225,7 +230,7 @@ public class SubscriptionController : ControllerBase
                     IsPremium = true,
                     PlanId = "premium",
                     Status = "premium",
-                    PremiumUntil = DateTime.UtcNow.AddDays(30)
+                    PremiumUntil = expiresAt
                 };
             }
         }
@@ -236,6 +241,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpPost("cancel/{userId}")]
+    [Authorize]
     public IActionResult CancelSubscription(string userId)
     {
         _store.UserPremium[userId] = new PremiumStatus

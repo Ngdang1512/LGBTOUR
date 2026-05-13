@@ -82,6 +82,9 @@ namespace SaigonAudioTour.Api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("PremiumExpiresAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SubscriptionStatus")
                         .IsRequired()
                         .HasMaxLength(30)

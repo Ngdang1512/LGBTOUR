@@ -15,6 +15,7 @@ namespace SaigonAudioTour.Api.Services
         Task<TourDetailDto> CreateTourAsync(CreateTourDto dto);
         Task<TourDetailDto?> GetTourByIdAsync(int id);
         Task<bool> AddPoiToTourAsync(int tourId, AddPoiToTourDto dto);
+        Task<bool> UpdateRouteAsync(int tourId, List<int> orderedPoiIds);
         Task<bool> UpdateTourAsync(int id, UpdateTourDto dto);
         Task<bool> DeleteTourAsync(int id);
     }

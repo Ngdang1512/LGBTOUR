@@ -5,4 +5,5 @@
   <Project Path="SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.csproj">
     <Deploy Solution="Debug|*" />
   </Project>
+  <Project Path="SaigonAudioTour.Mobile/SaigonAudioTour.Mobile.iOS.csproj" />
 </Solution>

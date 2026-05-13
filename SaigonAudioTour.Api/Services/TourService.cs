@@ -91,6 +91,27 @@ namespace SaigonAudioTour.Api.Services
             return true;
         }
 
+        public async Task<bool> UpdateRouteAsync(int tourId, List<int> orderedPoiIds)
+        {
+            var tourExists = await _context.Tours.AnyAsync(t => t.Id == tourId);
+            if (!tourExists) return false;
+
+            var existing = await _context.TourPOIs.Where(tp => tp.TourId == tourId).ToListAsync();
+            _context.TourPOIs.RemoveRange(existing);
+
+            for (int i = 0; i < orderedPoiIds.Count; i++)
+            {
+                _context.TourPOIs.Add(new TourPOI
+                {
+                    TourId = tourId,
+                    POI_Id = orderedPoiIds[i],
+                    DisplayOrder = i + 1
+                });
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> AddPoiToTourAsync(int tourId, AddPoiToTourDto dto)
         {
             var tourExists = await _context.Tours.AnyAsync(t => t.Id == tourId);

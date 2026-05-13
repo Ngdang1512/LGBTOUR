@@ -1,0 +1,574 @@
+@{
+    ViewData["Title"] = "Giám sát thời gian thực";
+    var activityHubUrl = (ViewData["ActivityHubUrl"] as string) ?? "http://localhost:5117/hubs/activity";
+}
+
+<style>
+    .stat-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 18px 16px 14px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.08);
+        transition: box-shadow 0.2s;
+        border-top: 4px solid transparent;
+    }
+    .stat-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+    .stat-card .stat-num { font-size: 2.2rem; font-weight: 700; line-height: 1.1; }
+    .stat-card .stat-label { font-size: 0.75rem; color: #6c757d; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }
+    .stat-card .stat-icon { font-size: 1.6rem; float: right; opacity: 0.25; }
+    .sc-total   { border-top-color: #0dcaf0; } .sc-total   .stat-num { color: #0891b2; }
+    .sc-moving  { border-top-color: #0d6efd; } .sc-moving  .stat-num { color: #1d4ed8; }
+    .sc-listen  { border-top-color: #dc3545; } .sc-listen  .stat-num { color: #dc2626; }
+    .sc-detail  { border-top-color: #ffc107; } .sc-detail  .stat-num { color: #d97706; }
+    .sc-nav     { border-top-color: #20c997; } .sc-nav     .stat-num { color: #0891b2; }
+    .sc-idle    { border-top-color: #6c757d; } .sc-idle    .stat-num { color: #6b7280; }
+
+    .sbadge { display: inline-block; padding: 2px 10px; border-radius: 50px; font-size: 0.76rem; font-weight: 600; white-space: nowrap; }
+    .sb-moving        { background: #dbeafe; color: #1d4ed8; }
+    .sb-listening     { background: #fee2e2; color: #dc2626; }
+    .sb-viewing_detail{ background: #fef3c7; color: #d97706; }
+    .sb-navigating    { background: #cffafe; color: #0891b2; }
+    .sb-idle          { background: #f3f4f6; color: #6b7280; }
+
+    .user-pill { font-size: 0.72rem; font-weight: 600; padding: 1px 8px; border-radius: 10px; }
+    .up-member { background: #d1fae5; color: #065f46; }
+    .up-guest  { background: #e5e7eb; color: #374151; }
+
+    .feed-wrap { max-height: 340px; overflow-y: auto; padding-right: 2px; }
+    .feed-wrap::-webkit-scrollbar { width: 4px; }
+    .feed-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .feed-item { padding: 7px 10px 7px 12px; border-left: 3px solid #cbd5e1; border-radius: 0 6px 6px 0; margin-bottom: 5px; background: #f9fafb; font-size: 0.81rem; }
+
+    .conn-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+    .conn-dot.ok   { background: #10b981; animation: blink 2s infinite; }
+    .conn-dot.warn { background: #f59e0b; animation: blink 1s infinite; }
+    .conn-dot.err  { background: #ef4444; }
+    @@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+    .device-id { font-family: monospace; font-size: 0.8rem; color: #6b7280; }
+    .action-cell { font-size: 0.84rem; }
+    .table td { vertical-align: middle; padding: 8px 10px; }
+    .table thead th { padding: 10px; }
+    .row-fresh { background-color: #f0fdf4 !important; }
+</style>
+
+<div class="container-fluid">
+
+    <!-- ─── Header ─── -->
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h4 class="mb-0 font-weight-bold">
+                <i class="fas fa-satellite-dish text-info mr-2"></i>Giám sát thời gian thực
+            </h4>
+            <small class="text-muted">Theo dõi thiết bị &amp; hành động người dùng đang diễn ra</small>
+        </div>
+        <div class="d-flex align-items-center">
+            <span id="connStatus" style="font-size:0.82rem">
+                <span class="conn-dot warn"></span><span id="connText">Đang kết nối...</span>
+            </span>
+            <button id="exportCsvBtn" class="btn btn-sm btn-outline-success ml-3">
+                <i class="fas fa-download mr-1"></i>Xuất CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- ─── Stat Cards ─── -->
+    <div class="row mb-3">
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="stat-card sc-total">
+                <i class="fas fa-wifi stat-icon"></i>
+                <div class="stat-num" id="cntTotal">0</div>
+                <div class="stat-label">Tổng online</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="stat-card sc-moving">
+                <i class="fas fa-walking stat-icon"></i>
+                <div class="stat-num" id="cntMoving">0</div>
+                <div class="stat-label">Di chuyển</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="stat-card sc-listen">
+                <i class="fas fa-headphones stat-icon"></i>
+                <div class="stat-num" id="cntListening">0</div>
+                <div class="stat-label">Đang nghe</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="stat-card sc-detail">
+                <i class="fas fa-eye stat-icon"></i>
+                <div class="stat-num" id="cntDetail">0</div>
+                <div class="stat-label">Xem chi tiết</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="stat-card sc-nav">
+                <i class="fas fa-compass stat-icon"></i>
+                <div class="stat-num" id="cntNav">0</div>
+                <div class="stat-label">Chỉ đường</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="stat-card sc-idle">
+                <i class="fas fa-clock stat-icon"></i>
+                <div class="stat-num" id="cntIdle">0</div>
+                <div class="stat-label">Đang chờ</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Map + Live Feed ─── -->
+    <div class="row mb-3">
+        <div class="col-lg-8 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                    <span class="font-weight-bold" style="font-size:0.92rem">
+                        <i class="fas fa-map-marked-alt text-info mr-1"></i>Bản đồ vị trí thiết bị
+                    </span>
+                    <div class="custom-control custom-switch mb-0">
+                        <input type="checkbox" class="custom-control-input" id="heatmapToggle" checked>
+                        <label class="custom-control-label" for="heatmapToggle" style="font-size:0.8rem">Heatmap</label>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div id="activityMap" style="height:380px;"></div>
+                </div>
+                <div class="card-footer bg-white py-1 px-3 border-top-0">
+                    <small class="text-muted">
+                        <span class="legend-dot mr-1" style="background:#1d4ed8"></span>Di chuyển&nbsp;
+                        <span class="legend-dot mr-1 ml-2" style="background:#dc2626"></span>Nghe audio&nbsp;
+                        <span class="legend-dot mr-1 ml-2" style="background:#d97706"></span>Xem chi tiết&nbsp;
+                        <span class="legend-dot mr-1 ml-2" style="background:#0891b2"></span>Chỉ đường&nbsp;
+                        <span class="legend-dot mr-1 ml-2" style="background:#6b7280"></span>Chờ
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-3">
+            <div class="card shadow-sm" style="height:100%">
+                <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                    <span class="font-weight-bold" style="font-size:0.92rem">
+                        <i class="fas fa-stream text-info mr-1"></i>Hoạt động gần đây
+                    </span>
+                    <button class="btn btn-sm btn-light py-0" id="clearFeedBtn" style="font-size:0.78rem">Xóa</button>
+                </div>
+                <div class="card-body py-2 px-2">
+                    <div class="feed-wrap" id="activityFeed">
+                        <p class="text-muted text-center py-4 mb-0" style="font-size:0.83rem">Đang chờ hoạt động...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Filter + Table ─── -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-white py-2">
+            <div class="row align-items-center">
+                <div class="col-md-3 mb-2 mb-md-0">
+                    <select id="statusFilter" class="form-control form-control-sm">
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="moving">🚶 Đang di chuyển</option>
+                        <option value="listening">🎧 Đang nghe audio</option>
+                        <option value="viewing_detail">👁️ Đang xem chi tiết</option>
+                        <option value="navigating">🧭 Đang chỉ đường</option>
+                        <option value="idle">💤 Đang chờ</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-2 mb-md-0">
+                    <input type="text" id="searchInput" class="form-control form-control-sm"
+                           placeholder="Tìm theo thiết bị, email, POI...">
+                </div>
+                <div class="col-md-5 text-md-right">
+                    <small class="text-muted" id="tblCount">0 thiết bị</small>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width:36px">#</th>
+                            <th>Thiết bị / Người dùng</th>
+                            <th>Hành động hiện tại</th>
+                            <th>POI</th>
+                            <th>Trạng thái</th>
+                            <th style="white-space:nowrap">Cập nhật</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+<script>
+(function () {
+    'use strict';
+
+    // ── State ──
+    const state   = new Map();   // deviceId → ActivityTelemetryDto
+    const markers = new Map();   // deviceId → L.circleMarker
+    const feed    = [];          // recent events, newest first
+    const MAX_FEED = 60;
+    let lastFiltered = [];
+
+    // ── DOM refs ──
+    const tbl          = document.getElementById('activityTable');
+    const tblCount     = document.getElementById('tblCount');
+    const statusFilter = document.getElementById('statusFilter');
+    const searchInput  = document.getElementById('searchInput');
+    const heatToggle   = document.getElementById('heatmapToggle');
+    const exportBtn    = document.getElementById('exportCsvBtn');
+    const clearFeedBtn = document.getElementById('clearFeedBtn');
+    const feedWrap     = document.getElementById('activityFeed');
+    const connDot      = document.querySelector('#connStatus .conn-dot');
+    const connText     = document.getElementById('connText');
+    const cntTotal     = document.getElementById('cntTotal');
+    const cntMoving    = document.getElementById('cntMoving');
+    const cntListening = document.getElementById('cntListening');
+    const cntDetail    = document.getElementById('cntDetail');
+    const cntNav       = document.getElementById('cntNav');
+    const cntIdle      = document.getElementById('cntIdle');
+
+    // ── Map ──
+    const map       = L.map('activityMap').setView([10.7769, 106.7009], 14);
+    const heatLayer = L.layerGroup().addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // ── Status config ──
+    const SC = {
+        moving:         { color: '#1d4ed8', icon: '🚶', label: 'Đang di chuyển' },
+        listening:      { color: '#dc2626', icon: '🎧', label: 'Đang nghe audio' },
+        viewing_detail: { color: '#d97706', icon: '👁️', label: 'Đang xem chi tiết' },
+        navigating:     { color: '#0891b2', icon: '🧭', label: 'Đang chỉ đường' },
+        idle:           { color: '#6b7280', icon: '💤', label: 'Đang chờ' }
+    };
+
+    function norm(v) { return (v || 'idle').toString().toLowerCase().trim(); }
+    function sc(status) { return SC[norm(status)] || SC.idle; }
+
+    function actionDesc(item) {
+        const s   = norm(item.status);
+        const poi = item.poiName || (item.poiId ? `POI #${item.poiId}` : null);
+        switch (s) {
+            case 'listening':
+                return poi ? `Đang nghe thuyết minh tại "${poi}"` : 'Đang nghe audio thuyết minh';
+            case 'viewing_detail':
+                return poi ? `Đang xem chi tiết "${poi}"` : 'Đang xem thông tin địa điểm';
+            case 'moving':
+                return 'Đang di chuyển tham quan';
+            case 'navigating':
+                return poi ? `Đang được chỉ đường đến "${poi}"` : 'Đang được chỉ đường';
+            case 'idle':
+                return 'Đang dừng / chờ';
+            default:
+                return 'Không xác định';
+        }
+    }
+
+    function userDisplay(item) {
+        if (item.userEmail) return { label: item.userEmail, kind: 'member' };
+        if (item.userName)  return { label: item.userName,  kind: 'member' };
+        return { label: (item.deviceId || 'unknown').substring(0, 14), kind: 'guest' };
+    }
+
+    function timeAgo(ts) {
+        if (!ts) return '-';
+        const d = new Date(ts);
+        if (isNaN(d)) return '-';
+        const sec = Math.floor((Date.now() - d.getTime()) / 1000);
+        if (sec < 5)  return 'vừa xong';
+        if (sec < 60) return `${sec}s trước`;
+        const min = Math.floor(sec / 60);
+        if (min < 60) return `${min}p trước`;
+        return `${Math.floor(min / 60)}h trước`;
+    }
+
+    function fmtTime(ts) {
+        if (!ts) return '-';
+        const d = new Date(ts);
+        return isNaN(d) ? '-' : d.toLocaleTimeString('vi-VN');
+    }
+
+    function isVisible(item) {
+        const fStatus = statusFilter.value;
+        if (fStatus !== 'all' && norm(item.status) !== fStatus) return false;
+        const q = searchInput.value.toLowerCase().trim();
+        if (q) {
+            const hay = [item.deviceId, item.userEmail, item.userName, item.poiName, item.status]
+                .filter(Boolean).join(' ').toLowerCase();
+            if (!hay.includes(q)) return false;
+        }
+        return true;
+    }
+
+    // ── Main render ──
+    function render() {
+        const all = [...state.values()];
+
+        // Stat cards
+        const counts = { moving: 0, listening: 0, viewing_detail: 0, navigating: 0, idle: 0 };
+        for (const x of all) {
+            const s = norm(x.status);
+            if (s in counts) counts[s]++; else counts.idle++;
+        }
+        cntTotal.textContent     = all.length;
+        cntMoving.textContent    = counts.moving;
+        cntListening.textContent = counts.listening;
+        cntDetail.textContent    = counts.viewing_detail;
+        cntNav.textContent       = counts.navigating;
+        cntIdle.textContent      = counts.idle;
+
+        // Persist online count for sidebar badge (other pages read this)
+        try { localStorage.setItem('sat_online', all.length); } catch (_) {}
+
+        // Filtered list for table
+        const filtered = all
+            .filter(isVisible)
+            .sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+        lastFiltered = filtered;
+        tblCount.textContent = `${filtered.length} thiết bị`;
+
+        // Table rows
+        if (filtered.length === 0) {
+            tbl.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-5">Không có thiết bị nào phù hợp.</td></tr>';
+        } else {
+            const freshThreshold = Date.now() - 15000;
+            tbl.innerHTML = filtered.map((item, i) => {
+                const cfg    = sc(item.status);
+                const user   = userDisplay(item);
+                const action = actionDesc(item);
+                const poi    = item.poiName || (item.poiId ? `POI #${item.poiId}` : '—');
+                const s      = norm(item.status);
+                const fresh  = item.timestamp && new Date(item.timestamp).getTime() > freshThreshold;
+                return `<tr${fresh ? ' class="row-fresh"' : ''}>
+  <td class="text-muted" style="font-size:0.8rem;width:36px">${i + 1}</td>
+  <td>
+    <span class="user-pill ${user.kind === 'member' ? 'up-member' : 'up-guest'}">
+      ${user.kind === 'member' ? '👤 Thành viên' : '🧑 Khách'}
+    </span>
+    <div class="device-id mt-1" title="${item.deviceId || ''}">${user.label}</div>
+  </td>
+  <td class="action-cell">${cfg.icon} ${action}</td>
+  <td><small>${poi}</small></td>
+  <td><span class="sbadge sb-${s}">${cfg.label}</span></td>
+  <td><small class="text-muted" data-ts="${item.timestamp || ''}" title="${fmtTime(item.timestamp)}">${timeAgo(item.timestamp)}</small></td>
+</tr>`;
+            }).join('');
+        }
+
+        syncMarkers(filtered);
+        drawHeatmap(all);
+    }
+
+    // ── Time-ago refresh (no full re-render) ──
+    setInterval(() => {
+        document.querySelectorAll('[data-ts]').forEach(el => {
+            const ts = el.getAttribute('data-ts');
+            if (ts) el.textContent = timeAgo(ts);
+        });
+    }, 15000);
+
+    // ── Map markers ──
+    function syncMarkers(items) {
+        const visible = new Set(items.map(x => x.deviceId).filter(Boolean));
+        for (const [k, m] of markers) {
+            if (!visible.has(k)) { map.removeLayer(m); markers.delete(k); }
+        }
+
+        const bounds = [];
+        for (const item of items) {
+            if (typeof item.latitude !== 'number' || typeof item.longitude !== 'number') continue;
+            const pos  = [item.latitude, item.longitude];
+            const cfg  = sc(item.status);
+            const user = userDisplay(item);
+            bounds.push(pos);
+
+            let m = markers.get(item.deviceId);
+            if (!m) {
+                m = L.circleMarker(pos, {
+                    radius: 9, color: cfg.color, fillColor: cfg.color, fillOpacity: 0.85, weight: 2
+                }).addTo(map);
+                markers.set(item.deviceId, m);
+            } else {
+                m.setLatLng(pos);
+                m.setStyle({ color: cfg.color, fillColor: cfg.color });
+            }
+
+            m.bindPopup(`
+<div style="min-width:190px;font-size:0.84rem">
+  <strong>${user.label}</strong>
+  <span style="font-size:0.7rem;padding:1px 6px;border-radius:8px;margin-left:4px;
+    background:${user.kind==='member'?'#d1fae5':'#e5e7eb'};
+    color:${user.kind==='member'?'#065f46':'#374151'}">
+    ${user.kind === 'member' ? 'Thành viên' : 'Khách'}
+  </span>
+  <hr style="margin:5px 0"/>
+  <div>${cfg.icon} ${actionDesc(item)}</div>
+  <div style="color:#9ca3af;margin-top:4px;font-size:0.76rem">🕐 ${fmtTime(item.timestamp)}</div>
+</div>`);
+        }
+
+        if (bounds.length > 0) {
+            map.fitBounds(L.latLngBounds(bounds), { padding: [30, 30], maxZoom: 16 });
+        }
+    }
+
+    // ── Heatmap ──
+    function drawHeatmap(all) {
+        heatLayer.clearLayers();
+        if (!heatToggle.checked) return;
+        const grid = new Map();
+        for (const x of all) {
+            if (typeof x.latitude !== 'number' || typeof x.longitude !== 'number') continue;
+            const k = `${Math.round(x.latitude * 500) / 500}:${Math.round(x.longitude * 500) / 500}`;
+            grid.set(k, (grid.get(k) || 0) + 1);
+        }
+        for (const [k, cnt] of grid) {
+            const [lat, lng] = k.split(':').map(Number);
+            const color = cnt >= 4 ? '#dc2626' : cnt >= 2 ? '#f59e0b' : '#2563eb';
+            L.circle([lat, lng], {
+                radius: Math.min(120, 30 + cnt * 15),
+                color, fillColor: color, fillOpacity: 0.14, weight: 1
+            }).bindTooltip(`Mật độ: ${cnt} thiết bị`, { direction: 'top' }).addTo(heatLayer);
+        }
+    }
+
+    // ── Activity Feed ──
+    function pushFeed(item) {
+        const cfg    = sc(item.status);
+        const user   = userDisplay(item);
+        const action = actionDesc(item);
+        feed.unshift({ cfg, user, action, time: new Date() });
+        if (feed.length > MAX_FEED) feed.pop();
+        renderFeed();
+    }
+
+    function renderFeed() {
+        if (feed.length === 0) {
+            feedWrap.innerHTML = '<p class="text-muted text-center py-4 mb-0" style="font-size:0.83rem">Đang chờ hoạt động...</p>';
+            return;
+        }
+        feedWrap.innerHTML = feed.map(e => `
+<div class="feed-item" style="border-left-color:${e.cfg.color}">
+  <div class="d-flex justify-content-between align-items-start">
+    <strong style="font-size:0.8rem;color:#374151">${e.user.label}</strong>
+    <small class="text-muted ml-1" style="white-space:nowrap">${e.time.toLocaleTimeString('vi-VN')}</small>
+  </div>
+  <div style="color:${e.cfg.color};font-size:0.79rem;margin-top:1px">${e.cfg.icon} ${e.action}</div>
+</div>`).join('');
+    }
+
+    // ── SignalR handlers ──
+    function handleUpdate(raw) {
+        const deviceId = raw?.deviceId || raw?.DeviceId;
+        if (!deviceId) return;
+        const item = { ...raw, deviceId };
+        const prev = state.get(deviceId);
+        state.set(deviceId, item);
+        // Push to feed only if status or POI changed (avoid flooding on location updates)
+        if (!prev || prev.status !== item.status || prev.poiId !== item.poiId) {
+            pushFeed(item);
+        }
+        render();
+    }
+
+    function handleSnapshot(list) {
+        state.clear();
+        (list || []).forEach(raw => {
+            const deviceId = raw?.deviceId || raw?.DeviceId;
+            if (deviceId) state.set(deviceId, { ...raw, deviceId });
+        });
+        render();
+    }
+
+    // ── Connection ──
+    const conn = new signalR.HubConnectionBuilder()
+        .withUrl('@activityHubUrl')
+        .withAutomaticReconnect()
+        .build();
+
+    function setConnState(state) {
+        if (state === 'ok') {
+            connDot.className = 'conn-dot ok';
+            connText.textContent = 'Đã kết nối';
+        } else if (state === 'warn') {
+            connDot.className = 'conn-dot warn';
+            connText.textContent = 'Đang kết nối lại...';
+        } else {
+            connDot.className = 'conn-dot err';
+            connText.textContent = 'Lỗi kết nối';
+        }
+    }
+
+    conn.onreconnecting(() => setConnState('warn'));
+    conn.onreconnected(async () => {
+        setConnState('ok');
+        await conn.invoke('GetAllActivities');
+    });
+
+    conn.on('ActivitySnapshot',     handleSnapshot);
+    conn.on('ReceiveAllActivities', handleSnapshot);
+    conn.on('ActivityUpdated',      handleUpdate);
+    conn.on('ReceiveActivityUpdate', handleUpdate);
+    conn.on('OnlineCount', count => {
+        if (typeof count === 'number') {
+            cntTotal.textContent = count;
+            try { localStorage.setItem('sat_online', count); } catch (_) {}
+        }
+    });
+
+    conn.start()
+        .then(async () => {
+            setConnState('ok');
+            await conn.invoke('JoinAdminGroup');
+            await conn.invoke('GetAllActivities');
+        })
+        .catch(err => {
+            console.error('[SignalR]', err);
+            setConnState('err');
+            tbl.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-5">Không kết nối được realtime hub. Hãy kiểm tra API.</td></tr>';
+        });
+
+    // ── UI event listeners ──
+    statusFilter.addEventListener('change', render);
+    searchInput.addEventListener('input', render);
+    heatToggle.addEventListener('change', render);
+    clearFeedBtn.addEventListener('click', () => { feed.length = 0; renderFeed(); });
+
+    exportBtn.addEventListener('click', () => {
+        const rows = [['DeviceId', 'UserEmail', 'UserName', 'Status', 'HanhDong', 'PoiId', 'PoiName', 'Latitude', 'Longitude', 'Timestamp']];
+        for (const x of lastFiltered) {
+            rows.push([
+                x.deviceId || '', x.userEmail || '', x.userName || '',
+                x.status || '', actionDesc(x),
+                x.poiId ?? '', x.poiName || '',
+                typeof x.latitude  === 'number' ? x.latitude.toFixed(6)  : '',
+                typeof x.longitude === 'number' ? x.longitude.toFixed(6) : '',
+                x.timestamp || ''
+            ]);
+        }
+        const esc = v => { const s = String(v ?? ''); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+        const csv  = rows.map(r => r.map(esc).join(',')).join('\n');
+        const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href     = url;
+        a.download = `activity-${new Date().toISOString().replace(/[:.]/g, '-')}.csv`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+})();
+</script>
+}

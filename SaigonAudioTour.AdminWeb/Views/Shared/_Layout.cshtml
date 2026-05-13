@@ -94,6 +94,7 @@
             
             <a href="/Home/Index" class="nav-link"><i class="fas fa-tachometer-alt text-info"></i> Dashboard Thống Kê</a>
             <a href="/Analytics/Dashboard" class="nav-link"><i class="fas fa-chart-bar text-primary"></i> 📊 Analytics & Heatmap</a>
+            <a href="/Activity/Index" class="nav-link"><i class="fas fa-users text-info"></i> 👥 Người dùng đang sử dụng <span id="sidebarOnlineBadge" class="badge badge-danger badge-pill ml-1" style="font-size:0.65rem;display:none"></span></a>
             
             <div class="menu-title">Quản Lý Dữ Liệu</div>
             <a href="/Pois/Index" class="nav-link"><i class="fas fa-map-marker-alt text-danger"></i> Điểm đến (POI)</a>
@@ -116,6 +117,24 @@
             </div>
 
             <div class="main-content">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
+                        <i class="fas fa-check-circle mr-1"></i> @TempData["SuccessMessage"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-3" role="alert">
+                        <i class="fas fa-exclamation-circle mr-1"></i> @TempData["ErrorMessage"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
                 @RenderBody()
             </div>
             
@@ -157,6 +176,41 @@
         })();
     </script>
     
+    <script>
+        (function () {
+            const badge = document.getElementById('sidebarOnlineBadge');
+            if (!badge) return;
+            function refresh() {
+                try {
+                    const n = localStorage.getItem('sat_online');
+                    if (n !== null && parseInt(n, 10) > 0) {
+                        badge.textContent = n;
+                        badge.style.display = 'inline';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                } catch (_) {}
+            }
+            refresh();
+            setInterval(refresh, 10000);
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var segments = window.location.pathname.split('/').filter(Boolean);
+            var controller = segments.length > 0 ? segments[0].toLowerCase() : '';
+            document.querySelectorAll('#sidebar .nav-link').forEach(function (link) {
+                var href = link.getAttribute('href');
+                if (!href) return;
+                var hrefParts = href.split('/').filter(Boolean);
+                if (hrefParts.length > 0 && controller === hrefParts[0].toLowerCase()) {
+                    link.classList.add('active');
+                }
+            });
+        })();
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

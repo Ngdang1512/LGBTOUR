@@ -1,5 +1,6 @@
 using SaigonAudioTour.Mobile.Models;
 using SaigonAudioTour.Mobile.Services;
+using SaigonAudioTour.Mobile.Services.Geofencing;
 using Microsoft.Maui.Media;
 
 namespace SaigonAudioTour.Mobile;
@@ -8,6 +9,7 @@ public partial class DetailPage : ContentPage
 {
     private const string NarratingPlaceKey = "NarratingPlaceId";
     private readonly SubscriptionApiService _subscriptionApiService;
+    private readonly GeofenceSessionState? _geofenceSessionState;
 
     public Place? SelectedPlace { get; set; }
     
@@ -23,6 +25,7 @@ public partial class DetailPage : ContentPage
 
         _subscriptionApiService = IPlatformApplication.Current?.Services.GetService<SubscriptionApiService>()
             ?? throw new InvalidOperationException("SubscriptionApiService chưa được đăng ký DI.");
+        _geofenceSessionState = IPlatformApplication.Current?.Services.GetService<GeofenceSessionState>();
 
         // Khởi tạo danh sách ngôn ngữ cho Picker
         LanguagePicker.ItemsSource = new List<string> { 
@@ -49,6 +52,15 @@ public partial class DetailPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
+        if (SelectedPlace != null)
+        {
+            _geofenceSessionState?.SetActivePoi(
+                SelectedPlace,
+                0,
+                _geofenceSessionState?.CurrentLocation);
+            _geofenceSessionState?.SetActivityStatus("viewing_detail");
+        }
 
         if (_hasAutoPlayed || SelectedPlace == null)
         {
@@ -86,6 +98,7 @@ public partial class DetailPage : ContentPage
         var selectedCode = GetLanguageCode(selectedLang);
         AppLanguageService.SetNarrationLanguage(selectedCode);
         Preferences.Set(NarratingPlaceKey, SelectedPlace.Id);
+        _geofenceSessionState?.SetActivityStatus("listening");
 
         // Demo translation theo ngôn ngữ đã chọn
         textToRead = selectedCode switch
@@ -241,5 +254,15 @@ public partial class DetailPage : ContentPage
         }
 
         ClearNarratingFlag();
+
+        if (SelectedPlace != null)
+        {
+            _geofenceSessionState?.SetActivityStatus("viewing_detail");
+        }
+
+        if (SelectedPlace != null && _geofenceSessionState?.ActivePoi?.Id == SelectedPlace.Id)
+        {
+            _geofenceSessionState.ClearActivePoi();
+        }
     }
 }

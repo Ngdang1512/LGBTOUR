@@ -1,6 +1,38 @@
 @SaigonAudioTour_Api_HostAddress = http://localhost:5117
+@AdminToken = REPLACE_WITH_ADMIN_JWT
+
+POST {{SaigonAudioTour_Api_HostAddress}}/api/auth/admin-login
+Content-Type: application/json
+
+{
+	"username": "MinhVy",
+	"password": "admin123"
+}
 
 GET {{SaigonAudioTour_Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+GET {{SaigonAudioTour_Api_HostAddress}}/api/activity/online
+Accept: application/json
+Authorization: Bearer {{AdminToken}}
+
+###
+
+POST {{SaigonAudioTour_Api_HostAddress}}/api/auth/admin-refresh
+Accept: application/json
+Authorization: Bearer {{AdminToken}}
+
+###
+
+GET {{SaigonAudioTour_Api_HostAddress}}/api/pois
+Accept: application/json
+
+###
+
+GET {{SaigonAudioTour_Api_HostAddress}}/webapp
+
+###
+
+GET {{SaigonAudioTour_Api_HostAddress}}/qr/ben-thanh

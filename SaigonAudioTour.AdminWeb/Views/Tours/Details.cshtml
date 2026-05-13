@@ -1,6 +1,50 @@
-﻿namespace SaigonAudioTour.AdminWeb.Views.Tours
-{
-    public class Details
-    {
-    }
+@model SaigonAudioTour.AdminWeb.Models.TourViewModel
+@{
+    ViewData["Title"] = "Chi tiết Tuyến xe";
 }
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h3 class="card-title font-weight-bold m-0 text-warning">
+            <i class="fas fa-bus mr-2"></i> Chi tiết Tuyến: @Model?.Name
+        </h3>
+        <a asp-action="Index" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left mr-1"></i> Quay lại
+        </a>
+    </div>
+    <div class="card-body">
+        @if (Model == null)
+        {
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle mr-1"></i> Không tìm thấy thông tin tuyến xe.
+            </div>
+        }
+        else
+        {
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Tên tuyến</dt>
+                <dd class="col-sm-9 font-weight-bold">@Model.Name</dd>
+
+                <dt class="col-sm-3">Mô tả</dt>
+                <dd class="col-sm-9">@(Model.Description ?? "—")</dd>
+
+                <dt class="col-sm-3">Thời gian ước tính</dt>
+                <dd class="col-sm-9"><span class="badge badge-info">@Model.EstimatedTimeMinutes phút</span></dd>
+
+                <dt class="col-sm-3">Quãng đường</dt>
+                <dd class="col-sm-9">@Model.TotalDistanceKm km</dd>
+
+                <dt class="col-sm-3">Giá vé</dt>
+                <dd class="col-sm-9 text-success font-weight-bold">@Model.TicketPrice.ToString("N0") VNĐ</dd>
+            </dl>
+        }
+    </div>
+    @if (Model != null)
+    {
+        <div class="card-footer bg-white text-right">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning font-weight-bold">
+                <i class="fas fa-edit mr-1"></i> Chỉnh sửa
+            </a>
+        </div>
+    }
+</div>

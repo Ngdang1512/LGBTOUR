@@ -1,0 +1,244 @@
+@inject IConfiguration Configuration
+@{
+    var apiBaseUrl = Configuration["Realtime:ApiBaseUrl"] ?? "http://localhost:5117";
+    var activityHubUrl = Configuration["Realtime:HubUrl"] ?? $"{apiBaseUrl.TrimEnd('/')}/hubs/activity";
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<style>
+    .radar-status-badge {
+        display: inline-block;
+        padding: 2px 9px;
+        border-radius: 50px;
+        font-size: 0.74rem;
+        font-weight: 600;
+    }
+    .radar-action-label { font-size: 0.78rem; color: #6b7280; margin-top: 1px; }
+    .radar-user-type { font-size: 0.71rem; font-weight: 600; padding: 1px 7px; border-radius: 10px; }
+    .rut-member { background: #d1fae5; color: #065f46; }
+    .rut-guest  { background: #e5e7eb; color: #374151; }
+</style>
+
+<div class="row mt-4">
+    <div class="col-md-8 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white d-flex align-items-center justify-content-between py-2">
+                <div>
+                    <i class="fas fa-map-marked-alt text-info mr-1"></i>
+                    <strong style="font-size:0.92rem">Radar hoạt động (thời gian thực)</strong>
+                </div>
+                <span id="radarConnBadge" class="badge badge-warning" style="font-size:0.7rem">Đang kết nối...</span>
+            </div>
+            <div class="card-body p-0">
+                <div id="mapAdmin" style="height:460px; border-radius:0 0 4px 4px; z-index:1;"></div>
+            </div>
+            <div class="card-footer bg-white py-1 px-3 border-top-0">
+                <small class="text-muted">
+                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#1d4ed8;margin-right:3px"></span>Di chuyển&nbsp;
+                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#dc2626;margin-right:3px;margin-left:8px"></span>Nghe audio&nbsp;
+                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#d97706;margin-right:3px;margin-left:8px"></span>Xem chi tiết&nbsp;
+                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#0891b2;margin-right:3px;margin-left:8px"></span>Chỉ đường&nbsp;
+                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#6b7280;margin-right:3px;margin-left:8px"></span>Chờ
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
+                <strong style="font-size:0.92rem">Thiết bị đang kết nối</strong>
+                <span class="badge badge-danger badge-pill px-3" id="activeUsersCount">0 Active</span>
+            </div>
+            <div class="card-body p-0" style="max-height:460px; overflow-y:auto;">
+                <table class="table table-hover table-sm align-middle mb-0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="pl-3" style="font-size:0.78rem">Người dùng</th>
+                            <th style="font-size:0.78rem">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminUsersTable">
+                        <tr>
+                            <td colspan="2" class="text-center text-muted py-4" style="font-size:0.83rem">
+                                Đang dò tìm tín hiệu...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@8.0.7/dist/browser/signalr.min.js"></script>
+<script>
+(function () {
+    'use strict';
+
+    const HUB_URL = '@activityHubUrl';
+
+    const SC = {
+        moving:         { color: '#1d4ed8', icon: '🚶', label: 'Đang di chuyển' },
+        listening:      { color: '#dc2626', icon: '🎧', label: 'Đang nghe audio' },
+        viewing_detail: { color: '#d97706', icon: '👁️', label: 'Đang xem chi tiết' },
+        navigating:     { color: '#0891b2', icon: '🧭', label: 'Đang chỉ đường' },
+        idle:           { color: '#6b7280', icon: '💤', label: 'Đang chờ' }
+    };
+
+    function norm(v)  { return (v || 'idle').toString().toLowerCase().trim(); }
+    function cfg(s)   { return SC[norm(s)] || SC.idle; }
+
+    function actionDesc(data) {
+        const s   = norm(data.status || data.Status);
+        const poi = data.poiName || data.PoiName || (data.poiId || data.PoiId ? `POI #${data.poiId || data.PoiId}` : null);
+        switch (s) {
+            case 'listening':      return poi ? `Nghe thuyết minh tại "${poi}"` : 'Nghe audio';
+            case 'viewing_detail': return poi ? `Xem chi tiết "${poi}"` : 'Xem thông tin địa điểm';
+            case 'moving':         return 'Di chuyển tham quan';
+            case 'navigating':     return poi ? `Chỉ đường đến "${poi}"` : 'Đang chỉ đường';
+            default:               return 'Đang chờ';
+        }
+    }
+
+    function userDisplay(deviceId, data) {
+        const email = data.userEmail || data.UserEmail;
+        const name  = data.userName  || data.UserName;
+        if (email) return { label: email, kind: 'member' };
+        if (name)  return { label: name,  kind: 'member' };
+        return { label: (deviceId || 'unknown').substring(0, 14), kind: 'guest' };
+    }
+
+    // Map setup
+    const mapAdmin      = L.map('mapAdmin').setView([10.7769, 106.7009], 14);
+    const markerLayer   = L.layerGroup().addTo(mapAdmin);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapAdmin);
+
+    const devices = new Map(); // deviceId → {data, receivedAt}
+    const STALE_MS = 5 * 60 * 1000;
+
+    function upsert(raw) {
+        const deviceId = raw?.deviceId || raw?.DeviceId;
+        if (!deviceId) return;
+        devices.set(deviceId, { data: raw, receivedAt: Date.now() });
+    }
+
+    function renderRadar() {
+        const now  = Date.now();
+        const tbody = document.getElementById('adminUsersTable');
+        markerLayer.clearLayers();
+
+        // Prune stale
+        for (const [id, entry] of devices) {
+            if (now - entry.receivedAt > STALE_MS) devices.delete(id);
+        }
+
+        if (devices.size === 0) {
+            tbody.innerHTML = '<tr><td colspan="2" class="text-center text-muted py-4" style="font-size:0.83rem">Chưa có thiết bị nào đang kết nối</td></tr>';
+            document.getElementById('activeUsersCount').textContent = '0 Active';
+            return;
+        }
+
+        const bounds = [];
+        let html = '';
+
+        for (const [deviceId, { data }] of devices) {
+            const status = data.status || data.Status || 'idle';
+            const c      = cfg(status);
+            const user   = userDisplay(deviceId, data);
+            const action = actionDesc(data);
+            const lat    = data.latitude  || data.Latitude  || 10.7769;
+            const lng    = data.longitude || data.Longitude || 106.7009;
+            const poi    = data.poiName   || data.PoiName   || '';
+
+            bounds.push([lat, lng]);
+
+            L.circleMarker([lat, lng], {
+                radius: 9, color: c.color, fillColor: c.color, fillOpacity: 0.85, weight: 2
+            }).bindPopup(`
+<div style="min-width:170px;font-size:0.83rem">
+  <strong>${user.label}</strong>
+  <span style="font-size:0.7rem;padding:1px 6px;border-radius:8px;margin-left:4px;
+    background:${user.kind==='member'?'#d1fae5':'#e5e7eb'};
+    color:${user.kind==='member'?'#065f46':'#374151'}">
+    ${user.kind === 'member' ? 'Thành viên' : 'Khách'}
+  </span>
+  <hr style="margin:5px 0"/>
+  <div>${c.icon} ${action}</div>
+  ${poi ? `<div style="color:#9ca3af;font-size:0.75rem;margin-top:3px">📍 ${poi}</div>` : ''}
+</div>`).addTo(markerLayer);
+
+            html += `<tr>
+  <td class="pl-3">
+    <span class="radar-user-type ${user.kind === 'member' ? 'rut-member' : 'rut-guest'}">
+      ${user.kind === 'member' ? '👤 Thành viên' : '🧑 Khách'}
+    </span>
+    <div class="radar-action-label" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${user.label}">${user.label}</div>
+  </td>
+  <td>
+    <span class="radar-status-badge" style="background:${c.color}15;color:${c.color}">${c.icon} ${c.label}</span>
+    ${poi ? `<div class="radar-action-label" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${poi}">📍 ${poi}</div>` : ''}
+  </td>
+</tr>`;
+        }
+
+        tbody.innerHTML = html;
+        document.getElementById('activeUsersCount').textContent = `${devices.size} Active`;
+
+        if (bounds.length > 0) {
+            mapAdmin.fitBounds(L.latLngBounds(bounds), { padding: [20, 20], maxZoom: 16 });
+        }
+    }
+
+    // SignalR connection
+    const conn = new signalR.HubConnectionBuilder()
+        .withUrl(HUB_URL)
+        .withAutomaticReconnect()
+        .build();
+
+    const connBadge = document.getElementById('radarConnBadge');
+
+    conn.onreconnecting(() => {
+        connBadge.className = 'badge badge-warning';
+        connBadge.textContent = 'Đang kết nối lại...';
+    });
+    conn.onreconnected(async () => {
+        connBadge.className = 'badge badge-success';
+        connBadge.textContent = 'Đã kết nối';
+        await conn.invoke('GetAllActivities');
+    });
+
+    conn.on('ReceiveActivityUpdate', raw => { upsert(raw); renderRadar(); });
+    conn.on('ActivityUpdated',       raw => { upsert(raw); renderRadar(); });
+    conn.on('ReceiveAllActivities',  list => { (list || []).forEach(upsert); renderRadar(); });
+    conn.on('ActivitySnapshot',      list => { (list || []).forEach(upsert); renderRadar(); });
+    conn.on('OnlineCount', count => {
+        if (typeof count === 'number') {
+            document.getElementById('activeUsersCount').textContent = `${count} Active`;
+        }
+    });
+
+    async function start() {
+        try {
+            if (conn.state === 'Disconnected') {
+                await conn.start();
+                connBadge.className = 'badge badge-success';
+                connBadge.textContent = 'Đã kết nối';
+                await conn.invoke('JoinAdminGroup');
+                await conn.invoke('GetAllActivities');
+            }
+        } catch (err) {
+            connBadge.className = 'badge badge-danger';
+            connBadge.textContent = 'Lỗi kết nối';
+            console.error('[LiveRadar SignalR]', err);
+            setTimeout(start, 5000);
+        }
+    }
+
+    // Refresh time-ago every 30s even without new events
+    setInterval(renderRadar, 30000);
+    start();
+})();
+</script>

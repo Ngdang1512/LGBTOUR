@@ -222,5 +222,109 @@ namespace SaigonAudioTour.Api.Services
         };
 
         private sealed record PoiContent(string Location, string ImageUrl, string TtsScript);
+
+        public async Task<int> SeedDemoPoisAsync()
+        {
+            // Check if already seeded
+            var existingCount = await _context.POIs.CountAsync();
+            if (existingCount > 0)
+            {
+                return existingCount; // Already has data
+            }
+
+            var demoPois = new List<POI>
+            {
+                new POI
+                {
+                    Name = "Nhà Thờ Đức Bà",
+                    Description = "Nhà thờ Đức Bà là một nhà thờ Công giáo La Mã nằm ở trung tâm Hồ Chí Minh, được xây dựng từ 1877-1883. Đây là một tác phẩm kiến trúc Pháp cổ điển vô cùng ấn tượng.",
+                    Lat = 10.7829,
+                    Lng = 106.6982,
+                    Radius = 100,
+                    Priority = 100,
+                    IsStopStation = false,
+                    Image = "nha-tho-duc-ba.jpg"
+                },
+                new POI
+                {
+                    Name = "Dinh Độc Lập",
+                    Description = "Dinh Độc Lập, còn được gọi là Dinh Tổng Thống, là một điểm đến lịch sử quan trọng. Tòa nhà được xây dựng năm 1868 với kiến trúc Pháp cổ điển.",
+                    Lat = 10.7920,
+                    Lng = 106.6868,
+                    Radius = 100,
+                    Priority = 95,
+                    IsStopStation = false,
+                    Image = "dinh-doc-lap.jpg"
+                },
+                new POI
+                {
+                    Name = "Bến Nhà Rồng",
+                    Description = "Bến Nhà Rồng là công trình kiến trúc cổ kính bên bờ sông Sài Gòn, được xây dựng vào thế kỷ 19. Nơi đây đã chứng kiến nhiều sự kiện lịch sử quan trọng.",
+                    Lat = 10.7627,
+                    Lng = 106.6881,
+                    Radius = 80,
+                    Priority = 90,
+                    IsStopStation = true,
+                    Image = "ben-nha-rong.jpg"
+                },
+                new POI
+                {
+                    Name = "Chợ Bến Thành",
+                    Description = "Chợ Bến Thành là một chợ truyền thống nổi tiếng ở Sài Gòn, nơi du khách có thể tìm thấy hàng hóa địa phương và đặc sản Việt Nam.",
+                    Lat = 10.7720,
+                    Lng = 106.6967,
+                    Radius = 100,
+                    Priority = 85,
+                    IsStopStation = true,
+                    Image = "cho-ben-thanh.jpg"
+                },
+                new POI
+                {
+                    Name = "Tòa Nhà Bitexco",
+                    Description = "Tòa Nhà Bitexco Financial Tower là tòa nhà cao ốc hiện đại, được hoàn thành năm 2010. Từ tầng 49 Sky Garden, du khách có thể ngắm toàn cảnh Sài Gòn.",
+                    Lat = 10.7614,
+                    Lng = 106.7244,
+                    Radius = 100,
+                    Priority = 80,
+                    IsStopStation = false,
+                    Image = "bitexco-tower.jpg"
+                }
+            };
+
+            _context.POIs.AddRange(demoPois);
+            await _context.SaveChangesAsync();
+
+            // Seed narrations
+            var savedPois = await _context.POIs.ToListAsync();
+            var narrations = new List<Narration>();
+
+            foreach (var poi in savedPois)
+            {
+                // Vietnamese narration
+                narrations.Add(new Narration
+                {
+                    POI_Id = poi.Id,
+                    LanguageCode = "vi",
+                    TranslatedName = poi.Name,
+                    TranslatedDescription = poi.Description,
+                    ContentText = $"Xin chào, bây giờ chúng ta đang tới {poi.Name}. {poi.Description}"
+                });
+
+                // English narration
+                narrations.Add(new Narration
+                {
+                    POI_Id = poi.Id,
+                    LanguageCode = "en",
+                    TranslatedName = poi.Name,
+                    TranslatedDescription = poi.Description,
+                    ContentText = $"Welcome to {poi.Name}. {poi.Description}"
+                });
+            }
+
+            _context.Narrations.AddRange(narrations);
+            await _context.SaveChangesAsync();
+
+            return demoPois.Count;
+        }
     }
 }

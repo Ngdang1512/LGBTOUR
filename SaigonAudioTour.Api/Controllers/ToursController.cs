@@ -63,6 +63,17 @@ namespace SaigonAudioTour.Api.Controllers
             return Ok(new { message = "Đã thêm trạm vào Tuyến xe buýt thành công!" });
         }
 
+        // PUT: api/tours/{id}/route
+        [HttpPut("{id}/route")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateRoute(int id, [FromBody] List<int> orderedPoiIds)
+        {
+            var success = await _tourService.UpdateRouteAsync(id, orderedPoiIds);
+            if (!success) return NotFound(new { message = "Không tìm thấy Tuyến xe buýt này." });
+
+            return Ok(new { message = "Đã lưu lộ trình tuyến xe thành công!" });
+        }
+
         // PUT: api/tours/{id}
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]

@@ -51,7 +51,8 @@ namespace SaigonAudioTour.AdminWeb.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, model.Username),
-                    new Claim("JWToken", token) // Mấu chốt là cái này!
+                    new Claim("JWToken", token),
+                    new Claim("JWTokenRefreshedAt", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

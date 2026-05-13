@@ -24,5 +24,8 @@ namespace SaigonAudioTour.Api.Entities
         [Required]
         [MaxLength(30)]
         public string SubscriptionStatus { get; set; } = "free";
+
+        /// <summary>Ngày hết hạn gói Premium. Null = chưa mua hoặc gói free.</summary>
+        public DateTime? PremiumExpiresAt { get; set; }
     }
 }

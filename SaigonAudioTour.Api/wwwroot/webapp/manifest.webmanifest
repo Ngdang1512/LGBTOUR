@@ -1,0 +1,16 @@
+{
+  "name": "Saigon Audio Tour Web",
+  "short_name": "SaigonTour",
+  "start_url": "/webapp/index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0d6efd",
+  "description": "Web app thuyết minh du lịch tự động bằng GPS tại Sài Gòn",
+  "icons": [
+    {
+      "src": "/webapp/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

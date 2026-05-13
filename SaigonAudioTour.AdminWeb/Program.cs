@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using SaigonAudioTour.AdminWeb.Handlers;
+using SaigonAudioTour.AdminWeb.Middleware;
+using SaigonAudioTour.AdminWeb.Options;
 
 namespace SaigonAudioTour.AdminWeb
 {
@@ -9,12 +12,18 @@ namespace SaigonAudioTour.AdminWeb
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
 
-            // 1. CẤU HÌNH API
+            builder.Services.Configure<RealtimeOptions>(builder.Configuration.GetSection("Realtime"));
+            var apiBaseUrl = builder.Configuration["Realtime:ApiBaseUrl"] ?? "http://localhost:5117";
+
+            // 1. CẤU HÌNH API — BearerTokenHandler tự động gắn JWT của admin vào mọi request
+            builder.Services.AddTransient<BearerTokenHandler>();
             builder.Services.AddHttpClient("ApiClient", client =>
             {
-                client.BaseAddress = new Uri("http://localhost:5117/");
-            });
+                client.BaseAddress = new Uri($"{apiBaseUrl.TrimEnd('/')}/");
+            })
+            .AddHttpMessageHandler<BearerTokenHandler>();
 
             // 2. CẤU HÌNH COOKIE
             builder.Services.AddAuthentication(options =>
@@ -47,6 +56,7 @@ namespace SaigonAudioTour.AdminWeb
 
             // 3. KÍCH HOẠT BẢO MẬT
             app.UseAuthentication();
+            app.UseMiddleware<AdminJwtRefreshMiddleware>();
             app.UseAuthorization();
 
             app.MapStaticAssets();

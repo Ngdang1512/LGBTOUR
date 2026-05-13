@@ -1,6 +1,8 @@
 ﻿@model SaigonAudioTour.AdminWeb.Models.PoiViewModel
+@inject Microsoft.Extensions.Configuration.IConfiguration _config
 @{
     ViewData["Title"] = "Sửa Thông Tin Trạm";
+    var apiBase = (_config["Realtime:ApiBaseUrl"] ?? "http://localhost:5117").TrimEnd('/');
 }
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -42,7 +44,7 @@
                                     ? "/images/no-image.png"
                                     : (rawImage.Trim().StartsWith("http", StringComparison.OrdinalIgnoreCase)
                                         ? rawImage.Trim()
-                                        : $"http://localhost:5117{(rawImage.Trim().StartsWith("/") ? rawImage.Trim() : "/" + rawImage.Trim())}");
+                                        : $"{apiBase}{(rawImage.Trim().StartsWith("/") ? rawImage.Trim() : "/" + rawImage.Trim())}");
                             }
                             <img id="imgPreview" src="@imageUrl"
                                  style="max-height: 150px; border-radius: 8px; border: 1px solid #ddd; object-fit: cover;"

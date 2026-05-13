@@ -7,6 +7,7 @@ namespace SaigonAudioTour.Api.Services
     {
         Task<AuthResultDto?> LoginAsync(LoginDto dto);
         Task<AuthResultDto?> AdminLoginAsync(LoginDto dto);
+        Task<AuthResultDto?> RefreshAdminTokenAsync(string username);
         Task<AuthResultDto?> RegisterAsync(RegisterDto dto);
         Task<AuthResultDto?> GetProfileByEmailAsync(string email);
     }

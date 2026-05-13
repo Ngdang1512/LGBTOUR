@@ -72,6 +72,34 @@ namespace SaigonAudioTour.Api.Services
             };
         }
 
+        public async Task<AuthResultDto?> RefreshAdminTokenAsync(string username)
+        {
+            var normalized = (username ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(normalized))
+            {
+                return null;
+            }
+
+            var admin = await _context.Admins
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Username == normalized);
+
+            if (admin == null)
+            {
+                return null;
+            }
+
+            var token = CreateJwt(admin.Username, "Admin");
+
+            return new AuthResultDto
+            {
+                Token = token,
+                UserId = admin.Id,
+                Email = admin.Username,
+                FullName = string.IsNullOrWhiteSpace(admin.FullName) ? admin.Username : admin.FullName
+            };
+        }
+
         // ========================================================
         // 3. ĐĂNG KÝ TÀI KHOẢN MỚI (Dành cho App)
         // ========================================================

@@ -26,6 +26,7 @@ namespace SaigonAudioTour.Mobile.Services.Geofencing
     {
         private readonly PoiApiService _poiApiService;
         private readonly GeofenceSessionState _sessionState;
+        private readonly GeofenceConflictResolver _conflictResolver;
 
         private CancellationTokenSource? _cancellationTokenSource;
         private Location? _lastKnownLocation;
@@ -40,6 +41,8 @@ namespace SaigonAudioTour.Mobile.Services.Geofencing
         {
             _poiApiService = poiApiService;
             _sessionState = sessionState;
+            _conflictResolver = new GeofenceConflictResolver();
+            _conflictResolver.OnResolved += OnPoiResolved;
             _isMonitoring = false;
         }
 
@@ -94,12 +97,33 @@ namespace SaigonAudioTour.Mobile.Services.Geofencing
             _sessionState.ClearActivePoi();
         }
 
+        private void OnPoiResolved(object? sender, QueuedPoi decision)
+        {
+            var location = _lastKnownLocation;
+            OnNearbyPoiDetected?.Invoke(this, new NearbyPoiEventArgs
+            {
+                Poi = decision.Poi,
+                DistanceMeters = decision.DistanceMeters,
+                CurrentLocation = location
+            });
+
+            if (location != null)
+            {
+                _sessionState.SetActivePoi(decision.Poi, decision.DistanceMeters, location);
+                _sessionState.SetActivityStatus("listening");
+            }
+
+            GeofenceHelper.MarkPoiAsPlayed(decision.Poi.Id);
+        }
+
         private async Task MonitorLocationAsync(CancellationToken cancellationToken)
         {
             // Load POI list
             var places = await _poiApiService.GetPlacesAsync();
             if (places == null || !places.Any())
                 return;
+
+            _conflictResolver.Start();
 
             // Monitoring loop - track location mỗi 30 giây
             while (_isMonitoring && !cancellationToken.IsCancellationRequested)
@@ -124,37 +148,21 @@ namespace SaigonAudioTour.Mobile.Services.Geofencing
                         }
 
                         _lastKnownLocation = location;
+                        _sessionState.SetActivityStatus("moving");
 
-                        // Check mỗi POI xem có trong geofence không
-                        foreach (var poi in places)
+                        var notPlayedPlaces = places
+                            .Where(poi => !GeofenceHelper.IsPoiAlreadyPlayed(poi.Id))
+                            .ToList();
+
+                        await _conflictResolver.EvaluateAndQueueAsync(
+                            new LocationPoint(location.Latitude, location.Longitude),
+                            notPlayedPlaces,
+                            cancellationToken);
+
+                        // Fallback: nếu tất cả đã phát hết thì cho phép chạy lại theo session mới
+                        if (notPlayedPlaces.Count == 0)
                         {
-                            var distance = GeofenceHelper.CalculateHaversineDistance(
-                                location.Latitude,
-                                location.Longitude,
-                                poi.Latitude,
-                                poi.Longitude
-                            );
-
-                            // Detect nearby: nếu trong radius của POI
-                            if (distance <= poi.TriggerRadius)
-                            {
-                                // Anti-spam: check xem đã phát POI này trong phiên chưa
-                                if (!GeofenceHelper.IsPoiAlreadyPlayed(poi.Id))
-                                {
-                                    // Trigger event
-                                    OnNearbyPoiDetected?.Invoke(this, new NearbyPoiEventArgs
-                                    {
-                                        Poi = poi,
-                                        DistanceMeters = distance,
-                                        CurrentLocation = location
-                                    });
-
-                                    _sessionState.SetActivePoi(poi, distance, location);
-
-                                    // Mark as played
-                                    GeofenceHelper.MarkPoiAsPlayed(poi.Id);
-                                }
-                            }
+                            GeofenceHelper.ClearPlayedPois();
                         }
                     }
 

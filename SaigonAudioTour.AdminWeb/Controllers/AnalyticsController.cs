@@ -180,6 +180,28 @@ namespace SaigonAudioTour.AdminWeb.Controllers
             }
         }
 
+        public async Task<IActionResult> ActiveUsers(int minutes = 5)
+        {
+            try
+            {
+                var apiUrl = GetApiUrl();
+                var response = await _httpClient.GetAsync($"{apiUrl}/api/dashboard/active-users?minutes={minutes}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    return Json(new { success = false, message = "Lỗi tải dữ liệu người dùng đang hoạt động" });
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var data = JsonSerializer.Deserialize<ActiveUsersSnapshot>(content, options) ?? new ActiveUsersSnapshot();
+                return Json(new { success = true, data });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
         private string GetApiUrl() => _configuration["ApiUrl"] ?? "http://localhost:5117";
 
         private static (DateTime StartDate, DateTime EndDate) GetDefaultDateRange(int days)
@@ -260,5 +282,44 @@ namespace SaigonAudioTour.AdminWeb.Controllers
 
         [System.Text.Json.Serialization.JsonPropertyName("completedPayments")]
         public int CompletedPayments { get; set; }
+    }
+
+    public class ActiveUsersSnapshot
+    {
+        [System.Text.Json.Serialization.JsonPropertyName("windowMinutes")]
+        public int WindowMinutes { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("asOfUtc")]
+        public DateTime AsOfUtc { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("activeUsers")]
+        public int ActiveUsers { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("activeDevices")]
+        public int ActiveDevices { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("activeAccounts")]
+        public int ActiveAccounts { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("items")]
+        public List<ActiveUserItem> Items { get; set; } = new();
+    }
+
+    public class ActiveUserItem
+    {
+        [System.Text.Json.Serialization.JsonPropertyName("sessionKey")]
+        public string SessionKey { get; set; } = string.Empty;
+
+        [System.Text.Json.Serialization.JsonPropertyName("userId")]
+        public string UserId { get; set; } = string.Empty;
+
+        [System.Text.Json.Serialization.JsonPropertyName("deviceId")]
+        public string DeviceId { get; set; } = string.Empty;
+
+        [System.Text.Json.Serialization.JsonPropertyName("lastSeenAt")]
+        public DateTime LastSeenAt { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("heartbeatCount")]
+        public int HeartbeatCount { get; set; }
     }
 }

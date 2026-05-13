@@ -15,5 +15,8 @@ namespace SaigonAudioTour.Api.Services
 
         // (Tuỳ chọn) API cho Mobile App gọi để ghi nhận mỗi khi user bấm Play Audio
         Task RecordListenEventAsync(string userId, int poiId, int duration);
+
+        // SignalR: Generic event logging with location and duration
+        Task LogEventAsync(string userId, int? poiId, string eventType, double? lat = null, double? lng = null, long? durationSeconds = null);
     }
 }

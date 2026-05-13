@@ -63,6 +63,28 @@ namespace SaigonAudioTour.Mobile.Services
             }
         }
 
+        /// <summary>
+        /// Gửi heartbeat để backend biết user đang sử dụng app.
+        /// POST /api/dashboard/heartbeat?userId=...&amp;deviceId=...
+        /// </summary>
+        public async Task<bool> SendHeartbeatAsync(string? userId = null)
+        {
+            try
+            {
+                var deviceId = GetOrCreateDeviceId();
+                var effectiveUserId = string.IsNullOrWhiteSpace(userId) ? deviceId : userId.Trim();
+
+                var url = $"api/dashboard/heartbeat?userId={Uri.EscapeDataString(effectiveUserId)}&deviceId={Uri.EscapeDataString(deviceId)}";
+                var response = await _httpClient.PostAsync(url, null);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[UserLogService] Error sending heartbeat: {ex.Message}");
+                return false;
+            }
+        }
+
         private static string GetOrCreateDeviceId()
         {
             var existing = Preferences.Get(DeviceIdKey, string.Empty);

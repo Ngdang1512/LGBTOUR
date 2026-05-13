@@ -3,6 +3,7 @@ using System.Net.Http;
 using SaigonAudioTour.Mobile.Models;
 using SaigonAudioTour.Mobile.Services;
 using SaigonAudioTour.Mobile.Services.Geofencing;
+using SaigonAudioTour.Mobile.Services.Realtime;
 
 namespace SaigonAudioTour.Mobile;
 
@@ -22,6 +23,7 @@ public partial class MainPage : ContentPage
     private GeofencingService? _geofencingService;
     private NarrationEngine? _narrationEngine;
     private UserLogService? _userLogService;
+    private ActivityReporterService? _activityReporterService;
     private GeofenceSessionState? _geofenceSessionState;
     private Place? _activePoi;
     private CancellationTokenSource? _geofenceBannerCts;
@@ -150,6 +152,7 @@ public partial class MainPage : ContentPage
         _geofencingService ??= IPlatformApplication.Current?.Services.GetService<GeofencingService>();
         _narrationEngine ??= IPlatformApplication.Current?.Services.GetService<NarrationEngine>();
         _userLogService ??= IPlatformApplication.Current?.Services.GetService<UserLogService>();
+        _activityReporterService ??= IPlatformApplication.Current?.Services.GetService<ActivityReporterService>();
         _geofenceSessionState ??= IPlatformApplication.Current?.Services.GetService<GeofenceSessionState>();
 
         await LoadDataAsync();
@@ -168,6 +171,12 @@ public partial class MainPage : ContentPage
             }
 
             await _geofencingService.StartMonitoringAsync();
+        }
+
+        if (_activityReporterService != null)
+        {
+            var userId = Preferences.Get(StorageKeys.UserId, string.Empty);
+            await _activityReporterService.StartAsync(userId);
         }
     }
 

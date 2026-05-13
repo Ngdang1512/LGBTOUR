@@ -12,6 +12,7 @@ namespace SaigonAudioTour.Mobile.Services.Geofencing
         private Place? _activePoi;
         private double _distanceMeters;
         private Location? _currentLocation;
+        private string _activityStatus = "idle";
         private DateTimeOffset _lastUpdatedAt = DateTimeOffset.MinValue;
 
         public event EventHandler? Changed;
@@ -20,6 +21,7 @@ namespace SaigonAudioTour.Mobile.Services.Geofencing
         public int ActivePoiId => _activePoi?.Id ?? -1;
         public double DistanceMeters => _distanceMeters;
         public Location? CurrentLocation => _currentLocation;
+        public string ActivityStatus => _activityStatus;
         public DateTimeOffset LastUpdatedAt => _lastUpdatedAt;
         public bool HasActivePoi => _activePoi != null;
 
@@ -28,6 +30,22 @@ namespace SaigonAudioTour.Mobile.Services.Geofencing
             _activePoi = poi;
             _distanceMeters = distanceMeters;
             _currentLocation = currentLocation;
+            _lastUpdatedAt = DateTimeOffset.UtcNow;
+            Changed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SetActivityStatus(string? status)
+        {
+            var normalizedStatus = string.IsNullOrWhiteSpace(status)
+                ? "idle"
+                : status.Trim().ToLowerInvariant();
+
+            if (_activityStatus == normalizedStatus)
+            {
+                return;
+            }
+
+            _activityStatus = normalizedStatus;
             _lastUpdatedAt = DateTimeOffset.UtcNow;
             Changed?.Invoke(this, EventArgs.Empty);
         }
@@ -42,6 +60,7 @@ namespace SaigonAudioTour.Mobile.Services.Geofencing
             _activePoi = null;
             _distanceMeters = 0;
             _currentLocation = null;
+            _activityStatus = "idle";
             _lastUpdatedAt = DateTimeOffset.UtcNow;
             Changed?.Invoke(this, EventArgs.Empty);
         }

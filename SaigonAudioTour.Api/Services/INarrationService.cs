@@ -7,5 +7,6 @@ namespace SaigonAudioTour.Api.Services
     {
         Task<NarrationDto?> AddNarrationAsync(CreateNarrationDto dto);
         Task<NarrationDto?> GetNarrationByPoiAndLanguageAsync(int poiId, string? languageCode);
+        Task<NarrationDto?> GenerateTtsFallbackAsync(int poiId, string? languageCode);
     }
 }

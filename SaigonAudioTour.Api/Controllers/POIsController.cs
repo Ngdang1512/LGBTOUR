@@ -89,5 +89,21 @@ namespace SaigonAudioTour.Api.Controllers
 
             return Ok(new { message = "Đã upload và cập nhật hình ảnh thành công!" });
         }
+
+        // --- SEED DEMO DATA (Development Only) ---
+        [HttpPost("seed-demo")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SeedDemoData()
+        {
+            try
+            {
+                var demoCount = await _poiService.SeedDemoPoisAsync();
+                return Ok(new { message = $"Đã tạo {demoCount} POI demo. Có thể reload webapp để xem!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Lỗi seed data: " + ex.Message });
+            }
+        }
     }
 }

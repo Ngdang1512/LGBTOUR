@@ -248,11 +248,12 @@ public class PaymentGatewayOrchestrator : IPaymentGatewayOrchestrator
 
             if (status.Value == PaymentStatus.Completed)
             {
-                // Mark order as paid and grant subscription
+                transaction.ConfirmedAt = DateTime.UtcNow;
                 var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == transaction.UserId, cancellationToken);
                 if (user != null)
                 {
                     user.SubscriptionStatus = "premium";
+                    user.PremiumExpiresAt = DateTime.UtcNow.AddDays(30);
                     _logger.LogInformation("Subscription activated for user {UserId} via order {OrderId}", transaction.UserId, orderId);
                 }
             }

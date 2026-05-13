@@ -16,5 +16,6 @@ namespace SaigonAudioTour.Api.Services
         Task<NearbyPoiDto?> GetNearbyPoiAsync(double currentLat, double currentLng, string langcode);
         Task<bool> UpdatePoiAsync(int id, UpdatePoiDto dto);
         Task<bool> DeletePoiAsync(int id);
+        Task<int> SeedDemoPoisAsync();
     }
 }

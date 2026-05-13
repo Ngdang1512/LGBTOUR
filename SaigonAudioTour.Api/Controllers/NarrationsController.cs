@@ -46,5 +46,33 @@ namespace SaigonAudioTour.Api.Controllers
 
             return Ok(result);
         }
+
+        // GET: api/narrations/tts/{poiId}?lang=vi
+        [HttpGet("tts/{poiId:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GenerateTtsFallback(int poiId, [FromQuery] string? lang = "vi")
+        {
+            var result = await _narrationService.GenerateTtsFallbackAsync(poiId, lang);
+            if (result == null)
+            {
+                return NotFound(new { message = "Không thể tạo TTS cho địa điểm này." });
+            }
+
+            return Ok(result);
+        }
+
+        // GET: api/narrations/{poiId}/synthesize?lang=vi
+        [HttpGet("{poiId:int}/synthesize")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SynthesizeNarration(int poiId, [FromQuery] string? lang = "vi")
+        {
+            var result = await _narrationService.GenerateTtsFallbackAsync(poiId, lang);
+            if (result == null)
+            {
+                return NotFound(new { message = "Không thể tạo audio cho địa điểm này." });
+            }
+
+            return Ok(result);
+        }
     }
 }

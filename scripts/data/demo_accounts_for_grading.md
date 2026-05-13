@@ -10,6 +10,10 @@
   - Phần 3 = Gói: `FREE`
 - QR (text payload):
   https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=demo.free%40saigontour.local%7CDemo%40123%7CFREE
+- QR (webapp login, không cần cài app):
+  https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=http%3A%2F%2Flocalhost%3A5117%2Fwebapp%2Findex.html%3Fstation%3Dben%2520thanh%26u%3Ddemo.free%40saigontour.local%26p%3DDemo%40123%26plan%3DFREE
+- Link trực tiếp (Click để mở web):
+  http://localhost:5117/webapp/index.html?station=ben%20thanh&u=demo.free@saigontour.local&p=Demo@123&plan=FREE
 
 ## 2) Account Premium
 - Email: demo.premium@saigontour.local
@@ -21,6 +25,17 @@
   - Phần 3 = Gói: `PREMIUM`
 - QR (text payload):
   https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=demo.premium%40saigontour.local%7CDemo%40123%7CPREMIUM
+- QR (webapp login, không cần cài app):
+  https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=http%3A%2F%2Flocalhost%3A5117%2Fwebapp%2Findex.html%3Fstation%3Dben%2520thanh%26u%3Ddemo.premium%40saigontour.local%26p%3DDemo%40123%26plan%3DPREMIUM
+- Link trực tiếp (Click để mở web):
+  http://localhost:5117/webapp/index.html?station=ben%20thanh&u=demo.premium@saigontour.local&p=Demo@123&plan=PREMIUM
+
+## 3) Webapp chung (Khách vãng lai / Backup)
+- Dùng để mở thẳng trang webapp mà không cần đăng nhập (chế độ Guest).
+- QR (webapp trực tiếp):
+  https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=http%3A%2F%2Flocalhost%3A5117%2Fwebapp%2Findex.html%3Fstation%3Dben%2520thanh
+- Link trực tiếp (Click để mở web):
+  http://localhost:5117/webapp/index.html?station=ben%20thanh
 
 ## Verify quickly
 - Free: login and check Upgrade page should show trạng thái FREE.
@@ -34,6 +49,11 @@
   2) Mở app, vào màn hình Login.
   3) Nhập email + password tương ứng rồi đăng nhập thủ công.
   4) Vào Upgrade để chứng minh FREE/PREMIUM.
+
+## Cách dùng QR mở webapp trực tiếp
+- Domain/IP hiện tại của máy dev: `localhost`.
+- Đảm bảo API đang chạy cổng `5117`.
+- Quét mã QR "webapp login" sẽ mở trực tiếp trang web và tự động điền thông tin đăng nhập.
 
 ## Notes
 - These QR codes contain plain-text demo credentials only for grading/demo.
