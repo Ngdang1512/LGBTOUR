@@ -1,0 +1,65 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────
+#  SaigonAudioTour — Full Stack Docker Compose
+#  Chạy: docker-compose up -d
+#  Dừng: docker-compose down
+#  Reset DB: docker-compose down -v && docker-compose up -d
+# ─────────────────────────────────────────────────────
+
+services:
+
+  # ── SQL Server (Azure SQL Edge — hỗ trợ Apple Silicon) ──
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: saigon_db
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${DB_PASSWORD:-SaigonTour@2026}"
+    volumes:
+      - saigon_db_data:/var/opt/mssql
+      - ./database/init-sqlserver.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd",
+             "-S", "localhost", "-U", "sa",
+             "-P", "${DB_PASSWORD:-SaigonTour@2026}",
+             "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+  # ── ASP.NET Core API ──
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: saigon_api
+    ports:
+      - "5117:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT:-Production}"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=SaigonAudioTour;User Id=sa;Password=${DB_PASSWORD:-SaigonTour@2026};TrustServerCertificate=True;Connection Timeout=30;"
+      JwtSettings__Key: "${JWT_SECRET:-SaigonAudioTour_Super_Secret_Key_For_District1_Bus_2026_!!!}"
+      JwtSettings__Issuer: "SaigonAudioTourApi"
+      JwtSettings__Audience: "SaigonAudioTourAdmin"
+      VNPay__TmnCode: "${VNPAY_TMN_CODE:-SANDBOX}"
+      VNPay__HashSecret: "${VNPAY_HASH_SECRET:-}"
+      VNPay__ApiUrl: "${VNPAY_BASE_URL:-https://sandbox.vnpayment.vn/paygate/pay.html}"
+      VNPay__ReturnUrl: "${VNPAY_RETURN_URL:-http://localhost:5117/api/payment/webhook/vnpay}"
+      AllowedOrigins__0: "${CORS_ORIGIN_0:-http://localhost:5200}"
+      AllowedOrigins__1: "${CORS_ORIGIN_1:-http://localhost:5244}"
+    volumes:
+      - saigon_uploads:/app/uploads
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  saigon_db_data:
+    name: saigon_db_data
+  saigon_uploads:
+    name: saigon_uploads

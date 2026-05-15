@@ -1,0 +1,1959 @@
+openapi: 3.0.3
+info:
+  title: SaigonAudioTour API
+  description: |
+    REST API cho hệ thống thuyết minh du lịch tự động SaigonAudioTour.
+    Hỗ trợ GPS geofencing auto-play, subscription management (VNPay),
+    realtime activity tracking (SignalR), và admin CMS.
+
+    ## Authentication
+    - **Tourist**: JWT Bearer (accessToken 15 phút, refreshToken 7 ngày)
+    - **Admin**: JWT Bearer với role claim (SuperAdmin / Editor / Viewer)
+    - **QR Login**: Token-based one-time flow
+
+    ## Base URL
+    - Dev: `http://localhost:5117/api`
+    - Prod: `https://api.saigonaudiotour.vn/api`
+  version: 1.0.0
+  contact:
+    name: SaigonAudioTour Dev Team
+    email: dev@saigonaudiotour.vn
+
+servers:
+  - url: http://localhost:5117/api
+    description: Development
+  - url: https://api.saigonaudiotour.vn/api
+    description: Production
+
+tags:
+  - name: Auth
+    description: Đăng ký, đăng nhập, refresh token, 2FA
+  - name: POIs
+    description: Quản lý điểm tham quan (Point of Interest)
+  - name: Tours
+    description: Quản lý tuyến tour và thứ tự POI
+  - name: Narrations
+    description: Quản lý nội dung thuyết minh và audio
+  - name: Activity
+    description: GPS location tracking và event logging
+  - name: Subscriptions
+    description: Gói subscription và trạng thái người dùng
+  - name: Payments
+    description: Tích hợp VNPay thanh toán
+  - name: Analytics
+    description: Dashboard thống kê (SuperAdmin only)
+  - name: QR Login
+    description: Đăng nhập bằng QR code
+  - name: Admin Auth
+    description: Xác thực admin portal
+  - name: Admin Users
+    description: Quản lý người dùng và phân quyền
+
+# ─────────────────────────── SECURITY ───────────────────────────
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token. Header format: `Authorization: Bearer {token}`
+
+  # ─────────────────────────── SCHEMAS ───────────────────────────
+  schemas:
+
+    # ── Common ──
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: token_expired
+        message:
+          type: string
+          example: Access token has expired
+        traceId:
+          type: string
+          example: 00-4af7651916cd43dd8448eb211c80319c-afb2bf05d0eaa7fa-00
+      required: [error]
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            email: ["Email không hợp lệ"]
+            password: ["Mật khẩu phải có ít nhất 8 ký tự"]
+
+    PaginatedMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        pageSize:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 150
+        totalPages:
+          type: integer
+          example: 8
+
+    # ── Auth ──
+    RegisterRequest:
+      type: object
+      required: [email, password, fullName]
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          minLength: 8
+          example: "MyP@ssw0rd!"
+        fullName:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: Nguyễn Văn A
+        phone:
+          type: string
+          example: "0901234567"
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          example: "MyP@ssw0rd!"
+
+    TokenPair:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token, valid 15 minutes
+        refreshToken:
+          type: string
+          description: Refresh token, valid 7 days
+        expiresIn:
+          type: integer
+          description: Access token lifetime in seconds
+          example: 900
+        tokenType:
+          type: string
+          example: Bearer
+
+    LoginResponse:
+      oneOf:
+        - allOf:
+            - $ref: '#/components/schemas/TokenPair'
+            - type: object
+              properties:
+                requiresTwoFactor:
+                  type: boolean
+                  example: false
+        - type: object
+          properties:
+            requiresTwoFactor:
+              type: boolean
+              example: true
+            tempToken:
+              type: string
+              description: Short-lived token (3 min) for 2FA verification step
+
+    TwoFactorVerifyRequest:
+      type: object
+      required: [tempToken, code]
+      properties:
+        tempToken:
+          type: string
+        code:
+          type: string
+          pattern: '^\d{6}$'
+          example: "123456"
+
+    TwoFactorSetupResponse:
+      type: object
+      properties:
+        secret:
+          type: string
+          description: TOTP secret key (Base32 encoded)
+          example: JBSWY3DPEHPK3PXP
+        otpAuthUri:
+          type: string
+          description: URI for QR code generation in authenticator apps
+          example: "otpauth://totp/SaigonAudioTour:user@example.com?secret=JBSWY3DP&issuer=SaigonAudioTour"
+        qrCodeBase64:
+          type: string
+          description: Base64-encoded QR code image (data:image/png;base64,...)
+
+    RefreshTokenRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+
+    # ── User ──
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        subscriptionStatus:
+          type: string
+          enum: [Free, Premium, Expired]
+        premiumUntil:
+          type: string
+          format: date-time
+          nullable: true
+        twoFactorEnabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    # ── POI ──
+    POI:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Nhà thờ Đức Bà
+        description:
+          type: string
+          example: Công trình kiến trúc Pháp nổi tiếng xây dựng năm 1880
+        latitude:
+          type: number
+          format: double
+          example: 10.7797
+        longitude:
+          type: number
+          format: double
+          example: 106.6990
+        radiusMeters:
+          type: integer
+          description: Bán kính geofence tính bằng mét
+          example: 80
+        priority:
+          type: integer
+          description: Thứ tự ưu tiên khi có nhiều POI match cùng lúc
+          example: 1
+        isStopStation:
+          type: boolean
+          description: Có phải điểm dừng xe không
+          example: true
+        imageUrl:
+          type: string
+          nullable: true
+          example: /uploads/pois/nha-tho-duc-ba.jpg
+        isActive:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+
+    CreatePOIRequest:
+      type: object
+      required: [name, latitude, longitude, radiusMeters]
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 200
+        description:
+          type: string
+          maxLength: 2000
+        latitude:
+          type: number
+          format: double
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          format: double
+          minimum: -180
+          maximum: 180
+        radiusMeters:
+          type: integer
+          minimum: 20
+          maximum: 500
+          example: 80
+        priority:
+          type: integer
+          minimum: 1
+          default: 5
+        isStopStation:
+          type: boolean
+          default: false
+
+    UpdatePOIRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 200
+        description:
+          type: string
+          maxLength: 2000
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        radiusMeters:
+          type: integer
+          minimum: 20
+          maximum: 500
+        priority:
+          type: integer
+        isStopStation:
+          type: boolean
+        isActive:
+          type: boolean
+
+    # ── Tour ──
+    Tour:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Tour Quận 1 Cổ Điển
+        description:
+          type: string
+        estimatedMinutes:
+          type: integer
+          example: 90
+        totalDistanceKm:
+          type: number
+          format: double
+          example: 8.5
+        ticketPrice:
+          type: number
+          format: double
+          example: 150000
+        coverImageUrl:
+          type: string
+          nullable: true
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    TourDetail:
+      allOf:
+        - $ref: '#/components/schemas/Tour'
+        - type: object
+          properties:
+            pois:
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/POI'
+                  - type: object
+                    properties:
+                      orderIndex:
+                        type: integer
+
+    CreateTourRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 200
+        description:
+          type: string
+        estimatedMinutes:
+          type: integer
+          minimum: 10
+        totalDistanceKm:
+          type: number
+          format: double
+        ticketPrice:
+          type: number
+          format: double
+          minimum: 0
+
+    UpdateTourPOIsRequest:
+      type: object
+      required: [poiIds]
+      description: Cập nhật danh sách POI trong tour theo thứ tự (index = vị trí trong array)
+      properties:
+        poiIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["poi-uuid-1", "poi-uuid-2", "poi-uuid-3"]
+
+    # ── Narration ──
+    Narration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        poiId:
+          type: string
+          format: uuid
+        languageCode:
+          type: string
+          enum: [vi, en]
+          example: vi
+        voiceType:
+          type: string
+          enum: [male, female]
+          example: female
+        contentText:
+          type: string
+          description: Nội dung văn bản của thuyết minh
+        audioUrl:
+          type: string
+          nullable: true
+          description: URL file audio đã upload hoặc generate từ TTS
+        durationSeconds:
+          type: integer
+          nullable: true
+          example: 45
+        isPremium:
+          type: boolean
+          description: True = chỉ user Premium mới auto-play được
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateNarrationRequest:
+      type: object
+      required: [poiId, languageCode, voiceType, contentText]
+      properties:
+        poiId:
+          type: string
+          format: uuid
+        languageCode:
+          type: string
+          enum: [vi, en]
+        voiceType:
+          type: string
+          enum: [male, female]
+        contentText:
+          type: string
+          minLength: 10
+        isPremium:
+          type: boolean
+          default: false
+
+    # ── Activity ──
+    LocationRequest:
+      type: object
+      required: [latitude, longitude]
+      properties:
+        latitude:
+          type: number
+          format: double
+          example: 10.7797
+        longitude:
+          type: number
+          format: double
+          example: 106.6990
+        accuracy:
+          type: number
+          format: double
+          description: GPS accuracy in meters
+          example: 15.5
+        languageCode:
+          type: string
+          enum: [vi, en]
+          default: vi
+
+    LocationResponse:
+      type: object
+      properties:
+        triggered:
+          type: boolean
+        poi:
+          $ref: '#/components/schemas/POI'
+          nullable: true
+        narration:
+          $ref: '#/components/schemas/Narration'
+          nullable: true
+
+    EventRequest:
+      type: object
+      required: [eventType]
+      properties:
+        eventType:
+          type: string
+          enum: [NarrationPlay, NarrationStop, NarrationComplete, PoiViewed]
+        poiId:
+          type: string
+          format: uuid
+          nullable: true
+        narrationId:
+          type: string
+          format: uuid
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Extra data (playDuration, percentage, etc.)
+
+    # ── Subscription ──
+    SubscriptionPlan:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Gói 1 Tháng
+        price:
+          type: number
+          format: double
+          example: 49000
+        durationDays:
+          type: integer
+          example: 30
+        description:
+          type: string
+          example: Truy cập không giới hạn trong 1 tháng
+        isActive:
+          type: boolean
+
+    SubscriptionStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [Free, Premium, Expired]
+        premiumUntil:
+          type: string
+          format: date-time
+          nullable: true
+        daysRemaining:
+          type: integer
+          nullable: true
+          example: 22
+        activePlanName:
+          type: string
+          nullable: true
+          example: Gói 3 Tháng
+
+    # ── Payment ──
+    CreateVNPayOrderRequest:
+      type: object
+      required: [planId]
+      properties:
+        planId:
+          type: string
+          format: uuid
+        returnUrl:
+          type: string
+          format: uri
+          description: URL redirect sau khi thanh toán xong (client-side). Nếu không cung cấp, dùng default config.
+          example: "http://localhost:5117/webapp/index.html#payment-result"
+
+    CreateVNPayOrderResponse:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Internal order ID
+          example: a1b2c3d4-...
+        paymentUrl:
+          type: string
+          format: uri
+          description: URL redirect đến VNPay để thanh toán
+          example: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=..."
+        expiresAt:
+          type: string
+          format: date-time
+          description: Giao dịch hết hạn sau 15 phút
+
+    PaymentTransaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        orderId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+          example: VND
+        status:
+          type: string
+          enum: [Pending, Success, Failed, Expired, Refunded]
+        planName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    VNPayReturnResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          example: Thanh toán thành công! Subscription đã được kích hoạt.
+        transaction:
+          $ref: '#/components/schemas/PaymentTransaction'
+
+    # ── Analytics ──
+    AnalyticsOverview:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        premiumUsers:
+          type: integer
+        totalRevenue:
+          type: number
+          format: double
+        totalNarrationPlays:
+          type: integer
+        activeTours:
+          type: integer
+        todayNewUsers:
+          type: integer
+        todayRevenue:
+          type: number
+          format: double
+
+    HeatmapDataPoint:
+      type: object
+      properties:
+        poiId:
+          type: string
+          format: uuid
+        poiName:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        triggerCount:
+          type: integer
+        weight:
+          type: number
+          format: double
+          description: Normalized weight 0.0–1.0 for heatmap rendering
+
+    PopularPOI:
+      type: object
+      properties:
+        poiId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        triggerCount:
+          type: integer
+        uniqueUsers:
+          type: integer
+        avgDwellSeconds:
+          type: number
+          format: double
+        rank:
+          type: integer
+
+    # ── QR Login ──
+    QrGenerateResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          format: uuid
+          description: QR token (single-use, 5 minutes TTL)
+        qrData:
+          type: string
+          description: Content to encode into QR code
+          example: "saigontour://qr/550e8400-e29b-41d4-a716-446655440000"
+        expiresAt:
+          type: string
+          format: date-time
+
+    QrStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [Pending, Scanned, Confirmed, Expired]
+        message:
+          type: string
+
+    # ── Admin ──
+    AdminLoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+
+    AdminProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [SuperAdmin, Editor, Viewer]
+        permissions:
+          type: array
+          items:
+            type: string
+          example: [pois:write, tours:write, narrations:write]
+
+    AdminUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+        subscriptionStatus:
+          type: string
+          enum: [Free, Premium, Expired]
+        premiumUntil:
+          type: string
+          format: date-time
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        lastActiveAt:
+          type: string
+          format: date-time
+          nullable: true
+
+  # ─────────────────────────── RESPONSES ───────────────────────────
+  responses:
+    Unauthorized:
+      description: Token không hợp lệ hoặc đã hết hạn
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: token_expired
+            message: Access token has expired. Please refresh.
+
+    Forbidden:
+      description: Không đủ quyền thực hiện hành động này
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: insufficient_permissions
+            message: This action requires the 'pois:write' permission.
+
+    NotFound:
+      description: Không tìm thấy resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: resource_not_found
+            message: POI with id 'abc' does not exist.
+
+    ValidationError:
+      description: Dữ liệu đầu vào không hợp lệ
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorResponse'
+
+# ─────────────────────────── PATHS ───────────────────────────
+paths:
+
+  # ══════════════════════════════════════════
+  # AUTH
+  # ══════════════════════════════════════════
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Đăng ký tài khoản tourist
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        "201":
+          description: Đăng ký thành công
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/TokenPair'
+                  - type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/UserProfile'
+        "400":
+          $ref: '#/components/responses/ValidationError'
+        "409":
+          description: Email đã tồn tại
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: email_already_exists
+                message: An account with this email already exists.
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Đăng nhập bằng email + password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        "200":
+          description: Đăng nhập thành công (hoặc cần 2FA)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        "400":
+          $ref: '#/components/responses/ValidationError'
+        "401":
+          description: Sai email hoặc mật khẩu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: invalid_credentials
+                message: Email or password is incorrect.
+
+  /auth/2fa/setup:
+    get:
+      tags: [Auth]
+      summary: Lấy secret + QR URI để cài 2FA
+      description: User phải đã đăng nhập. Trả về secret để add vào Google Authenticator.
+      responses:
+        "200":
+          description: 2FA setup info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoFactorSetupResponse'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/2fa/enable:
+    post:
+      tags: [Auth]
+      summary: Kích hoạt 2FA sau khi đã setup
+      description: Xác minh 1 code đầu tiên để confirm setup thành công.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code]
+              properties:
+                code:
+                  type: string
+                  pattern: '^\d{6}$'
+      responses:
+        "200":
+          description: 2FA đã được kích hoạt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Two-factor authentication enabled successfully.
+        "400":
+          description: Code không hợp lệ
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/2fa/verify:
+    post:
+      tags: [Auth]
+      summary: Xác minh TOTP code sau login (khi 2FA enabled)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TwoFactorVerifyRequest'
+      responses:
+        "200":
+          description: Xác minh thành công, nhận JWT pair
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        "401":
+          description: Code sai hoặc tempToken hết hạn
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: invalid_2fa_code
+                message: TOTP code is invalid or expired.
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh JWT access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        "200":
+          description: Token mới (refresh token cũ bị invalidate)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        "401":
+          description: Refresh token không hợp lệ hoặc đã dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: invalid_refresh_token
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Đăng xuất, revoke refresh token
+      responses:
+        "204":
+          description: Đã logout
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Lấy thông tin profile của user hiện tại
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  # ══════════════════════════════════════════
+  # POIs
+  # ══════════════════════════════════════════
+  /pois:
+    get:
+      tags: [POIs]
+      summary: Danh sách tất cả POI đang active
+      security: []
+      parameters:
+        - name: includeInactive
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Chỉ Admin mới dùng được
+      responses:
+        "200":
+          description: Danh sách POI
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/POI'
+
+    post:
+      tags: [POIs]
+      summary: Tạo POI mới
+      description: Yêu cầu quyền `pois:write` (Editor hoặc SuperAdmin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePOIRequest'
+      responses:
+        "201":
+          description: POI đã được tạo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/POI'
+        "400":
+          $ref: '#/components/responses/ValidationError'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  /pois/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags: [POIs]
+      summary: Chi tiết POI
+      security: []
+      responses:
+        "200":
+          description: POI detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/POI'
+        "404":
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags: [POIs]
+      summary: Cập nhật POI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePOIRequest'
+      responses:
+        "200":
+          description: POI đã cập nhật
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/POI'
+        "400":
+          $ref: '#/components/responses/ValidationError'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags: [POIs]
+      summary: Xoá POI (soft delete — set isActive=false)
+      responses:
+        "204":
+          description: Đã xoá
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+
+  /pois/{id}/image:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags: [POIs]
+      summary: Upload ảnh đại diện cho POI
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [image]
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Ảnh JPG/PNG/WebP, max 5MB
+      responses:
+        "200":
+          description: Upload thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imageUrl:
+                    type: string
+                    example: /uploads/pois/nha-tho-duc-ba-abc123.jpg
+        "400":
+          description: File không hợp lệ (sai định dạng hoặc quá lớn)
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  # ══════════════════════════════════════════
+  # TOURS
+  # ══════════════════════════════════════════
+  /tours:
+    get:
+      tags: [Tours]
+      summary: Danh sách tất cả Tour đang active
+      security: []
+      responses:
+        "200":
+          description: Danh sách Tour
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tour'
+
+    post:
+      tags: [Tours]
+      summary: Tạo Tour mới
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTourRequest'
+      responses:
+        "201":
+          description: Tour đã được tạo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tour'
+        "400":
+          $ref: '#/components/responses/ValidationError'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  /tours/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags: [Tours]
+      summary: Chi tiết Tour kèm danh sách POI theo thứ tự
+      security: []
+      responses:
+        "200":
+          description: Tour detail with ordered POIs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TourDetail'
+        "404":
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags: [Tours]
+      summary: Cập nhật thông tin Tour
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTourRequest'
+      responses:
+        "200":
+          description: Tour đã cập nhật
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tour'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+    delete:
+      tags: [Tours]
+      summary: Xoá Tour (soft delete)
+      responses:
+        "204":
+          description: Đã xoá
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  /tours/{id}/pois:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      tags: [Tours]
+      summary: Cập nhật danh sách & thứ tự POI trong Tour
+      description: Ghi đè toàn bộ danh sách POI theo thứ tự trong mảng poiIds.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTourPOIsRequest'
+      responses:
+        "200":
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TourDetail'
+        "400":
+          description: Một hoặc nhiều poiId không tồn tại
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  # ══════════════════════════════════════════
+  # NARRATIONS
+  # ══════════════════════════════════════════
+  /narrations:
+    get:
+      tags: [Narrations]
+      summary: Lấy narration cho một POI
+      description: |
+        Trả về narration phù hợp với ngôn ngữ và tier của user.
+        - User free: chỉ nhận narration có `isPremium=false`
+        - User premium: nhận tất cả
+      parameters:
+        - name: poiId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: lang
+          in: query
+          schema:
+            type: string
+            enum: [vi, en]
+            default: vi
+      responses:
+        "200":
+          description: Narration phù hợp
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Narration'
+        "404":
+          description: Không có narration cho POI này với ngôn ngữ yêu cầu
+
+    post:
+      tags: [Narrations]
+      summary: Tạo narration mới cho POI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNarrationRequest'
+      responses:
+        "201":
+          description: Narration đã được tạo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Narration'
+        "400":
+          $ref: '#/components/responses/ValidationError'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  /narrations/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      tags: [Narrations]
+      summary: Cập nhật nội dung narration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contentText:
+                  type: string
+                isPremium:
+                  type: boolean
+                voiceType:
+                  type: string
+                  enum: [male, female]
+      responses:
+        "200":
+          description: Narration đã cập nhật
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Narration'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+    delete:
+      tags: [Narrations]
+      summary: Xoá narration
+      responses:
+        "204":
+          description: Đã xoá
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  /narrations/{id}/audio:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags: [Narrations]
+      summary: Upload file audio cho narration
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [audio]
+              properties:
+                audio:
+                  type: string
+                  format: binary
+                  description: File MP3 hoặc M4A, max 20MB
+      responses:
+        "200":
+          description: Upload thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  audioUrl:
+                    type: string
+                  durationSeconds:
+                    type: integer
+        "400":
+          description: File không hợp lệ
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  # ══════════════════════════════════════════
+  # ACTIVITY
+  # ══════════════════════════════════════════
+  /activity/location:
+    post:
+      tags: [Activity]
+      summary: Gửi GPS location, nhận narration trigger nếu vào geofence
+      description: |
+        Client gọi endpoint này mỗi 5 giây khi GPS đang bật.
+        API tính khoảng cách đến tất cả POI active và trả về narration nếu user vào geofence.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationRequest'
+      responses:
+        "200":
+          description: Kết quả check geofence
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  /activity/event:
+    post:
+      tags: [Activity]
+      summary: Ghi lại event của user (play, stop, complete narration)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRequest'
+      responses:
+        "204":
+          description: Event đã được ghi nhận
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  # ══════════════════════════════════════════
+  # SUBSCRIPTIONS
+  # ══════════════════════════════════════════
+  /subscriptions/plans:
+    get:
+      tags: [Subscriptions]
+      summary: Danh sách gói subscription đang active
+      security: []
+      responses:
+        "200":
+          description: Danh sách plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionPlan'
+
+  /subscriptions/status:
+    get:
+      tags: [Subscriptions]
+      summary: Trạng thái subscription của user hiện tại
+      responses:
+        "200":
+          description: Subscription status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionStatus'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  # ══════════════════════════════════════════
+  # PAYMENTS
+  # ══════════════════════════════════════════
+  /payments/vnpay/create:
+    post:
+      tags: [Payments]
+      summary: Tạo VNPay payment order
+      description: Trả về paymentUrl để redirect user đến VNPay thanh toán.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVNPayOrderRequest'
+      responses:
+        "200":
+          description: Order đã được tạo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateVNPayOrderResponse'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "422":
+          description: User đã có giao dịch Pending đang xử lý
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: payment_already_pending
+                message: You already have a pending payment. Please complete or wait for it to expire.
+
+  /payments/vnpay/webhook:
+    post:
+      tags: [Payments]
+      summary: VNPay IPN webhook endpoint
+      description: |
+        **KHÔNG dùng trực tiếp từ client.** Endpoint này chỉ nhận request từ VNPay server.
+
+        Bảo mật:
+        - IP whitelist (chỉ accept VNPay IPs)
+        - HMAC-SHA512 signature verification bắt buộc
+      security: []
+      parameters:
+        - name: vnp_TxnRef
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: vnp_ResponseCode
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: vnp_SecureHash
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: IPN response (VNPay yêu cầu luôn trả 200)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  RspCode:
+                    type: string
+                    example: "00"
+                  Message:
+                    type: string
+                    example: Confirm Success
+
+  /payments/vnpay/return:
+    get:
+      tags: [Payments]
+      summary: Return URL sau khi VNPay redirect user về
+      security: []
+      parameters:
+        - name: vnp_TxnRef
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: vnp_ResponseCode
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: vnp_SecureHash
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Kết quả thanh toán
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VNPayReturnResponse'
+
+  /payments/history:
+    get:
+      tags: [Payments]
+      summary: Lịch sử giao dịch của user hiện tại
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Paginated transaction list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PaymentTransaction'
+                  meta:
+                    $ref: '#/components/schemas/PaginatedMeta'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  # ══════════════════════════════════════════
+  # ANALYTICS (SuperAdmin only)
+  # ══════════════════════════════════════════
+  /analytics/overview:
+    get:
+      tags: [Analytics]
+      summary: Tổng quan dashboard (users, revenue, plays)
+      responses:
+        "200":
+          description: Overview metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsOverview'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  /analytics/heatmap:
+    get:
+      tags: [Analytics]
+      summary: Dữ liệu heatmap — tần suất trigger theo POI
+      parameters:
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date
+          example: "2026-05-01"
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date
+          example: "2026-05-13"
+      responses:
+        "200":
+          description: Heatmap data points
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HeatmapDataPoint'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  /analytics/pois/popular:
+    get:
+      tags: [Analytics]
+      summary: Top POI theo lượt trigger và unique users
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            maximum: 50
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [today, week, month, all]
+            default: month
+      responses:
+        "200":
+          description: Popular POIs ranked list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PopularPOI'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  # ══════════════════════════════════════════
+  # QR LOGIN
+  # ══════════════════════════════════════════
+  /qr/generate:
+    post:
+      tags: [QR Login]
+      summary: Tạo QR login token (Browser/TV)
+      security: []
+      responses:
+        "200":
+          description: QR token đã được tạo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QrGenerateResponse'
+
+  /qr/status/{token}:
+    parameters:
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags: [QR Login]
+      summary: Kiểm tra trạng thái QR token (polling fallback)
+      description: |
+        Browser dùng SignalR để nhận kết quả realtime.
+        Endpoint này là fallback cho môi trường không hỗ trợ WebSocket.
+      security: []
+      responses:
+        "200":
+          description: QR token status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QrStatusResponse'
+        "404":
+          $ref: '#/components/responses/NotFound'
+
+  /qr/scan/{token}:
+    parameters:
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags: [QR Login]
+      summary: Mobile app xác nhận QR token
+      description: |
+        Mobile user đã đăng nhập (có JWT) scan QR và confirm cho browser.
+        API sẽ push JWT pair cho browser qua SignalR.
+      responses:
+        "200":
+          description: Đã confirm. Browser sẽ nhận token qua SignalR.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: QR login confirmed. The browser session has been authenticated.
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "404":
+          description: Token không tồn tại hoặc đã hết hạn
+        "409":
+          description: Token đã được scan rồi
+
+  # ══════════════════════════════════════════
+  # ADMIN AUTH
+  # ══════════════════════════════════════════
+  /admin/auth/login:
+    post:
+      tags: [Admin Auth]
+      summary: Admin đăng nhập
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLoginRequest'
+      responses:
+        "200":
+          description: Đăng nhập thành công
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/TokenPair'
+                  - type: object
+                    properties:
+                      admin:
+                        $ref: '#/components/schemas/AdminProfile'
+        "401":
+          description: Sai username hoặc mật khẩu
+
+  /admin/auth/refresh:
+    post:
+      tags: [Admin Auth]
+      summary: Refresh admin JWT token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        "200":
+          description: Token mới
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  /admin/auth/me:
+    get:
+      tags: [Admin Auth]
+      summary: Lấy profile admin hiện tại
+      responses:
+        "200":
+          description: Admin profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminProfile'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  # ══════════════════════════════════════════
+  # ADMIN USERS
+  # ══════════════════════════════════════════
+  /admin/users:
+    get:
+      tags: [Admin Users]
+      summary: Danh sách tất cả tourist users (SuperAdmin)
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Tìm theo email hoặc fullName
+        - name: subscriptionStatus
+          in: query
+          schema:
+            type: string
+            enum: [Free, Premium, Expired]
+      responses:
+        "200":
+          description: Paginated user list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AdminUser'
+                  meta:
+                    $ref: '#/components/schemas/PaginatedMeta'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+  /admin/users/{id}/subscription:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      tags: [Admin Users]
+      summary: Cập nhật subscription cho user (manual override)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [subscriptionStatus]
+              properties:
+                subscriptionStatus:
+                  type: string
+                  enum: [Free, Premium, Expired]
+                premiumUntil:
+                  type: string
+                  format: date-time
+                  nullable: true
+      responses:
+        "200":
+          description: Subscription đã được cập nhật
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+
+  /admin/roles:
+    get:
+      tags: [Admin Users]
+      summary: Danh sách roles và permissions (SuperAdmin)
+      responses:
+        "200":
+          description: Roles list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                    name:
+                      type: string
+                    permissions:
+                      type: array
+                      items:
+                        type: string
+        "403":
+          $ref: '#/components/responses/Forbidden'

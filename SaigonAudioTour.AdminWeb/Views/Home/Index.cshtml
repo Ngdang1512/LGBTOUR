@@ -1,38 +1,202 @@
-﻿<!-- Tích hợp Live Radar (Real-time SignalR) -->
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Tích hợp Live Radar (Real-time SignalR) -->
 <partial name="_LiveRadar" />
 
+<style>
+    .db-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 18px 16px 14px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.08);
+        transition: box-shadow 0.2s;
+        border-top: 4px solid transparent;
+        height: 100%;
+    }
+    .db-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+    .db-card .db-num   { font-size: 2rem; font-weight: 700; line-height: 1.15; }
+    .db-card .db-label { font-size: 0.73rem; color: #6c757d; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-top: 3px; }
+    .db-card .db-icon  { font-size: 1.5rem; float: right; opacity: 0.22; }
+    .dc-pois    { border-top-color: #dc3545; } .dc-pois    .db-num { color: #dc2626; }
+    .dc-tours   { border-top-color: #ffc107; } .dc-tours   .db-num { color: #d97706; }
+    .dc-users   { border-top-color: #0dcaf0; } .dc-users   .db-num { color: #0891b2; }
+    .dc-listens { border-top-color: #198754; } .dc-listens .db-num { color: #198754; }
+    .section-header { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: #0d6efd; font-weight: 700; }
+    .chart-wrap { position: relative; height: 240px; }
+</style>
+
+<!-- Summary KPI cards -->
+<div class="row mb-3" id="dashKpiRow">
+    <div class="col-6 col-md-3 mb-2">
+        <div class="db-card dc-pois">
+            <i class="fas fa-map-marker-alt db-icon"></i>
+            <div class="db-num" id="dbPois">-</div>
+            <div class="db-label">Điểm tham quan</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 mb-2">
+        <div class="db-card dc-tours">
+            <i class="fas fa-bus db-icon"></i>
+            <div class="db-num" id="dbTours">-</div>
+            <div class="db-label">Tuyến đang hoạt động</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 mb-2">
+        <div class="db-card dc-users">
+            <i class="fas fa-wifi db-icon"></i>
+            <div class="db-num" id="dbOnline">0</div>
+            <div class="db-label">Đang online ngay</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 mb-2">
+        <div class="db-card dc-listens">
+            <i class="fas fa-headphones db-icon"></i>
+            <div class="db-num" id="dbListens">-</div>
+            <div class="db-label">Tổng lượt nghe hôm nay</div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart + Quick links -->
 <div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title">Top 5 Địa Điểm Được Quan Tâm Nhất</h3>
+    <div class="col-md-8 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
+                <span class="section-header"><i class="fas fa-chart-bar mr-1"></i>Top 5 địa điểm được quan tâm nhất</span>
+                <a href="/Analytics/Dashboard" class="btn btn-sm btn-light border" style="font-size:0.78rem">
+                    <i class="fas fa-external-link-alt mr-1"></i>Xem đầy đủ
+                </a>
             </div>
-            <div class="card-body">
-                <canvas id="poiChart" height="150"></canvas>
+            <div class="card-body pb-3">
+                <div class="chart-wrap">
+                    <canvas id="poiChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white py-2">
+                <span class="section-header"><i class="fas fa-bolt mr-1"></i>Truy cập nhanh</span>
+            </div>
+            <div class="card-body py-2">
+                <a href="/Pois/Index" class="d-flex align-items-center gap-3 p-2 rounded mb-1 text-decoration-none" style="transition:.15s" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background=''">
+                    <div class="rounded d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#fee2e2;flex-shrink:0">
+                        <i class="fas fa-map-marker-alt text-danger" style="font-size:.9rem"></i>
+                    </div>
+                    <div>
+                        <div class="font-weight-bold text-dark" style="font-size:.85rem">Quản lý POI</div>
+                        <div class="text-muted" style="font-size:.75rem">Thêm, sửa điểm tham quan</div>
+                    </div>
+                </a>
+                <a href="/Tours/Index" class="d-flex align-items-center gap-3 p-2 rounded mb-1 text-decoration-none" style="transition:.15s" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background=''">
+                    <div class="rounded d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#fef3c7;flex-shrink:0">
+                        <i class="fas fa-bus text-warning" style="font-size:.9rem"></i>
+                    </div>
+                    <div>
+                        <div class="font-weight-bold text-dark" style="font-size:.85rem">Tuyến xe buýt</div>
+                        <div class="text-muted" style="font-size:.75rem">Sắp xếp lộ trình</div>
+                    </div>
+                </a>
+                <a href="/Narrations/Create" class="d-flex align-items-center gap-3 p-2 rounded mb-1 text-decoration-none" style="transition:.15s" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background=''">
+                    <div class="rounded d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#d1fae5;flex-shrink:0">
+                        <i class="fas fa-microphone-alt text-success" style="font-size:.9rem"></i>
+                    </div>
+                    <div>
+                        <div class="font-weight-bold text-dark" style="font-size:.85rem">Upload Audio</div>
+                        <div class="text-muted" style="font-size:.75rem">Thêm thuyết minh mới</div>
+                    </div>
+                </a>
+                <a href="/Activity/Index" class="d-flex align-items-center gap-3 p-2 rounded text-decoration-none" style="transition:.15s" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background=''">
+                    <div class="rounded d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#e0f2fe;flex-shrink:0">
+                        <i class="fas fa-satellite-dish text-info" style="font-size:.9rem"></i>
+                    </div>
+                    <div>
+                        <div class="font-weight-bold text-dark" style="font-size:.85rem">Giám sát realtime</div>
+                        <div class="text-muted" style="font-size:.75rem">Radar người dùng</div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var statsData = @Html.Raw(ViewBag.Stats ?? "[]");
-        var labels = statsData.map(x => x.poiName);
-        var counts = statsData.map(x => x.totalListens);
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+(function () {
+    var statsData = @Html.Raw(ViewBag.Stats ?? "[]");
 
-        new Chart(document.getElementById('poiChart'), {
-        type: 'bar',
-        data: {
-        labels: labels,
-        datasets: [{
-        label: 'Số lượt nghe thuyết minh',
-        data: counts,
-        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-        borderColor: 'rgb(54, 162, 235)',
-        borderWidth: 1
-        }]
-        }
+    // KPI từ stats
+    if (Array.isArray(statsData) && statsData.length > 0) {
+        var totalListens = statsData.reduce(function(s,x){ return s + (x.totalListens || 0); }, 0);
+        document.getElementById('dbListens').textContent = totalListens.toLocaleString('vi-VN');
+    } else {
+        document.getElementById('dbListens').textContent = '0';
+    }
+
+    // POI + Tour count từ API
+    Promise.all([
+        fetch('/api-proxy/pois-count').catch(() => null),
+        fetch('/api-proxy/tours-count').catch(() => null)
+    ]);
+
+    // Online badge từ localStorage (set bởi Activity page)
+    function refreshOnline() {
+        try {
+            var n = localStorage.getItem('sat_online');
+            document.getElementById('dbOnline').textContent = (n && parseInt(n) > 0) ? parseInt(n).toLocaleString('vi-VN') : '0';
+        } catch(_) {}
+    }
+    refreshOnline();
+    setInterval(refreshOnline, 10000);
+
+    // POI + Tour count từ stat cards data
+    document.getElementById('dbPois').textContent = statsData.length > 0 ? statsData.length : '-';
+    document.getElementById('dbTours').textContent = '-';
+
+    // Chart
+    var labels = statsData.map(function(x) { return x.poiName; });
+    var counts = statsData.map(function(x) { return x.totalListens; });
+
+    if (labels.length > 0) {
+        var ctx = document.getElementById('poiChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Lượt nghe',
+                    data: counts,
+                    backgroundColor: [
+                        'rgba(220,53,69,0.7)','rgba(13,110,253,0.7)','rgba(25,135,84,0.7)',
+                        'rgba(255,193,7,0.7)','rgba(13,202,240,0.7)'
+                    ],
+                    borderRadius: 5,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: function(c) { return c.raw.toLocaleString('vi-VN') + ' lượt nghe'; } } }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,.04)' },
+                         ticks: { callback: function(v) { return v.toLocaleString('vi-VN'); } } },
+                    x: { grid: { display: false } }
+                }
+            }
         });
-    </script>
+    } else {
+        document.getElementById('poiChart').closest('.chart-wrap').innerHTML =
+            '<div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted">' +
+            '<i class="fas fa-chart-bar fa-2x mb-2 opacity-25"></i><span style="font-size:.83rem">Chưa có dữ liệu lượt nghe</span></div>';
+    }
+})();
+</script>
 }

@@ -1,0 +1,609 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		845F76A92F971FEB00AB6AE1 /* SaigonAudioTourApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F76A82F971FEB00AB6AE1 /* SaigonAudioTourApp.swift */; };
+		845F76AB2F971FEB00AB6AE1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F76AA2F971FEB00AB6AE1 /* ContentView.swift */; };
+		845F76AD2F971FED00AB6AE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 845F76AC2F971FED00AB6AE1 /* Assets.xcassets */; };
+		845F76B12F971FED00AB6AE1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 845F76B02F971FED00AB6AE1 /* Preview Assets.xcassets */; };
+		845F76BB2F971FED00AB6AE1 /* SaigonAudioTourTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F76BA2F971FED00AB6AE1 /* SaigonAudioTourTests.swift */; };
+		845F76C52F971FED00AB6AE1 /* SaigonAudioTourUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F76C42F971FED00AB6AE1 /* SaigonAudioTourUITests.swift */; };
+		845F76C72F971FED00AB6AE1 /* SaigonAudioTourUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F76C62F971FED00AB6AE1 /* SaigonAudioTourUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		845F76B72F971FED00AB6AE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 845F769D2F971FEB00AB6AE1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 845F76A42F971FEB00AB6AE1;
+			remoteInfo = SaigonAudioTour;
+		};
+		845F76C12F971FED00AB6AE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 845F769D2F971FEB00AB6AE1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 845F76A42F971FEB00AB6AE1;
+			remoteInfo = SaigonAudioTour;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		845F76A52F971FEB00AB6AE1 /* SaigonAudioTour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaigonAudioTour.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		845F76A82F971FEB00AB6AE1 /* SaigonAudioTourApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaigonAudioTourApp.swift; sourceTree = "<group>"; };
+		845F76AA2F971FEB00AB6AE1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		845F76AC2F971FED00AB6AE1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		845F76AE2F971FED00AB6AE1 /* SaigonAudioTour.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SaigonAudioTour.entitlements; sourceTree = "<group>"; };
+		845F76B02F971FED00AB6AE1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		845F76B62F971FED00AB6AE1 /* SaigonAudioTourTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaigonAudioTourTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		845F76BA2F971FED00AB6AE1 /* SaigonAudioTourTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaigonAudioTourTests.swift; sourceTree = "<group>"; };
+		845F76C02F971FED00AB6AE1 /* SaigonAudioTourUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaigonAudioTourUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		845F76C42F971FED00AB6AE1 /* SaigonAudioTourUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaigonAudioTourUITests.swift; sourceTree = "<group>"; };
+		845F76C62F971FED00AB6AE1 /* SaigonAudioTourUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaigonAudioTourUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		845F76A22F971FEB00AB6AE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		845F76B32F971FED00AB6AE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		845F76BD2F971FED00AB6AE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		845F769C2F971FEB00AB6AE1 = {
+			isa = PBXGroup;
+			children = (
+				845F76A72F971FEB00AB6AE1 /* SaigonAudioTour */,
+				845F76B92F971FED00AB6AE1 /* SaigonAudioTourTests */,
+				845F76C32F971FED00AB6AE1 /* SaigonAudioTourUITests */,
+				845F76A62F971FEB00AB6AE1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		845F76A62F971FEB00AB6AE1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				845F76A52F971FEB00AB6AE1 /* SaigonAudioTour.app */,
+				845F76B62F971FED00AB6AE1 /* SaigonAudioTourTests.xctest */,
+				845F76C02F971FED00AB6AE1 /* SaigonAudioTourUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		845F76A72F971FEB00AB6AE1 /* SaigonAudioTour */ = {
+			isa = PBXGroup;
+			children = (
+				845F76A82F971FEB00AB6AE1 /* SaigonAudioTourApp.swift */,
+				845F76AA2F971FEB00AB6AE1 /* ContentView.swift */,
+				845F76AC2F971FED00AB6AE1 /* Assets.xcassets */,
+				845F76AE2F971FED00AB6AE1 /* SaigonAudioTour.entitlements */,
+				845F76AF2F971FED00AB6AE1 /* Preview Content */,
+			);
+			path = SaigonAudioTour;
+			sourceTree = "<group>";
+		};
+		845F76AF2F971FED00AB6AE1 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				845F76B02F971FED00AB6AE1 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		845F76B92F971FED00AB6AE1 /* SaigonAudioTourTests */ = {
+			isa = PBXGroup;
+			children = (
+				845F76BA2F971FED00AB6AE1 /* SaigonAudioTourTests.swift */,
+			);
+			path = SaigonAudioTourTests;
+			sourceTree = "<group>";
+		};
+		845F76C32F971FED00AB6AE1 /* SaigonAudioTourUITests */ = {
+			isa = PBXGroup;
+			children = (
+				845F76C42F971FED00AB6AE1 /* SaigonAudioTourUITests.swift */,
+				845F76C62F971FED00AB6AE1 /* SaigonAudioTourUITestsLaunchTests.swift */,
+			);
+			path = SaigonAudioTourUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		845F76A42F971FEB00AB6AE1 /* SaigonAudioTour */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 845F76CA2F971FED00AB6AE1 /* Build configuration list for PBXNativeTarget "SaigonAudioTour" */;
+			buildPhases = (
+				845F76A12F971FEB00AB6AE1 /* Sources */,
+				845F76A22F971FEB00AB6AE1 /* Frameworks */,
+				845F76A32F971FEB00AB6AE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SaigonAudioTour;
+			productName = SaigonAudioTour;
+			productReference = 845F76A52F971FEB00AB6AE1 /* SaigonAudioTour.app */;
+			productType = "com.apple.product-type.application";
+		};
+		845F76B52F971FED00AB6AE1 /* SaigonAudioTourTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 845F76CD2F971FED00AB6AE1 /* Build configuration list for PBXNativeTarget "SaigonAudioTourTests" */;
+			buildPhases = (
+				845F76B22F971FED00AB6AE1 /* Sources */,
+				845F76B32F971FED00AB6AE1 /* Frameworks */,
+				845F76B42F971FED00AB6AE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				845F76B82F971FED00AB6AE1 /* PBXTargetDependency */,
+			);
+			name = SaigonAudioTourTests;
+			productName = SaigonAudioTourTests;
+			productReference = 845F76B62F971FED00AB6AE1 /* SaigonAudioTourTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		845F76BF2F971FED00AB6AE1 /* SaigonAudioTourUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 845F76D02F971FED00AB6AE1 /* Build configuration list for PBXNativeTarget "SaigonAudioTourUITests" */;
+			buildPhases = (
+				845F76BC2F971FED00AB6AE1 /* Sources */,
+				845F76BD2F971FED00AB6AE1 /* Frameworks */,
+				845F76BE2F971FED00AB6AE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				845F76C22F971FED00AB6AE1 /* PBXTargetDependency */,
+			);
+			name = SaigonAudioTourUITests;
+			productName = SaigonAudioTourUITests;
+			productReference = 845F76C02F971FED00AB6AE1 /* SaigonAudioTourUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		845F769D2F971FEB00AB6AE1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1400;
+				LastUpgradeCheck = 1400;
+				TargetAttributes = {
+					845F76A42F971FEB00AB6AE1 = {
+						CreatedOnToolsVersion = 14.0.1;
+					};
+					845F76B52F971FED00AB6AE1 = {
+						CreatedOnToolsVersion = 14.0.1;
+						TestTargetID = 845F76A42F971FEB00AB6AE1;
+					};
+					845F76BF2F971FED00AB6AE1 = {
+						CreatedOnToolsVersion = 14.0.1;
+						TestTargetID = 845F76A42F971FEB00AB6AE1;
+					};
+				};
+			};
+			buildConfigurationList = 845F76A02F971FEB00AB6AE1 /* Build configuration list for PBXProject "SaigonAudioTour" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 845F769C2F971FEB00AB6AE1;
+			productRefGroup = 845F76A62F971FEB00AB6AE1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				845F76A42F971FEB00AB6AE1 /* SaigonAudioTour */,
+				845F76B52F971FED00AB6AE1 /* SaigonAudioTourTests */,
+				845F76BF2F971FED00AB6AE1 /* SaigonAudioTourUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		845F76A32F971FEB00AB6AE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				845F76B12F971FED00AB6AE1 /* Preview Assets.xcassets in Resources */,
+				845F76AD2F971FED00AB6AE1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		845F76B42F971FED00AB6AE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		845F76BE2F971FED00AB6AE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		845F76A12F971FEB00AB6AE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				845F76AB2F971FEB00AB6AE1 /* ContentView.swift in Sources */,
+				845F76A92F971FEB00AB6AE1 /* SaigonAudioTourApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		845F76B22F971FED00AB6AE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				845F76BB2F971FED00AB6AE1 /* SaigonAudioTourTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		845F76BC2F971FED00AB6AE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				845F76C72F971FED00AB6AE1 /* SaigonAudioTourUITestsLaunchTests.swift in Sources */,
+				845F76C52F971FED00AB6AE1 /* SaigonAudioTourUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		845F76B82F971FED00AB6AE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 845F76A42F971FEB00AB6AE1 /* SaigonAudioTour */;
+			targetProxy = 845F76B72F971FED00AB6AE1 /* PBXContainerItemProxy */;
+		};
+		845F76C22F971FED00AB6AE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 845F76A42F971FEB00AB6AE1 /* SaigonAudioTour */;
+			targetProxy = 845F76C12F971FED00AB6AE1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		845F76C82F971FED00AB6AE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		845F76C92F971FED00AB6AE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		845F76CB2F971FED00AB6AE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SaigonAudioTour/SaigonAudioTour.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SaigonAudioTour/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NgDang.SaigonAudioTour;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		845F76CC2F971FED00AB6AE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SaigonAudioTour/SaigonAudioTour.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SaigonAudioTour/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NgDang.SaigonAudioTour;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		845F76CE2F971FED00AB6AE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NgDang.SaigonAudioTourTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaigonAudioTour.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SaigonAudioTour";
+			};
+			name = Debug;
+		};
+		845F76CF2F971FED00AB6AE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NgDang.SaigonAudioTourTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaigonAudioTour.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SaigonAudioTour";
+			};
+			name = Release;
+		};
+		845F76D12F971FED00AB6AE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NgDang.SaigonAudioTourUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SaigonAudioTour;
+			};
+			name = Debug;
+		};
+		845F76D22F971FED00AB6AE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NgDang.SaigonAudioTourUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SaigonAudioTour;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		845F76A02F971FEB00AB6AE1 /* Build configuration list for PBXProject "SaigonAudioTour" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				845F76C82F971FED00AB6AE1 /* Debug */,
+				845F76C92F971FED00AB6AE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		845F76CA2F971FED00AB6AE1 /* Build configuration list for PBXNativeTarget "SaigonAudioTour" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				845F76CB2F971FED00AB6AE1 /* Debug */,
+				845F76CC2F971FED00AB6AE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		845F76CD2F971FED00AB6AE1 /* Build configuration list for PBXNativeTarget "SaigonAudioTourTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				845F76CE2F971FED00AB6AE1 /* Debug */,
+				845F76CF2F971FED00AB6AE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		845F76D02F971FED00AB6AE1 /* Build configuration list for PBXNativeTarget "SaigonAudioTourUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				845F76D12F971FED00AB6AE1 /* Debug */,
+				845F76D22F971FED00AB6AE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 845F769D2F971FEB00AB6AE1 /* Project object */;
+}

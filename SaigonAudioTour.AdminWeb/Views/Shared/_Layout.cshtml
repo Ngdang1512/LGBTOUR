@@ -1,216 +1,374 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Cổng Điều Hành Saigon Audio Tour</title>
-    
+    <title>@ViewData["Title"] — Saigon Audio Tour Admin</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SaigonAudioTour.AdminWeb.styles.css" asp-append-version="true" />
 
     <style>
-        html, body { height: 100%; }
-        body { margin: 0; background-color: #f4f6f9; overflow-x: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        #wrapper { display: flex; width: 100%; min-height: 100dvh; position: relative; }
-        
-        /* CỘT MENU TRÁI (SIDEBAR) */
+        /* ── Layout Shell ── */
+        #wrapper { display: flex; min-height: 100dvh; }
+
+        /* ── Sidebar ── */
         #sidebar {
-            width: 250px;
-            background-color: #343a40;
-            color: white;
+            width: 240px;
             flex-shrink: 0;
+            background: #0f172a;
             display: flex;
             flex-direction: column;
-            transition: margin-left 0.25s ease, transform 0.25s ease;
+            position: sticky;
+            top: 0;
+            height: 100dvh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: width .25s cubic-bezier(.4,0,.2,1), transform .25s cubic-bezier(.4,0,.2,1);
             z-index: 1040;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,.1) transparent;
         }
-        #sidebar .brand { padding: 20px; font-size: 1.2rem; font-weight: bold; text-align: center; border-bottom: 1px solid #4b545c; color: white; text-transform: uppercase; letter-spacing: 1px;}
-        #sidebar .user-panel { padding: 15px 20px; border-bottom: 1px solid #4b545c; }
-        #sidebar .menu-title { font-size: 0.8rem; color: #8fd19e; padding: 15px 20px 5px; text-transform: uppercase; font-weight: bold; }
-        #sidebar .nav-link { color: #c2c7d0; padding: 12px 20px; display: block; text-decoration: none; transition: 0.2s; }
-        #sidebar .nav-link:hover, #sidebar .nav-link.active { background-color: rgba(255,255,255,0.1); color: #fff; }
-        #sidebar .nav-link i { width: 25px; text-align: center; }
+        #sidebar::-webkit-scrollbar { width: 4px; }
+        #sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
 
-        /* VÙNG NỘI DUNG PHẢI */
-        #content-wrapper { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
-        .top-navbar { background-color: #fff; height: 60px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-        .main-content { padding: 20px; flex: 1 1 auto; }
-        footer { margin-top: auto; }
+        /* Brand */
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 16px 18px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+            text-decoration: none;
+        }
+        .sidebar-brand-icon {
+            width: 34px; height: 34px; border-radius: 8px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(99,102,241,.4);
+        }
+        .sidebar-brand-icon i { color: #fff; font-size: .9rem; }
+        .sidebar-brand-text { min-width: 0; }
+        .sidebar-brand-name {
+            font-size: .78rem; font-weight: 700; color: #f1f5f9;
+            letter-spacing: .04em; text-transform: uppercase;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+        .sidebar-brand-sub {
+            font-size: .65rem; color: rgba(148,163,184,.7);
+            font-weight: 400; letter-spacing: .08em; text-transform: uppercase;
+            margin-top: 1px;
+        }
 
-        #sidebar-overlay {
+        /* User panel */
+        .sidebar-user {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .sidebar-user-avatar {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex; align-items: center; justify-content: center;
+            font-size: .7rem; font-weight: 700; color: #fff; flex-shrink: 0;
+        }
+        .sidebar-user-name { font-size: .78rem; font-weight: 500; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sidebar-user-role { font-size: .65rem; color: rgba(148,163,184,.6); margin-top: 1px; }
+
+        /* Nav section heading */
+        .nav-section-title {
+            font-size: .62rem; font-weight: 700; letter-spacing: .1em;
+            text-transform: uppercase; color: rgba(100,116,139,.7);
+            padding: 16px 16px 6px;
+        }
+
+        /* Nav links */
+        .sidebar-nav-link {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 16px; margin: 1px 8px;
+            border-radius: 7px;
+            color: rgba(148,163,184,.85);
+            font-size: .8rem; font-weight: 500;
+            text-decoration: none;
+            transition: all .15s ease;
+            white-space: nowrap; overflow: hidden;
+        }
+        .sidebar-nav-link:hover {
+            background: rgba(99,102,241,.1);
+            color: #e2e8f0;
+            text-decoration: none;
+        }
+        .sidebar-nav-link.active {
+            background: rgba(99,102,241,.15);
+            color: #a5b4fc;
+            font-weight: 600;
+        }
+        .sidebar-nav-link .nav-icon {
+            width: 18px; text-align: center; font-size: .82rem; flex-shrink: 0;
+            opacity: .8;
+        }
+        .sidebar-nav-link.active .nav-icon { opacity: 1; color: #818cf8; }
+        .sidebar-nav-link .nav-badge {
+            margin-left: auto;
+            background: #ef4444; color: #fff;
+            font-size: .58rem; font-weight: 700;
+            padding: .1em .45em; border-radius: 100px;
             display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.35);
+        }
+
+        /* Sidebar bottom */
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 12px 8px 16px;
+            border-top: 1px solid rgba(255,255,255,.06);
+        }
+
+        /* Collapsed sidebar */
+        #wrapper.sidebar-collapsed #sidebar { width: 0; }
+        #wrapper.sidebar-collapsed #sidebar .sidebar-brand-text,
+        #wrapper.sidebar-collapsed #sidebar .sidebar-user-name,
+        #wrapper.sidebar-collapsed #sidebar .sidebar-user-role,
+        #wrapper.sidebar-collapsed #sidebar .nav-section-title,
+        #wrapper.sidebar-collapsed #sidebar .sidebar-nav-link span:not(.nav-icon) { display: none; }
+
+        /* ── Content wrapper ── */
+        #content-wrapper {
+            flex: 1 1 auto;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── Topbar ── */
+        .topbar {
+            background: #fff;
+            height: 56px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
             z-index: 1030;
+            box-shadow: 0 1px 3px rgba(0,0,0,.04);
+        }
+        .topbar-left { display: flex; align-items: center; gap: 12px; }
+        .topbar-right { display: flex; align-items: center; gap: 8px; }
+        .topbar-page-title { font-size: .88rem; font-weight: 600; color: #0f172a; letter-spacing: -.01em; }
+        .topbar-page-title span { color: #94a3b8; font-weight: 400; font-size: .78rem; }
+
+        .btn-topbar-toggle {
+            width: 34px; height: 34px; border: 1px solid #e2e8f0;
+            background: #fff; border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            color: #64748b; cursor: pointer;
+            transition: all .15s;
+        }
+        .btn-topbar-toggle:hover { background: #f1f5f9; color: #0f172a; }
+
+        /* ── Main content ── */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-x: hidden;
         }
 
-        #wrapper.sidebar-collapsed #sidebar {
-            margin-left: -250px;
+        /* ── Overlay (mobile) ── */
+        #sidebar-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,.45); z-index: 1035;
+            backdrop-filter: blur(2px);
         }
 
+        /* ── Footer ── */
+        .admin-footer {
+            background: #fff;
+            border-top: 1px solid #e2e8f0;
+            padding: 12px 20px;
+            font-size: .72rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        /* ── Toast notification stack ── */
+        .admin-toast-wrap {
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 8px;
+            pointer-events: none;
+        }
+        .admin-toast {
+            background: #0f172a; color: #f1f5f9;
+            padding: 10px 16px; border-radius: 8px;
+            font-size: .8rem; font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,.2);
+            display: flex; align-items: center; gap: 8px;
+            pointer-events: all;
+            animation: toastIn .25s ease;
+        }
+        .admin-toast.success { border-left: 3px solid #10b981; }
+        .admin-toast.error   { border-left: 3px solid #ef4444; }
+        @@keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ── Mobile ── */
         @@media (max-width: 991.98px) {
             #sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100dvh;
-                margin-left: 0;
+                position: fixed; top: 0; left: 0; height: 100dvh;
                 transform: translateX(-100%);
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+                box-shadow: 4px 0 20px rgba(0,0,0,.3);
+                width: 240px !important;
             }
-
-            #wrapper.mobile-sidebar-open #sidebar {
-                transform: translateX(0);
-            }
-
-            #wrapper.mobile-sidebar-open #sidebar-overlay {
-                display: block;
-            }
-
-            .top-navbar {
-                padding: 0 12px;
-            }
-
-            .main-content {
-                padding: 12px;
-            }
+            #wrapper.mobile-open #sidebar { transform: translateX(0); }
+            #wrapper.mobile-open #sidebar-overlay { display: block; }
+            #wrapper.sidebar-collapsed #sidebar { width: 240px !important; transform: translateX(-100%); }
+            .main-content { padding: 14px; }
         }
     </style>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="sidebar" class="shadow">
-            <div class="brand">
-                <i class="fas fa-headphones-alt text-warning mr-2"></i> SAIGON AUDIO TOUR
-                <div style="font-size: 0.75rem; font-weight: 600; color: #9ca3af; letter-spacing: 0.8px; margin-top: 4px;">ADMIN PORTAL</div>
+<div id="wrapper">
+
+    <!-- ── SIDEBAR ── -->
+    <nav id="sidebar">
+        <a class="sidebar-brand" href="/Home/Index">
+            <div class="sidebar-brand-icon"><i class="fas fa-headphones-alt"></i></div>
+            <div class="sidebar-brand-text">
+                <div class="sidebar-brand-name">Saigon Audio Tour</div>
+                <div class="sidebar-brand-sub">Admin Portal</div>
             </div>
-            <div class="user-panel">
-                Xin chào, <strong>@(User.Identity?.Name ?? "Admin")!</strong>
+        </a>
+
+        <div class="sidebar-user">
+            <div class="sidebar-user-avatar">
+                @(User.Identity?.Name?.Substring(0,1).ToUpper() ?? "A")
             </div>
-            
-            <a href="/Home/Index" class="nav-link"><i class="fas fa-tachometer-alt text-info"></i> Dashboard Thống Kê</a>
-            <a href="/Analytics/Dashboard" class="nav-link"><i class="fas fa-chart-bar text-primary"></i> 📊 Analytics & Heatmap</a>
-            <a href="/Activity/Index" class="nav-link"><i class="fas fa-users text-info"></i> 👥 Người dùng đang sử dụng <span id="sidebarOnlineBadge" class="badge badge-danger badge-pill ml-1" style="font-size:0.65rem;display:none"></span></a>
-            
-            <div class="menu-title">Quản Lý Dữ Liệu</div>
-            <a href="/Pois/Index" class="nav-link"><i class="fas fa-map-marker-alt text-danger"></i> Điểm đến (POI)</a>
-            <a href="/Tours/Index" class="nav-link"><i class="fas fa-bus text-warning"></i> Tuyến Xe Buýt</a>
-            <a href="/Narrations/Create" class="nav-link"><i class="fas fa-microphone-alt text-success"></i> File Thuyết Minh</a>
+            <div class="min-width-0">
+                <div class="sidebar-user-name">@(User.Identity?.Name ?? "Admin")</div>
+                <div class="sidebar-user-role">Quản trị viên</div>
+            </div>
         </div>
 
-        <div id="sidebar-overlay"></div>
+        <div class="nav-section-title">Tổng quan</div>
+        <a href="/Home/Index"       class="sidebar-nav-link"><i class="fas fa-th-large nav-icon"></i><span>Dashboard</span></a>
+        <a href="/Activity/Index"   class="sidebar-nav-link"><i class="fas fa-satellite-dish nav-icon"></i><span>Giám sát realtime</span><span class="nav-badge" id="sidebarOnlineBadge"></span></a>
+        <a href="/Analytics/Dashboard" class="sidebar-nav-link"><i class="fas fa-chart-area nav-icon"></i><span>Analytics</span></a>
 
-        <div id="content-wrapper">
-            <div class="top-navbar">
-                <div>
-                    <button id="sidebarToggle" class="btn btn-light" type="button" aria-label="Mở hoặc đóng menu">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-                <div>
-                    <a href="/Auth/Logout" class="btn btn-outline-danger btn-sm font-weight-bold"><i class="fas fa-sign-out-alt mr-1"></i> Đăng xuất</a>
-                </div>
-            </div>
+        <div class="nav-section-title">Nội dung</div>
+        <a href="/Pois/Index"       class="sidebar-nav-link"><i class="fas fa-map-marker-alt nav-icon"></i><span>Điểm tham quan</span></a>
+        <a href="/Tours/Index"      class="sidebar-nav-link"><i class="fas fa-route nav-icon"></i><span>Tuyến xe buýt</span></a>
+        <a href="/Narrations/Create" class="sidebar-nav-link"><i class="fas fa-microphone nav-icon"></i><span>Thuyết minh</span></a>
 
-            <div class="main-content">
-                @if (TempData["SuccessMessage"] != null)
-                {
-                    <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
-                        <i class="fas fa-check-circle mr-1"></i> @TempData["SuccessMessage"]
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                }
-                @if (TempData["ErrorMessage"] != null)
-                {
-                    <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-3" role="alert">
-                        <i class="fas fa-exclamation-circle mr-1"></i> @TempData["ErrorMessage"]
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                }
-                @RenderBody()
-            </div>
-            
-            <footer class="bg-white p-3 text-center text-muted border-top text-sm">
-                Copyright &copy; 2026 <strong>Saigon Audio Tour</strong>. Đồ án C Sharp.
-            </footer>
+        <div class="sidebar-bottom">
+            <a href="/Auth/Logout" class="sidebar-nav-link" style="color: rgba(248,113,113,.8);">
+                <i class="fas fa-sign-out-alt nav-icon" style="color:rgba(248,113,113,.8)"></i>
+                <span>Đăng xuất</span>
+            </a>
         </div>
-    </div>
+    </nav>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        (function () {
-            const wrapper = document.getElementById('wrapper');
-            const toggleBtn = document.getElementById('sidebarToggle');
-            const overlay = document.getElementById('sidebar-overlay');
-            if (!wrapper || !toggleBtn || !overlay) return;
+    <div id="sidebar-overlay"></div>
 
-            const isMobile = () => window.matchMedia('(max-width: 991.98px)').matches;
+    <!-- ── CONTENT WRAPPER ── -->
+    <div id="content-wrapper">
 
-            toggleBtn.addEventListener('click', function () {
-                if (isMobile()) {
-                    wrapper.classList.toggle('mobile-sidebar-open');
-                } else {
-                    wrapper.classList.toggle('sidebar-collapsed');
-                }
-            });
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="btn-topbar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars" style="font-size:.8rem"></i>
+                </button>
+                <div class="topbar-page-title">
+                    @(ViewData["Title"] ?? "Dashboard")
+                </div>
+            </div>
+            <div class="topbar-right">
+                <span style="font-size:.72rem; color:#94a3b8;">
+                    <i class="fas fa-circle" style="color:#10b981; font-size:.45rem; vertical-align:middle; margin-right:4px;"></i>
+                    API connected
+                </span>
+            </div>
+        </div>
 
-            overlay.addEventListener('click', function () {
-                wrapper.classList.remove('mobile-sidebar-open');
-            });
-
-            window.addEventListener('resize', function () {
-                if (!isMobile()) {
-                    wrapper.classList.remove('mobile-sidebar-open');
-                }
-            });
-        })();
-    </script>
-    
-    <script>
-        (function () {
-            const badge = document.getElementById('sidebarOnlineBadge');
-            if (!badge) return;
-            function refresh() {
-                try {
-                    const n = localStorage.getItem('sat_online');
-                    if (n !== null && parseInt(n, 10) > 0) {
-                        badge.textContent = n;
-                        badge.style.display = 'inline';
-                    } else {
-                        badge.style.display = 'none';
-                    }
-                } catch (_) {}
+        <!-- Alerts from TempData — converted to toasts -->
+        <div class="main-content">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                    <i class="fas fa-check-circle mr-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                </div>
             }
-            refresh();
-            setInterval(refresh, 10000);
-        })();
-    </script>
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                    <i class="fas fa-exclamation-circle mr-2"></i>@TempData["ErrorMessage"]
+                    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                </div>
+            }
+            @RenderBody()
+        </div>
 
-    <script>
-        (function () {
-            var segments = window.location.pathname.split('/').filter(Boolean);
-            var controller = segments.length > 0 ? segments[0].toLowerCase() : '';
-            document.querySelectorAll('#sidebar .nav-link').forEach(function (link) {
-                var href = link.getAttribute('href');
-                if (!href) return;
-                var hrefParts = href.split('/').filter(Boolean);
-                if (hrefParts.length > 0 && controller === hrefParts[0].toLowerCase()) {
-                    link.classList.add('active');
-                }
-            });
-        })();
-    </script>
+        <footer class="admin-footer">
+            &copy; 2026 <strong>Saigon Audio Tour</strong> &mdash; Đồ án tốt nghiệp C#
+        </footer>
+    </div>
+</div>
 
-    @await RenderSectionAsync("Scripts", required: false)
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+(function () {
+    const wrapper   = document.getElementById('wrapper');
+    const toggle    = document.getElementById('sidebarToggle');
+    const overlay   = document.getElementById('sidebar-overlay');
+    const isMobile  = () => window.matchMedia('(max-width:991.98px)').matches;
+
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            if (isMobile()) wrapper.classList.toggle('mobile-open');
+            else            wrapper.classList.toggle('sidebar-collapsed');
+        });
+    }
+    if (overlay) {
+        overlay.addEventListener('click', () => wrapper.classList.remove('mobile-open'));
+    }
+    window.addEventListener('resize', () => {
+        if (!isMobile()) wrapper.classList.remove('mobile-open');
+    });
+
+    // Active nav
+    const seg = window.location.pathname.split('/').filter(Boolean);
+    const ctrl = (seg[0] || '').toLowerCase();
+    document.querySelectorAll('.sidebar-nav-link').forEach(a => {
+        const parts = (a.getAttribute('href') || '').split('/').filter(Boolean);
+        if (parts[0] && ctrl === parts[0].toLowerCase()) a.classList.add('active');
+    });
+
+    // Online badge
+    const badge = document.getElementById('sidebarOnlineBadge');
+    function refreshBadge() {
+        try {
+            const n = parseInt(localStorage.getItem('sat_online') || '0', 10);
+            if (badge) {
+                badge.style.display = n > 0 ? 'inline' : 'none';
+                badge.textContent   = n > 0 ? n : '';
+            }
+        } catch(_) {}
+    }
+    refreshBadge();
+    setInterval(refreshBadge, 10000);
+})();
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

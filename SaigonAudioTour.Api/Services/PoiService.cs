@@ -84,7 +84,8 @@ namespace SaigonAudioTour.Api.Services
         {
             var allPois = await _context.POIs.AsNoTracking().Include(p => p.Narrations).ToListAsync();
 
-            NearbyPoiDto? closestPoi = null;
+            POI? closestPoi = null;
+            Narration? closestNarration = null;
             double minDistance = double.MaxValue;
 
             foreach (var poi in allPois)
@@ -94,23 +95,36 @@ namespace SaigonAudioTour.Api.Services
                 if (distance <= poi.Radius && distance < minDistance)
                 {
                     minDistance = distance;
-
-                    // Logic Fallback Ngôn Ngữ cực kỳ thông minh
-                    var narration = poi.Narrations.FirstOrDefault(n => n.LanguageCode == langcode)
-                                 ?? poi.Narrations.FirstOrDefault(n => n.LanguageCode == "vi")
-                                 ?? poi.Narrations.FirstOrDefault();
-
-                    closestPoi = new NearbyPoiDto
-                    {
-                        PoiId = poi.Id,
-                        PoiName = narration != null ? narration.TranslatedName : poi.Name,
-                        IsStopStation = poi.IsStopStation,
-                        DistanceMeters = Math.Round(distance, 2),
-                        AudioUrl = narration?.AudioUrl
-                    };
+                    closestPoi = poi;
+                    closestNarration = poi.Narrations.FirstOrDefault(n => n.LanguageCode == langcode)
+                                    ?? poi.Narrations.FirstOrDefault(n => n.LanguageCode == "vi")
+                                    ?? poi.Narrations.FirstOrDefault();
                 }
             }
-            return closestPoi;
+
+            if (closestPoi == null) return null;
+
+            // Narrations.AudioUrl thường null — fallback sang bảng Audios có file thực
+            var audioUrl = closestNarration?.AudioUrl;
+            if (audioUrl == null)
+            {
+                var audio = await _context.Audios.AsNoTracking()
+                    .Where(a => a.POI_Id == closestPoi.Id && a.LanguageCode == langcode)
+                    .FirstOrDefaultAsync()
+                    ?? await _context.Audios.AsNoTracking()
+                    .Where(a => a.POI_Id == closestPoi.Id)
+                    .FirstOrDefaultAsync();
+                audioUrl = audio?.AudioUrl;
+            }
+
+            return new NearbyPoiDto
+            {
+                PoiId = closestPoi.Id,
+                PoiName = closestNarration?.TranslatedName ?? closestPoi.Name,
+                IsStopStation = closestPoi.IsStopStation,
+                DistanceMeters = Math.Round(minDistance, 2),
+                AudioUrl = audioUrl
+            };
         }
 
         private double CalculateHaversineDistance(double lat1, double lon1, double lat2, double lon2)

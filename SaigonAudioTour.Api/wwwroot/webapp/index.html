@@ -4,376 +4,783 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Saigon Audio Tour Web</title>
-  <meta name="theme-color" content="#0d6efd" />
+  <meta name="theme-color" content="#4F46E5" />
   <link rel="manifest" href="/webapp/manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     :root {
-      --primary: #5365FF;
-      --primary-hover: #4050DD;
-      --primary-light: #EEF2FF;
-      --secondary: #FF6B6B;
-      --success: #12B886;
-      --warning: #FFA94D;
-      --danger: #FF6B6B;
-      --surface: #FFFFFF;
-      --background: #F5F5F7;
-      --surface-2: #FAFAFA;
-      --text-main: #1A1A1A;
-      --text-muted: #666666;
-      --text-light: #999999;
-      --border: #E5E5E7;
-      --radius-sm: 8px;
-      --radius-md: 14px;
-      --radius-lg: 20px;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+      --primary:        #4F46E5;
+      --primary-hover:  #4338CA;
+      --primary-light:  #EEF2FF;
+      --primary-rgb:    79, 70, 229;
+      --success:        #10B981;
+      --warning:        #F59E0B;
+      --danger:         #EF4444;
+      --surface:        #FFFFFF;
+      --bg:             #F8F9FB;
+      --surface-2:      #F1F3F8;
+      --text-main:      #0F172A;
+      --text-2:         #475569;
+      --text-muted:     #94A3B8;
+      --border:         #E8EBF0;
+      --radius-sm:      8px;
+      --radius-md:      14px;
+      --radius-lg:      22px;
+      --shadow-sm:      0 1px 4px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md:      0 4px 14px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.05);
+      --shadow-lg:      0 10px 30px rgba(0,0,0,.12);
     }
-    
-    * { transition: background-color 0.2s, color 0.2s; }
-    
-    body { 
-      background: var(--background); 
-      color: var(--text-main); 
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    html { font-size: 14px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       margin: 0;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* PAGE STRUCTURE */
-    .app-container {
-      max-width: 768px;
+    /* ── Shell ── */
+    .app-shell {
+      max-width: 540px;
       margin: 0 auto;
-      background: white;
-      min-height: 100vh;
+      background: var(--surface);
+      min-height: 100dvh;
+      position: relative;
+      box-shadow: 0 0 40px rgba(0,0,0,.06);
+    }
+
+    main.p-3 { padding-bottom: 90px !important; }
+
+    /* ── Header ── */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px !important;
+    }
+
+    .header-brand {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+    }
+    .header-brand-icon {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #4F46E5, #7C3AED);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(79,70,229,.35);
+    }
+    .header-brand-icon i { color: #fff; font-size: .85rem; }
+    .header-brand-name {
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -.01em;
+      line-height: 1.2;
+    }
+    .header-brand-sub {
+      font-size: .68rem;
+      color: var(--text-muted);
+      font-weight: 400;
     }
 
-    .app-page {
-      display: none;
-      flex: 1;
-      overflow-y: auto;
-      padding-bottom: 80px;
+    .lang-pill {
+      appearance: none; -webkit-appearance: none;
+      background: var(--primary-light);
+      border: 1.5px solid rgba(79,70,229,.2);
+      color: var(--primary);
+      font-family: inherit;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 5px 22px 5px 9px;
+      border-radius: 100px;
+      cursor: pointer;
+      outline: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234F46E5' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 6px center;
+      background-size: 10px;
     }
 
-    .app-page.active {
-      display: flex;
-      flex-direction: column;
+    .header-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-2);
+      font-size: .95rem;
+      flex-shrink: 0;
     }
 
-    /* HEADER */
-    .app-header { 
-      background: linear-gradient(135deg, #5365FF 0%, #4050DD 100%);
-      border-bottom: none;
-      color: white;
-      padding: 16px !important;
-      box-shadow: var(--shadow-md);
-    }
-    
-    .app-header .h4 { color: white; }
-    .app-header .text-muted { color: rgba(255,255,255,0.8); }
-    
-    .sticky-top-safe { 
-      position: sticky; 
-      top: 0; 
-      z-index: 1030; 
-      background: rgba(255,255,255,0.98); 
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow-sm);
-    }
-    
-    .card { 
-      border: 1px solid #F0F0F0 !important; 
-      border-radius: var(--radius-md) !important; 
-      background: var(--surface); 
+    /* ── Cards ── */
+    .card {
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius-md) !important;
+      background: var(--surface);
       box-shadow: var(--shadow-sm) !important;
       margin-bottom: 12px;
     }
-    
-    .card:hover {
-      box-shadow: var(--shadow-md) !important;
+    .card:hover { box-shadow: var(--shadow-md) !important; }
+
+    /* ── GPS Control Card ── */
+    .gps-card {
+      border: 1.5px solid var(--border) !important;
+      border-radius: var(--radius-md) !important;
+      background: var(--surface);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
-    
-    .btn-primary { 
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    .gps-btn {
+      width: 46px; height: 46px;
+      border-radius: 50%;
       border: none;
-      border-radius: 10px; 
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      box-shadow: var(--shadow-sm);
-    }
-    
-    .btn-primary:hover { 
-      background: linear-gradient(135deg, var(--primary-hover) 0%, #3535BB 100%);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-    }
-    
-    .btn-primary:active { transform: translateY(0); }
-    
-    .btn-outline-primary { 
-      color: var(--primary); 
-      border: 2px solid var(--primary-light); 
-      background-color: var(--primary-light); 
-      border-radius: 10px; 
-      font-weight: 600;
-    }
-    
-    .btn-outline-primary:hover { 
-      background-color: var(--primary); 
+      background: linear-gradient(135deg, var(--primary), #7C3AED);
       color: white;
-      border-color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 3px 10px rgba(79,70,229,.35);
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
     }
-    
-    .btn-light { 
-      background-color: var(--surface-2); 
-      border: 1px solid var(--border); 
-      border-radius: 10px; 
+    .gps-btn:hover { transform: scale(1.06); box-shadow: 0 5px 16px rgba(79,70,229,.4); }
+    .gps-btn.active { background: linear-gradient(135deg, var(--success), #059669); box-shadow: 0 3px 10px rgba(16,185,129,.35); }
+    .gps-btn i { font-size: 1.1rem; }
+
+    .gps-info-label { font-size: .8rem; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+    .gps-info-sub { font-size: .73rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+
+    .gps-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #CBD5E1;
+      flex-shrink: 0;
+      transition: background .3s, box-shadow .3s;
+    }
+    .gps-dot.active {
+      background: var(--success);
+      box-shadow: 0 0 0 3px rgba(16,185,129,.22);
+      animation: blink 1.2s ease infinite;
+    }
+
+    .autoplay-wrap { text-align: right; flex-shrink: 0; }
+    .autoplay-wrap .form-check-input { width: 2.4em; height: 1.3em; cursor: pointer; }
+    .form-check-input:checked { background-color: var(--primary) !important; border-color: var(--primary) !important; }
+    .autoplay-label { font-size: .67rem; color: var(--text-muted); margin-top: 3px; }
+
+    /* ── Search ── */
+    .search-wrap { position: relative; margin-bottom: 14px; }
+    .search-wrap .search-icon {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted); font-size: .85rem; pointer-events: none;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: .6rem .75rem .6rem 2.4rem;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      font-size: .85rem;
+      font-family: inherit;
       color: var(--text-main);
-      font-weight: 500;
+      background: var(--surface);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
     }
-    
-    .btn-light:hover { 
-      background-color: #EFEFEF;
+    .search-wrap input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79,70,229,.1);
     }
-    
-    #map, #mapExplore { 
-      height: 45vh; 
-      min-height: 300px; 
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
+    .search-wrap input::placeholder { color: var(--text-muted); }
+
+    /* ── Geofence Banner ── */
+    .geofence-banner {
+      border-radius: var(--radius-md) !important;
+      border: 1.5px solid rgba(79,70,229,.25) !important;
+      background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%) !important;
+      margin-bottom: 12px;
+    }
+    .geofence-banner-icon {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: white;
+      display: flex; align-items: center; justify-content: center;
       box-shadow: var(--shadow-sm);
+      color: var(--primary);
+      flex-shrink: 0;
     }
-    
-    .poi-img { 
-      height: 200px; 
+    .geofence-banner-title { font-size: .88rem; font-weight: 700; color: #312E81; margin-bottom: 2px; }
+    .geofence-banner-sub { font-size: .75rem; color: #4338CA; opacity: .8; }
+
+    /* ── Section heading ── */
+    .section-heading {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px; margin-top: 4px;
+    }
+    .section-heading h2 {
+      font-size: .82rem; font-weight: 700; color: var(--text-2);
+      text-transform: uppercase; letter-spacing: .06em; margin: 0;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #7C3AED) !important;
+      border: none !important;
+      border-radius: var(--radius-sm) !important;
+      font-weight: 600 !important;
+      font-family: inherit;
+      transition: opacity .15s, transform .1s, box-shadow .15s !important;
+      box-shadow: 0 2px 8px rgba(79,70,229,.3) !important;
+    }
+    .btn-primary:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(79,70,229,.35) !important; }
+    .btn-primary:active { transform: translateY(0) !important; }
+
+    .btn-outline-primary {
+      color: var(--primary) !important;
+      border: 1.5px solid rgba(79,70,229,.3) !important;
+      background: var(--primary-light) !important;
+      border-radius: var(--radius-sm) !important;
+      font-weight: 600 !important;
+    }
+    .btn-outline-primary:hover { background: var(--primary) !important; color: white !important; }
+
+    .btn-light {
+      background: var(--surface-2) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius-sm) !important;
+      color: var(--text-2) !important;
+      font-weight: 500 !important;
+    }
+    .btn-light:hover { background: #E8EBF2 !important; }
+
+    /* ── Map ── */
+    #map, #mapExplore {
+      height: 42vh;
+      min-height: 260px;
+      border-radius: var(--radius-md);
+      border: none;
+      box-shadow: none;
+    }
+
+    /* ── POI Cards ── */
+    .poi-img {
+      height: 180px;
       object-fit: cover;
       border-radius: var(--radius-md) var(--radius-md) 0 0;
     }
-    
+
     .poi-card-enhanced {
       overflow: hidden;
-      border-radius: var(--radius-md);
-      transition: all 0.3s;
+      border-radius: var(--radius-md) !important;
+      transition: transform .2s, box-shadow .2s;
+      cursor: pointer;
     }
-    
     .poi-card-enhanced:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg) !important;
     }
-    
+
     .poi-badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      z-index: 10;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      position: absolute; top: 10px; right: 10px;
+      padding: 4px 10px; border-radius: 100px;
+      font-size: .7rem; font-weight: 700;
+      z-index: 10; letter-spacing: .03em;
+      backdrop-filter: blur(4px);
     }
-    
     .poi-badge.playing {
-      background: #FF6B6B;
-      color: white;
-      animation: pulse 2s infinite;
+      background: rgba(239,68,68,.9); color: white;
+      animation: pulse 2s ease infinite;
     }
-    
     .poi-badge.priority {
-      background: #5365FF;
-      color: white;
+      background: rgba(79,70,229,.85); color: white;
     }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-    
+
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .7; } }
+    @keyframes blink  { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
     .line-clamp-2 {
       display: -webkit-box;
-      line-clamp: 2;
       -webkit-line-clamp: 2;
+      line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    
+
+    /* ── POI Detail — Bottom Sheet ── */
+    #poiDetailPanel {
+      position: fixed !important;
+      bottom: 0 !important; left: 50% !important;
+      transform: translateX(-50%) !important;
+      width: 100% !important; max-width: 540px !important;
+      max-height: 90dvh !important;
+      z-index: 1050 !important;
+      border-radius: 22px 22px 0 0 !important;
+      overflow-y: auto !important; overflow-x: hidden !important;
+      margin: 0 !important;
+      box-shadow: 0 -12px 60px rgba(0,0,0,.25) !important;
+      background: var(--surface) !important;
+      border: none !important;
+    }
+    #poiDetailPanel.d-none { display: none !important; }
+    #poiDetailPanel:not(.d-none) {
+      animation: slideUpSheet .32s cubic-bezier(.34,1.1,.64,1);
+    }
+    @keyframes slideUpSheet {
+      from { transform: translateX(-50%) translateY(25%); opacity: .6; }
+      to   { transform: translateX(-50%) translateY(0);   opacity: 1; }
+    }
+
+    .detail-drag-handle {
+      width: 38px; height: 4px; border-radius: 2px;
+      background: var(--border); margin: 10px auto 0;
+    }
+
+    .poi-detail-hero {
+      position: relative; width: 100%; height: 250px;
+      background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+      overflow: hidden; flex-shrink: 0;
+    }
+    .poi-detail-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .poi-detail-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,.52) 0%, transparent 42%,
+        transparent 55%, rgba(0,0,0,.72) 100%);
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+      padding: 14px 16px 20px;
+    }
+    .detail-close-btn {
+      align-self: flex-end;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      border: 1.5px solid rgba(255,255,255,.28);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      color: white; font-size: .9rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+      transition: background .15s;
+    }
+    .detail-close-btn:hover { background: rgba(255,255,255,.3); }
+    .poi-detail-hero-loc {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: .72rem; color: rgba(255,255,255,.82); margin-bottom: 5px;
+    }
+    .poi-detail-hero-loc i { color: #FDA4AF; font-size: .68rem; }
+    .poi-detail-hero-title {
+      font-size: 1.28rem; font-weight: 800; color: white;
+      letter-spacing: -.02em; line-height: 1.22; margin: 0;
+      text-shadow: 0 1px 6px rgba(0,0,0,.4);
+    }
+
+    .poi-detail-body { padding: 18px 20px 0; }
+    .poi-detail-desc {
+      font-size: .87rem; color: var(--text-2);
+      line-height: 1.72; margin-bottom: 18px;
+    }
+
+    /* Audio controls */
+    .poi-detail-audio {
+      background: linear-gradient(135deg, rgba(79,70,229,.07), rgba(124,58,237,.04));
+      border: 1.5px solid rgba(79,70,229,.14);
+      border-radius: var(--radius-md);
+      padding: 16px; margin-bottom: 14px;
+    }
+    .poi-audio-play-row { display: flex; align-items: center; gap: 14px; }
+    .poi-play-btn {
+      width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--primary), #7C3AED);
+      border: none; color: white; font-size: 1.3rem;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(79,70,229,.42);
+      cursor: pointer; transition: transform .15s, box-shadow .15s;
+    }
+    .poi-play-btn:hover { transform: scale(1.07); box-shadow: 0 6px 22px rgba(79,70,229,.52); }
+    .poi-stop-btn {
+      width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(239,68,68,.1); border: 1.5px solid rgba(239,68,68,.4);
+      color: #EF4444; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .15s;
+    }
+    .poi-stop-btn:hover { background: rgba(239,68,68,.2); }
+    .poi-audio-title {
+      font-size: .84rem; font-weight: 700; color: var(--primary); margin-bottom: 2px;
+    }
+    .poi-audio-sub { font-size: .72rem; color: var(--text-muted); }
+
+    /* Action row */
+    .poi-detail-actions {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      padding-bottom: 32px;
+    }
+    .poi-action-tile {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 14px 10px; border-radius: var(--radius-md);
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text-2); font-size: .8rem; font-weight: 600;
+      cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+    }
+    .poi-action-tile:hover {
+      background: var(--primary-light); color: var(--primary);
+      border-color: rgba(79,70,229,.3);
+    }
+    .poi-action-tile i { font-size: 1.25rem; }
+
+    /* Backdrop */
+    #detailBackdrop {
+      position: fixed; inset: 0; z-index: 1049;
+      background: rgba(0,0,0,.42);
+      backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+      animation: fadeIn .22s ease;
+    }
+
+    /* ── Bottom Tabbar ── */
     .bottom-tabbar {
       position: fixed;
-      left: 0;
-      right: 0;
       bottom: 0;
       z-index: 1040;
-      border-top: 2px solid var(--border);
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(10px);
-      padding-bottom: max(12px, env(safe-area-inset-bottom));
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      padding: 6px 16px;
+      padding-bottom: max(8px, env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 20px rgba(0,0,0,.06);
+      /* align with .app-shell on wide screens */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 540px;
     }
-    
+
+    .tabbar-inner {
+      display: flex;
+      gap: 4px;
+      background: var(--surface-2);
+      border-radius: 100px;
+      padding: 4px;
+    }
+
     .tab-btn {
+      flex: 1;
       border: 0;
       background: transparent;
-      color: var(--text-light);
-      font-size: .75rem;
-      width: 100%;
-      padding: 10px 0;
-      transition: all 0.3s;
-      font-weight: 500;
-    }
-    
-    .tab-btn i { 
-      font-size: 1.4rem; 
-      display: block; 
-      margin-bottom: 4px;
-      transition: transform 0.3s;
-    }
-    
-    .tab-btn.active { 
-      color: var(--primary); 
-      font-weight: 700;
-    }
-    
-    .tab-btn.active i {
-      transform: scale(1.2);
-    }
-    
-    .tab-pane-wrap { display: none; animation: fadeIn 0.3s; }
-    .tab-pane-wrap.active { display: block; }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    .gps-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-      background: #CCCCCC;
-      margin-right: 8px;
-      vertical-align: middle;
-      transition: all 0.3s;
-    }
-    
-    .gps-dot.active { 
-      background: #12B886; 
-      box-shadow: 0 0 0 4px rgba(18, 184, 134, 0.2);
-      animation: blink 1s infinite;
-    }
-    
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-    
-    .pointer { cursor: pointer; }
-    .custom-search .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(83, 101, 255, 0.1); }
-    .custom-search .input-group-text, .custom-search .form-control { border-color: var(--border); background: var(--surface-2); }
-    
-    /* POI Detail Panel Enhancement */
-    .poi-detail-hero {
-      position: relative;
-      width: 100%;
-      height: 260px;
-      background: linear-gradient(135deg, #5365FF 0%, #4050DD 100%);
-      overflow: hidden;
-    }
-    
-    .poi-detail-hero img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .poi-detail-header {
-      padding: 20px;
-      background: white;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .poi-detail-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text-main);
-    }
-    
-    .poi-detail-location {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
       color: var(--text-muted);
-      margin-bottom: 12px;
+      font-size: .72rem;
+      font-family: inherit;
+      padding: 7px 4px;
+      border-radius: 100px;
+      transition: color .2s, background .2s;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
     }
-    
-    .poi-detail-location i {
-      color: var(--danger);
-    }
-    
-    .poi-audio-section {
-      background: linear-gradient(135deg, #EEF2FF 0%, #F8F9FF 100%);
-      padding: 20px;
-      border-radius: var(--radius-md);
-      margin: 16px 20px;
-    }
-    
-    .poi-audio-label {
-      font-size: 0.85rem;
+    .tab-btn i { font-size: 1.1rem; line-height: 1; }
+    .tab-btn.active {
+      background: var(--surface);
       color: var(--primary);
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
-    
-    .poi-audio-buttons {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
+
+    .tab-pane-wrap { display: none; }
+    .tab-pane-wrap.active { display: block; animation: fadeIn .2s ease; }
+
+    /* ── Settings ── */
+    .settings-section-title {
+      font-size: .7rem; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: .08em;
+      padding: 18px 0 8px;
     }
-    
-    .poi-audio-buttons .btn {
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-weight: 600;
+    .form-label { font-size: .8rem; font-weight: 500; color: var(--text-2); }
+    .form-control, .form-select {
+      font-family: inherit !important;
+      font-size: .84rem !important;
+      border: 1.5px solid var(--border) !important;
+      border-radius: var(--radius-sm) !important;
+      color: var(--text-main) !important;
+      background: var(--surface) !important;
     }
-    
-    .poi-action-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 0 20px 20px;
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 3px rgba(79,70,229,.1) !important;
     }
-    
-    .poi-action-buttons .btn {
+    .form-range::-webkit-slider-thumb { background: var(--primary); }
+    .form-range::-moz-range-thumb { background: var(--primary); border: none; }
+
+    /* ── Skeleton ── */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f2f7 25%, #e8ebf3 50%, #f0f2f7 75%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s infinite;
+      border-radius: var(--radius-sm);
+    }
+    @keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .skeleton-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: white;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ── Misc ── */
+    .pointer { cursor: pointer; }
+    .badge { font-family: inherit !important; }
+
+    /* ── POI Horizontal Cards ── */
+    #poiList { display: flex; flex-direction: column; gap: 10px; }
+    .poi-row-card {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
       padding: 12px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .2s, transform .15s;
     }
-  </style>
-    .custom-search .form-control:focus { border-color: var(--border); box-shadow: none; }
-    .custom-search .input-group-text, .custom-search .form-control { border-color: var(--border); background: var(--surface); }
+    .poi-row-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .poi-row-card.playing {
+      border-color: rgba(79,70,229,.4);
+      background: linear-gradient(135deg, rgba(79,70,229,.04), rgba(124,58,237,.03));
+    }
+    .poi-row-thumb {
+      position: relative; flex-shrink: 0;
+      width: 82px; height: 82px;
+      border-radius: 10px; overflow: hidden;
+      background: var(--surface-2);
+    }
+    .poi-row-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .poi-row-thumb-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .poi-row-num {
+      position: absolute; top: 5px; left: 5px;
+      background: rgba(0,0,0,.55); color: white;
+      font-size: .62rem; font-weight: 700;
+      padding: 2px 6px; border-radius: 5px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .poi-row-playing-dot {
+      position: absolute; bottom: 5px; right: 5px;
+      background: rgba(239,68,68,.9); color: white;
+      font-size: .6rem; width: 20px; height: 20px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      animation: pulse 1.5s infinite;
+    }
+    .poi-row-content { flex: 1; min-width: 0; }
+    .poi-row-name {
+      font-size: .9rem; font-weight: 700; color: var(--text-main);
+      letter-spacing: -.01em; margin-bottom: 3px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .poi-row-loc {
+      font-size: .7rem; color: var(--text-muted); margin-bottom: 5px;
+      display: flex; align-items: center; gap: 3px;
+    }
+    .poi-row-loc i { color: var(--danger); font-size: .68rem; }
+    .poi-row-desc {
+      font-size: .75rem; color: var(--text-2); line-height: 1.5;
+      margin-bottom: 9px;
+    }
+    .poi-row-actions { display: flex; gap: 7px; }
+    .poi-row-actions .btn { font-size: .78rem; padding: 6px 12px; font-weight: 600; border-radius: 8px !important; }
+
+    /* ── Skeleton horizontal ── */
+    .poi-skeleton-row {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+    .poi-skeleton-thumb { width: 82px; height: 82px; border-radius: 10px; flex-shrink: 0; }
+    .poi-skeleton-lines { flex: 1; padding-top: 4px; }
+
+    /* ── GPS Card tracking state ── */
+    .gps-card.tracking {
+      background: linear-gradient(135deg, rgba(79,70,229,.07) 0%, rgba(124,58,237,.04) 100%) !important;
+      border-color: rgba(79,70,229,.35) !important;
+      box-shadow: 0 0 0 3px rgba(79,70,229,.08), var(--shadow-sm) !important;
+    }
+
+    /* ── Now Playing Bar ── */
+    .now-playing-bar {
+      position: fixed;
+      bottom: 68px;
+      left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 540px;
+      background: rgba(10,14,30,.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1035;
+      padding: 10px 16px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      animation: slideUpBar .25s ease;
+    }
+    @keyframes slideUpBar {
+      from { transform: translateX(-50%) translateY(100%); opacity: 0; }
+      to   { transform: translateX(-50%) translateY(0);   opacity: 1; }
+    }
+    .now-playing-inner { display: flex; align-items: center; gap: 12px; }
+    .now-playing-wave { display: flex; align-items: flex-end; gap: 2px; height: 18px; flex-shrink: 0; }
+    .now-playing-wave span {
+      display: block; width: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+      animation: waveBar 1.2s ease infinite;
+    }
+    .now-playing-wave span:nth-child(1) { height: 7px;  animation-delay: 0s; }
+    .now-playing-wave span:nth-child(2) { height: 14px; animation-delay: .15s; }
+    .now-playing-wave span:nth-child(3) { height: 9px;  animation-delay: .3s; }
+    .now-playing-wave span:nth-child(4) { height: 16px; animation-delay: .08s; }
+    @keyframes waveBar { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(.35); } }
+    .now-playing-info { flex: 1; min-width: 0; }
+    .now-playing-label {
+      font-size: .62rem; font-weight: 700; color: var(--primary);
+      text-transform: uppercase; letter-spacing: .07em; margin-bottom: 2px;
+    }
+    .now-playing-name {
+      font-size: .84rem; font-weight: 600; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .now-playing-stop {
+      flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(239,68,68,.18); border: 1px solid rgba(239,68,68,.4);
+      color: #ef4444; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: .9rem;
+      transition: background .15s;
+    }
+    .now-playing-stop:hover { background: rgba(239,68,68,.32); }
+
+    /* ── Map tab full-bleed ── */
+    #tab-map.active {
+      display: flex; flex-direction: column;
+      margin: -16px;
+      height: calc(100dvh - 56px - 68px);
+    }
+    #tab-map .map-fullbleed { flex: 1; position: relative; overflow: hidden; }
+    #tab-map .map-fullbleed #map {
+      position: absolute; inset: 0;
+      height: 100%; min-height: 0;
+      border-radius: 0;
+    }
+    .map-overlay-top {
+      position: absolute; top: 12px; right: 12px; z-index: 1000;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .map-overlay-btn {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 12px;
+      font-size: .78rem; font-weight: 600; color: var(--text-main);
+      box-shadow: var(--shadow-md); cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      white-space: nowrap;
+    }
+    .map-info-strip {
+      flex-shrink: 0;
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .map-info-strip .nearest-label { font-size: .68rem; color: var(--text-muted); font-weight: 500; margin-bottom: 2px; }
+    .map-info-strip .nearest-val  { font-size: .88rem; font-weight: 600; color: var(--text-main); }
+
+    /* ── Settings iOS-style ── */
+    .settings-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+    .settings-group-title {
+      font-size: .67rem; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: .08em;
+      padding: 16px 16px 6px;
+    }
+    .settings-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      min-height: 50px;
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row-icon {
+      width: 30px; height: 30px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: white; font-size: .82rem;
+    }
+    .settings-row-body { flex: 1; min-width: 0; }
+    .settings-row-label { font-size: .85rem; font-weight: 500; color: var(--text-main); }
+    .settings-row-sub   { font-size: .7rem; color: var(--text-muted); margin-top: 1px; }
+    .settings-mini-select {
+      appearance: none; -webkit-appearance: none;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      color: var(--text-2);
+      font-family: inherit; font-size: .78rem; font-weight: 500;
+      padding: 5px 22px 5px 9px; border-radius: 8px; cursor: pointer; outline: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394A3B8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+      background-repeat: no-repeat; background-position: right 5px center; background-size: 10px;
+      max-width: 140px; flex-shrink: 0;
+    }
+    .settings-mini-select:focus { border-color: var(--primary); outline: none; }
+    .settings-row .form-check { margin: 0; padding: 0; flex-shrink: 0; }
+    .settings-row .form-check-input { width: 2.2em; height: 1.25em; cursor: pointer; margin: 0; }
+    .settings-range-row { flex-direction: column; align-items: stretch; gap: 6px; }
+    .settings-range-row .settings-range-top { display: flex; align-items: center; gap: 12px; }
+    .settings-range-row .form-range { width: 100%; margin-top: 2px; }
+
+    /* Account panel ── */
+    .account-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #7C3AED);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.4rem; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .status-list li { padding: 5px 0; font-size: .8rem; color: var(--text-2); list-style: none; }
+    .status-list li::before { content: "•"; color: var(--primary); margin-right: 8px; }
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <header class="app-header sticky-top-safe px-3 pt-4 pb-3 shadow-sm">
+    <header class="app-header">
       <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <div class="small text-muted fw-medium mb-1" id="welcomeText" style="font-size: 0.85rem;">Chào bạn 👋</div>
-          <h1 class="h4 mb-0 fw-bold text-dark" style="letter-spacing: -0.5px;" id="headerTitle">Saigon Audio Tour</h1>
+        <div class="header-brand">
+          <div class="header-brand-icon"><i class="bi bi-headphones"></i></div>
+          <div>
+            <div class="header-brand-name">Saigon Audio Tour</div>
+            <div class="header-brand-sub" id="welcomeText">Chào bạn 👋</div>
+          </div>
         </div>
         <div class="d-flex align-items-center gap-2">
-          <select id="quickLanguageSelect" class="form-select form-select-sm border border-primary text-primary fw-bold shadow-sm px-2 pe-4" style="border-radius: 20px; width: auto; background-color: var(--primary-light); cursor: pointer; font-size: 0.85rem; appearance: none; background-position: right 0.5rem center;">
+          <select id="quickLanguageSelect" class="lang-pill">
             <option value="vi">🇻🇳 VN</option>
             <option value="en">🇬🇧 EN</option>
             <option value="zh">🇨🇳 ZH</option>
@@ -381,8 +788,8 @@
             <option value="ko">🇰🇷 KO</option>
             <option value="fr">🇫🇷 FR</option>
           </select>
-          <button id="btnInstall" class="btn btn-outline-primary btn-sm rounded-pill d-none px-3 fw-medium"><i class="bi bi-download"></i> App</button>
-          <div id="headerAvatar" class="bg-light text-primary d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border); cursor: pointer;">
+          <button id="btnInstall" class="btn btn-outline-primary btn-sm rounded-pill d-none px-3" style="font-size:.75rem;"><i class="bi bi-download me-1"></i>App</button>
+          <div id="headerAvatar" class="header-avatar">
             <i class="bi bi-person"></i>
           </div>
         </div>
@@ -391,43 +798,43 @@
 
     <main class="p-3">
       <section id="tab-explore" class="tab-pane-wrap active">
-        <div class="card mb-3">
-          <div class="card-body p-3 d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center gap-3">
-              <button id="btnLocateHeader" class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm border" style="width: 48px; height: 48px;">
-                <i id="iconLocateHeader" class="bi bi-play-fill fs-4 text-primary" style="margin-left: 2px;"></i>
-              </button>
-              <div>
-                <div class="fw-bold text-dark fs-6 mb-1">Theo dõi GPS</div>
-                <div class="small fw-medium text-muted"><span id="gpsDot" class="gps-dot"></span><span id="gpsStateText">Đã dừng</span></div>
-              </div>
+        <!-- GPS tracking card -->
+        <div class="gps-card" id="gpsCard">
+          <button id="btnLocateHeader" class="gps-btn">
+            <i id="iconLocateHeader" class="bi bi-play-fill"></i>
+          </button>
+          <div class="flex-grow-1">
+            <div class="gps-info-label">Theo dõi GPS</div>
+            <div class="gps-info-sub">
+              <span id="gpsDot" class="gps-dot"></span>
+              <span id="gpsStateText">Đã dừng</span>
             </div>
-            <div class="text-end">
-              <div class="form-check form-switch m-0 d-inline-block">
-                <input id="autoplaySwitchHeader" class="form-check-input fs-5" type="checkbox" checked>
-              </div>
-              <div class="small text-muted mt-1" style="font-size: 0.7rem;" id="statusText">Tự động phát</div>
+          </div>
+          <div class="autoplay-wrap">
+            <div class="form-check form-switch m-0 d-flex justify-content-end">
+              <input id="autoplaySwitchHeader" class="form-check-input" type="checkbox" checked>
             </div>
+            <div class="autoplay-label" id="statusText">Tự động phát</div>
           </div>
         </div>
 
-        <div class="input-group mb-3 custom-search shadow-sm" style="border-radius: var(--radius-md); overflow: hidden;">
-          <span class="input-group-text border-end-0 text-muted ps-3"><i class="bi bi-search"></i></span>
-          <input id="searchInput" class="form-control border-start-0 py-2 shadow-none" placeholder="Tìm điểm tham quan..." />
+        <!-- Search -->
+        <div class="search-wrap">
+          <i class="bi bi-search search-icon"></i>
+          <input id="searchInput" type="search" placeholder="Tìm điểm tham quan..." />
         </div>
 
-        <div id="geofenceBanner" class="card border-0 mb-3 shadow-sm d-none" style="background: var(--primary-light); border: 1px solid var(--primary) !important;">
+        <!-- Geofence banner -->
+        <div id="geofenceBanner" class="geofence-banner card d-none">
           <div class="card-body d-flex align-items-center justify-content-between p-3">
             <div class="d-flex align-items-center gap-3">
-              <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px; color: var(--primary);">
-                <i class="bi bi-geo-alt-fill fs-5"></i>
-              </div>
+              <div class="geofence-banner-icon"><i class="bi bi-geo-alt-fill fs-5"></i></div>
               <div>
-                <div class="fw-bold mb-1" id="bannerTitle" style="color: #312E81; font-size: 0.95rem;">Đang phát thuyết minh...</div>
-                <div class="small fw-medium opacity-75" id="bannerSubtitle" style="color: #312E81;">-</div>
+                <div class="geofence-banner-title" id="bannerTitle">Đang phát thuyết minh...</div>
+                <div class="geofence-banner-sub" id="bannerSubtitle">-</div>
               </div>
             </div>
-            <button id="btnBannerDismiss" class="btn btn-sm btn-link text-decoration-none p-0" style="color: #312E81;"><i class="bi bi-x-lg fs-5"></i></button>
+            <button id="btnBannerDismiss" class="btn btn-sm p-1" style="color:#4338CA; background:none; border:none;"><i class="bi bi-x-lg"></i></button>
           </div>
         </div>
 
@@ -440,12 +847,12 @@
           </div>
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
-          <h2 class="h6 mb-0 fw-bold text-dark">🚌 Tuyến tham quan nổi bật</h2>
-          <span id="poiCount" class="badge bg-primary rounded-pill px-3">0</span>
+        <div class="section-heading mt-3">
+          <h2>Điểm tham quan</h2>
+          <span id="poiCount" class="badge rounded-pill px-3" style="background:var(--primary-light);color:var(--primary);font-size:.72rem;">0</span>
         </div>
 
-        <div id="poiList" class="row g-3"></div>
+        <div id="poiList"></div>
 
         <div class="card mt-4">
           <div class="card-body">
@@ -459,180 +866,244 @@
           </div>
         </div>
 
-        <div id="poiDetailPanel" class="card shadow-sm mt-4 d-none overflow-hidden poi-card-enhanced" style="border: none; border-radius: 16px; margin-bottom: 100px;">
+        <div id="poiDetailPanel" class="d-none">
+          <div class="detail-drag-handle"></div>
           <div class="poi-detail-hero">
-            <img id="detailImage" class="w-100" style="height: 100%; object-fit: cover;" alt="POI image" />
-            <button id="btnCloseDetail" class="btn btn-light btn-sm rounded-circle position-absolute shadow-sm border-0" style="top: 16px; right: 16px; width: 40px; height: 40px; background: rgba(255,255,255,0.95) !important;"><i class="bi bi-x-lg"></i></button>
-          </div>
-          
-          <div class="poi-detail-header">
-            <h2 id="detailTitle" class="poi-detail-title">Chi tiết địa điểm</h2>
-            <div class="poi-detail-location">
-              <i class="bi bi-geo-alt-fill"></i>
-              <span id="detailLocation">-</span>
+            <img id="detailImage" alt="POI image" />
+            <div class="poi-detail-hero-overlay">
+              <button id="btnCloseDetail" class="detail-close-btn">
+                <i class="bi bi-chevron-down"></i>
+              </button>
+              <div>
+                <div class="poi-detail-hero-loc">
+                  <i class="bi bi-geo-alt-fill"></i>
+                  <span id="detailLocation">-</span>
+                </div>
+                <h2 id="detailTitle" class="poi-detail-hero-title">Chi tiết địa điểm</h2>
+              </div>
             </div>
           </div>
-          
-          <div class="px-4 py-3">
-            <p id="detailDescription" class="mb-4 small lh-lg text-secondary" style="line-height: 1.6; color: #666;">-</p>
-          </div>
-          
-          <div class="poi-audio-section">
-            <div class="poi-audio-label">
-              <i class="bi bi-soundwave me-2"></i>Thuyết minh tự động
+
+          <div class="poi-detail-body">
+            <p id="detailDescription" class="poi-detail-desc">-</p>
+
+            <div class="poi-detail-audio">
+              <div class="poi-audio-play-row">
+                <button id="btnDetailPlay" class="poi-play-btn">
+                  <i class="bi bi-play-fill"></i>
+                </button>
+                <button id="btnDetailStop" class="poi-stop-btn d-none">
+                  <i class="bi bi-stop-fill"></i>
+                </button>
+                <div>
+                  <div class="poi-audio-title">Thuyết minh tự động</div>
+                  <div class="poi-audio-sub">Nhấn để nghe thuyết minh địa điểm</div>
+                </div>
+              </div>
             </div>
-            <div class="poi-audio-buttons">
-              <button id="btnDetailPlay" class="btn btn-primary"><i class="bi bi-play-fill me-2"></i> Phát</button>
-              <button id="btnDetailStop" class="btn btn-outline-danger d-none"><i class="bi bi-stop-fill"></i></button>
+
+            <div class="poi-detail-actions">
+              <button id="btnDetailRoute" class="poi-action-tile">
+                <i class="bi bi-sign-turn-right" style="color:var(--primary);"></i>
+                <span>Chỉ đường</span>
+              </button>
+              <button id="btnDetailShare" class="poi-action-tile">
+                <i class="bi bi-share" style="color:var(--success);"></i>
+                <span>Chia sẻ</span>
+              </button>
             </div>
           </div>
-          
-          <div class="poi-action-buttons">
-            <button id="btnDetailRoute" class="btn btn-light"><i class="bi bi-sign-turn-right text-primary me-2"></i> Chỉ đường</button>
-            <button id="btnDetailShare" class="btn btn-light"><i class="bi bi-share text-success me-2"></i> Chia sẻ</button>
-          </div>
-          
-          <div style="height: 16px;"></div>
         </div>
       </section>
 
       <section id="tab-map" class="tab-pane-wrap">
-        <div class="card mb-3">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h2 class="h6 mb-0 fw-bold text-dark">Bản đồ chi tiết</h2>
-              <button id="btnOpenExternalMap" class="btn btn-outline-primary btn-sm"><i class="bi bi-map"></i> Google Maps</button>
-            </div>
-            <div id="map"></div>
+        <div class="map-fullbleed">
+          <div id="map"></div>
+          <div class="map-overlay-top">
+            <button id="btnOpenExternalMap" class="map-overlay-btn">
+              <i class="bi bi-map text-primary"></i> Google Maps
+            </button>
           </div>
         </div>
-
-        <div class="card">
-          <div class="card-body">
-            <div class="small text-muted">Điểm gần nhất</div>
-            <div id="nearestPoiText" class="fw-semibold">Chưa có dữ liệu GPS</div>
-            <div id="queueInfoText" class="small text-secondary mt-1">Hàng đợi audio: 0</div>
+        <div class="map-info-strip">
+          <div>
+            <div class="nearest-label">Điểm gần nhất</div>
+            <div id="nearestPoiText" class="nearest-val">Chưa có dữ liệu GPS</div>
           </div>
+          <div id="queueInfoText" class="small" style="color:var(--text-muted);">Hàng đợi: 0</div>
         </div>
       </section>
 
       <section id="tab-settings" class="tab-pane-wrap">
-        <div class="card mb-3">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h2 class="h6 mb-0 fw-bold text-dark">Tài khoản</h2>
-              <span id="accountBadge" class="badge bg-secondary rounded-pill">Khách</span>
-            </div>
 
-            <div id="accountGuestPanel">
-              <div class="mb-2">
-                <input id="loginEmailInput" class="form-control form-control-sm mb-2" type="email" placeholder="Email" />
-                <input id="loginPasswordInput" class="form-control form-control-sm" type="password" placeholder="Mật khẩu" />
-              </div>
-              <div class="d-grid gap-2 mb-2">
-                <button id="btnLogin" class="btn btn-primary btn-sm"><i class="bi bi-box-arrow-in-right"></i> Đăng nhập</button>
-                <button id="btnRegister" class="btn btn-outline-primary btn-sm"><i class="bi bi-person-plus"></i> Đăng ký nhanh</button>
-              </div>
-              <hr class="my-2 opacity-50"/>
-              <div class="text-center">
-                <button id="btnQrLogin" class="btn btn-outline-info btn-sm w-100 mb-2"><i class="bi bi-qr-code"></i> Quét mã QR</button>
-              </div>
-              <div class="small text-muted">Dùng chung backend và API như app mobile.</div>
+        <!-- Tài khoản -->
+        <div class="settings-group-title">Tài khoản</div>
+        <div class="settings-group">
+          <!-- Guest panel -->
+          <div id="accountGuestPanel">
+            <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:10px;padding:16px;">
+              <input id="loginEmailInput" class="form-control" type="email" placeholder="Email" style="font-size:.85rem;" />
+              <input id="loginPasswordInput" class="form-control" type="password" placeholder="Mật khẩu" style="font-size:.85rem;" />
+              <button id="btnLogin" class="btn btn-primary btn-sm w-100"><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</button>
+              <button id="btnRegister" class="btn btn-outline-primary btn-sm w-100"><i class="bi bi-person-plus me-1"></i>Đăng ký nhanh</button>
             </div>
-
-            <div id="accountUserPanel" class="d-none">
-              <div class="small text-muted">Xin chào</div>
-              <div id="accountNameText" class="fw-bold fs-5 text-primary">-</div>
-              <div id="accountEmailText" class="small text-secondary mb-2">-</div>
-              <div class="d-grid gap-2">
-                <button id="btnLogout" class="btn btn-outline-danger btn-sm"><i class="bi bi-box-arrow-right"></i> Đăng xuất</button>
+            <div class="settings-row" style="border-top:1px solid var(--border);">
+              <div class="settings-row-icon" style="background:#0EA5E9;"><i class="bi bi-qr-code-scan"></i></div>
+              <div class="settings-row-body">
+                <div class="settings-row-label">Đăng nhập QR</div>
+                <div class="settings-row-sub">Quét mã từ app mobile</div>
               </div>
+              <button id="btnQrLogin" class="btn btn-light btn-sm" style="font-size:.78rem;">Quét</button>
+            </div>
+            <div class="settings-row" style="padding:10px 16px;">
+              <span class="badge rounded-pill" style="background:var(--surface-2);color:var(--text-muted);font-size:.72rem;">Khách · Chưa đăng nhập</span>
+            </div>
+          </div>
+          <!-- User panel -->
+          <div id="accountUserPanel" class="d-none">
+            <div class="settings-row" style="padding:16px;gap:14px;">
+              <div class="account-avatar" id="headerAvatar2"><i class="bi bi-person-fill"></i></div>
+              <div style="flex:1;min-width:0;">
+                <div id="accountNameText" class="fw-bold" style="font-size:1rem;color:var(--text-main);">-</div>
+                <div id="accountEmailText" class="small" style="color:var(--text-muted);">-</div>
+                <span id="accountBadge" class="badge rounded-pill mt-1" style="background:var(--primary-light);color:var(--primary);font-size:.68rem;">Khách</span>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-icon" style="background:#EF4444;"><i class="bi bi-box-arrow-right"></i></div>
+              <div class="settings-row-body"><div class="settings-row-label">Đăng xuất</div></div>
+              <button id="btnLogout" class="btn btn-light btn-sm" style="font-size:.78rem;color:#EF4444;">Thoát</button>
             </div>
           </div>
         </div>
 
-        <div class="card mb-3">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h2 class="h6 mb-0 fw-bold text-dark">Gói Premium</h2>
-              <span id="premiumBadge" class="badge bg-secondary rounded-pill">Free</span>
+        <!-- Premium -->
+        <div class="settings-group-title">Gói dịch vụ</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-icon" style="background:#F59E0B;"><i class="bi bi-star-fill"></i></div>
+            <div class="settings-row-body">
+              <div class="settings-row-label">Gói Premium</div>
+              <div id="premiumInfoText" class="settings-row-sub">Đăng nhập để xem gói hiện tại</div>
             </div>
-
-            <div id="premiumInfoText" class="small text-secondary mb-2">Đăng nhập để kiểm tra gói hiện tại.</div>
-            <div id="premiumPlansWrap" class="d-grid gap-2"></div>
-            <div id="orderActionWrap" class="d-grid gap-2 mt-2 d-none">
-              <button id="btnCheckOrderStatus" class="btn btn-outline-primary btn-sm"><i class="bi bi-arrow-repeat"></i> Kiểm tra trạng thái thanh toán</button>
-            </div>
+            <span id="premiumBadge" class="badge rounded-pill" style="background:var(--surface-2);color:var(--text-muted);font-size:.72rem;">Free</span>
+          </div>
+          <div id="premiumPlansWrap" class="d-grid gap-2" style="padding:0 16px 12px;"></div>
+          <div id="orderActionWrap" class="d-none" style="padding:0 16px 12px;">
+            <button id="btnCheckOrderStatus" class="btn btn-outline-primary btn-sm w-100"><i class="bi bi-arrow-repeat me-1"></i>Kiểm tra trạng thái thanh toán</button>
           </div>
         </div>
 
-        <div class="card mb-3">
-          <div class="card-body">
-            <h2 class="h6 fw-bold text-dark mb-3">Tùy chọn thuyết minh</h2>
-            <div class="mb-3">
-              <label class="form-label">Ngôn ngữ</label>
-              <select id="languageSelect" class="form-select">
-                <option value="vi">Tiếng Việt</option>
-                <option value="en">English</option>
-                <option value="zh">中文</option>
-                <option value="ja">日本語</option>
-                <option value="ko">한국어</option>
-                <option value="fr">Français</option>
-              </select>
+        <!-- Thuyết minh -->
+        <div class="settings-group-title">Thuyết minh</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-icon" style="background:#4F46E5;"><i class="bi bi-translate"></i></div>
+            <div class="settings-row-body"><div class="settings-row-label">Ngôn ngữ</div></div>
+            <select id="languageSelect" class="settings-mini-select">
+              <option value="vi">🇻🇳 Việt</option>
+              <option value="en">🇬🇧 English</option>
+              <option value="zh">🇨🇳 中文</option>
+              <option value="ja">🇯🇵 日本語</option>
+              <option value="ko">🇰🇷 한국어</option>
+              <option value="fr">🇫🇷 Français</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-icon" style="background:#7C3AED;"><i class="bi bi-mic-fill"></i></div>
+            <div class="settings-row-body"><div class="settings-row-label">Giọng đọc</div></div>
+            <select id="voiceSelect" class="settings-mini-select">
+              <option value="auto">Tự động</option>
+              <option value="vi_female">Nữ · Việt</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-icon" style="background:#10B981;"><i class="bi bi-play-circle-fill"></i></div>
+            <div class="settings-row-body">
+              <div class="settings-row-label">Tự động phát</div>
+              <div class="settings-row-sub">Khi vào vùng geofence</div>
             </div>
-
-            <div class="mb-3">
-              <label class="form-label">Giọng đọc ưu tiên (Voice)</label>
-              <select id="voiceSelect" class="form-select">
-                <option value="auto">Tự động chọn giọng hay nhất</option>
-                <option value="vi_female">Ép giọng nữ tiếng Việt</option>
-              </select>
-            </div>
-
-            <div class="form-check form-switch mb-2">
+            <div class="form-check form-switch">
               <input id="autoplaySwitch" class="form-check-input" type="checkbox" checked>
-              <label class="form-check-label" for="autoplaySwitch">Tự phát khi vào vùng geofence</label>
             </div>
-
-            <div class="form-check form-switch mb-3">
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-icon" style="background:#0EA5E9;"><i class="bi bi-chat-square-text-fill"></i></div>
+            <div class="settings-row-body">
+              <div class="settings-row-label">TTS dự phòng</div>
+              <div class="settings-row-sub">Dùng giọng đọc khi thiếu audio</div>
+            </div>
+            <div class="form-check form-switch">
               <input id="ttsFallbackSwitch" class="form-check-input" type="checkbox" checked>
-              <label class="form-check-label" for="ttsFallbackSwitch">Dùng TTS khi thiếu audio</label>
             </div>
-
-            <label class="form-label" for="cooldownRange">Cooldown audio (<span id="cooldownValue">18</span>s)</label>
-            <input id="cooldownRange" type="range" class="form-range" min="5" max="60" step="1" value="18" />
-
-            <div class="d-grid gap-2 mt-3">
-              <button id="btnClearCache" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3"></i> Xóa cache offline</button>
+          </div>
+          <div class="settings-row settings-range-row">
+            <div class="settings-range-top" style="display:flex;align-items:center;gap:12px;width:100%;">
+              <div class="settings-row-icon" style="background:#F59E0B;flex-shrink:0;"><i class="bi bi-clock-fill"></i></div>
+              <div class="settings-row-body" style="flex:1;">
+                <div class="settings-row-label">Cooldown audio</div>
+              </div>
+              <span style="font-size:.82rem;font-weight:600;color:var(--primary);flex-shrink:0;"><span id="cooldownValue">18</span>s</span>
             </div>
+            <input id="cooldownRange" type="range" class="form-range" min="5" max="60" step="1" value="18" style="margin-left:42px;width:calc(100% - 42px);" />
           </div>
         </div>
 
-        <div class="card mb-4">
-          <div class="card-body">
-            <h2 class="h6 fw-bold text-dark mb-3">Trạng thái</h2>
-            <ul class="mb-0 small text-secondary">
-              <li id="networkStatus">Network: Online</li>
-              <li id="offlineDataStatus">Offline POI cache: 0</li>
-              <li id="deviceInfoText">Thiết bị: Web Browser</li>
-              <li id="sessionInfoText">Session: -</li>
-              <li id="qrHintText">QR: không có</li>
-            </ul>
+        <!-- Dữ liệu -->
+        <div class="settings-group-title">Dữ liệu & Bộ nhớ</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-icon" style="background:#EF4444;"><i class="bi bi-trash3-fill"></i></div>
+            <div class="settings-row-body">
+              <div class="settings-row-label">Xóa cache offline</div>
+              <div id="offlineDataStatus" class="settings-row-sub">POI cache: 0</div>
+            </div>
+            <button id="btnClearCache" class="btn btn-light btn-sm" style="font-size:.78rem;color:#EF4444;">Xóa</button>
           </div>
+        </div>
+
+        <!-- Trạng thái -->
+        <div class="settings-group-title">Thông tin hệ thống</div>
+        <div class="settings-group" style="margin-bottom:100px;">
+          <ul class="status-list" style="padding:12px 16px;margin:0;">
+            <li id="networkStatus">Network: Online</li>
+            <li id="deviceInfoText">Thiết bị: Web Browser</li>
+            <li id="sessionInfoText">Session: -</li>
+            <li id="qrHintText">QR: không có</li>
+          </ul>
         </div>
       </section>
     </main>
   </div>
 
-  <div class="bottom-tabbar">
-    <div class="d-flex text-center w-100" id="bottomTabbarInner">
-      <button class="tab-btn active flex-fill" data-tab="explore"><i class="bi bi-compass"></i><div>Khám phá</div></button>
-      <button class="tab-btn flex-fill" data-tab="map"><i class="bi bi-geo"></i><div>Bản đồ</div></button>
-      <button class="tab-btn flex-fill" data-tab="settings"><i class="bi bi-sliders"></i><div>Cài đặt</div></button>
+  <!-- Detail backdrop -->
+  <div id="detailBackdrop" class="d-none"></div>
+
+  <!-- Now Playing floating bar -->
+  <div id="nowPlayingBar" class="now-playing-bar d-none">
+    <div class="now-playing-inner">
+      <div class="now-playing-wave">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="now-playing-info">
+        <div class="now-playing-label">Đang phát thuyết minh</div>
+        <div class="now-playing-name" id="nowPlayingName">-</div>
+      </div>
+      <button class="now-playing-stop" id="btnNowPlayingStop" title="Dừng">
+        <i class="bi bi-stop-fill"></i>
+      </button>
     </div>
   </div>
 
-  <audio id="audioPlayer" controls class="w-100 fixed-bottom"></audio>
+  <div class="bottom-tabbar">
+    <div class="tabbar-inner" id="bottomTabbarInner">
+      <button class="tab-btn active" data-tab="explore"><i class="bi bi-compass-fill"></i><span>Khám phá</span></button>
+      <button class="tab-btn" data-tab="map"><i class="bi bi-map"></i><span>Bản đồ</span></button>
+      <button class="tab-btn" data-tab="settings"><i class="bi bi-sliders2"></i><span>Cài đặt</span></button>
+    </div>
+  </div>
+
+  <audio id="audioPlayer" style="display:none;"></audio>
 
   <!-- QR Scanner Modal -->
   <div id="qrModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000;">
@@ -662,9 +1133,9 @@
     const apiBase = window.location.origin;
     const qs = new URLSearchParams(window.location.search);
     const stationHint = (qs.get('station') || '').trim().toLowerCase();
-    const qrUsername = (qs.get('u') || '').trim();
-    const qrPassword = (qs.get('p') || '').trim();
-    const qrPlanHint = (qs.get('plan') || '').trim().toLowerCase();
+    let qrUsername = (qs.get('u') || '').trim();
+    let qrPassword = (qs.get('p') || '').trim();
+    let qrPlanHint = (qs.get('plan') || '').trim().toLowerCase();
 
     const KEY_SETTINGS = 'sat_webapp_settings_v1';
     const KEY_POI_CACHE = 'sat_webapp_poi_cache_v1';
@@ -907,7 +1378,8 @@
       el.btnRegister.addEventListener('click', registerUser);
       el.btnLogout.addEventListener('click', logoutUser);
 
-      el.btnCheckOrderStatus.addEventListener('click', checkCurrentOrderStatus);
+      el.btnCheckOrderStatus?.addEventListener('click', checkCurrentOrderStatus);
+      document.getElementById('btnNowPlayingStop')?.addEventListener('click', stopNarrationPlayback);
       el.premiumPlansWrap.addEventListener('click', (event) => {
         const btn = event.target.closest('button[data-action="plan"]');
         if (!btn) return;
@@ -1411,7 +1883,23 @@
       return [...matched, ...items.filter(x => !matched.some(m => m.id === x.id))];
     }
 
+    function showPoiSkeleton() {
+      const skeletonRow = () => `
+        <div class="poi-skeleton-row">
+          <div class="skeleton poi-skeleton-thumb"></div>
+          <div class="poi-skeleton-lines flex-grow-1" style="padding-top:4px;">
+            <div class="skeleton mb-2" style="height:13px;width:60%;"></div>
+            <div class="skeleton mb-2" style="height:10px;width:38%;"></div>
+            <div class="skeleton mb-1" style="height:10px;width:85%;"></div>
+            <div class="skeleton" style="height:10px;width:55%;"></div>
+          </div>
+        </div>`;
+      el.poiList.innerHTML = [1,2,3,4].map(skeletonRow).join('');
+      el.poiCount.textContent = '…';
+    }
+
     async function loadPois() {
+      showPoiSkeleton();
       try {
         setStatus('Đang tải địa điểm...');
         const response = await fetch(`${apiBase}/api/pois`);
@@ -1442,8 +1930,21 @@
       renderMarkers(filteredPois);
     }
 
+    function updateNowPlayingBar() {
+      const bar = document.getElementById('nowPlayingBar');
+      if (!bar) return;
+      if (currentlyPlayingPoiId) {
+        const poi = pois.find(p => p.id === currentlyPlayingPoiId);
+        document.getElementById('nowPlayingName').textContent = poi ? poi.name : 'Đang phát';
+        bar.classList.remove('d-none');
+      } else {
+        bar.classList.add('d-none');
+      }
+    }
+
     function updatePoiListState() {
       renderPoiList(filteredPois);
+      updateNowPlayingBar();
       if(activeDetailPoi) {
         const isPlaying = currentlyPlayingPoiId === activeDetailPoi.id;
         if(el.btnDetailPlay) el.btnDetailPlay.classList.toggle('d-none', isPlaying);
@@ -1452,26 +1953,38 @@
     }
 
     function renderPoiList(items) {
-      el.poiList.innerHTML = items.map((p) => {
+      if (items.length === 0 && pois.length > 0) {
+        el.poiList.innerHTML = `
+          <div class="text-center py-5" style="color:var(--text-muted);">
+            <i class="bi bi-search" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.35;"></i>
+            <div style="font-size:.85rem;font-weight:500;">Không tìm thấy địa điểm phù hợp</div>
+          </div>`;
+        return;
+      }
+      if (items.length === 0) return;
+      el.poiList.innerHTML = items.map((p, idx) => {
         const isNarrating = p.id === currentlyPlayingPoiId;
-        const badgeHTML = isNarrating 
-          ? `<span class="poi-badge playing" style="animation: pulse 2s infinite;"><i class="bi bi-volume-up-fill me-1"></i>Đang phát</span>`
-          : `<span class="poi-badge priority">P${p.priority}</span>`;
-          
-        const image = p.imageUrl
-          ? `<div class="position-relative"><img src="${p.imageUrl}" alt="${p.name}" class="card-img-top poi-img" loading="lazy" style="border-radius: 14px 14px 0 0;">${badgeHTML}</div>`
-          : `<div class="position-relative bg-light poi-img d-flex align-items-center justify-content-center" style="border-radius: 14px 14px 0 0;"><i class="bi bi-image text-muted fs-1"></i>${badgeHTML}</div>`;
+        const thumbInner = p.imageUrl
+          ? `<img src="${p.imageUrl}" alt="${p.name}" loading="lazy">`
+          : `<div class="poi-row-thumb-placeholder"><i class="bi bi-building" style="font-size:1.6rem;color:var(--text-muted);opacity:.4;"></i></div>`;
         return `
-          <div class="col-12 col-sm-6">
-            <div class="card h-100 border-0 overflow-hidden poi-card-enhanced" style="border-radius: 14px; background: white;">
-              ${image}
-              <div class="card-body d-flex flex-column p-4">
-                <h3 class="h6 fw-bold mb-2 text-dark" style="font-size: 1rem;">${p.name}</h3>
-                <p class="small text-muted line-clamp-2 mb-4" style="color: #666; line-height: 1.5;">${p.description || 'Không có mô tả.'}</p>
-                <div class="mt-auto d-flex gap-2">
-                  <button class="btn btn-primary btn-sm flex-grow-1 fw-medium" data-action="listen" data-poi-id="${p.id}" style="border-radius: 8px; padding: 10px;"><i class="bi bi-play-fill"></i> Nghe</button>
-                  <button class="btn btn-light btn-sm fw-medium px-4" data-action="detail" data-poi-id="${p.id}" style="border-radius: 8px; padding: 10px;"><i class="bi bi-chevron-right"></i></button>
-                </div>
+          <div class="poi-row-card${isNarrating ? ' playing' : ''}">
+            <div class="poi-row-thumb">
+              ${thumbInner}
+              <span class="poi-row-num">${idx + 1}</span>
+              ${isNarrating ? '<span class="poi-row-playing-dot"><i class="bi bi-soundwave"></i></span>' : ''}
+            </div>
+            <div class="poi-row-content">
+              <div class="poi-row-name">${p.name}</div>
+              <div class="poi-row-loc"><i class="bi bi-geo-alt-fill"></i>${p.location || 'Quận 1, TP.HCM'}</div>
+              <div class="poi-row-desc line-clamp-2">${p.description || 'Không có mô tả.'}</div>
+              <div class="poi-row-actions">
+                <button class="btn btn-primary btn-sm" data-action="listen" data-poi-id="${p.id}">
+                  <i class="bi ${isNarrating ? 'bi-stop-fill' : 'bi-play-fill'}"></i> ${isNarrating ? 'Dừng' : 'Nghe'}
+                </button>
+                <button class="btn btn-light btn-sm" data-action="detail" data-poi-id="${p.id}">
+                  <i class="bi bi-info-circle"></i>
+                </button>
               </div>
             </div>
           </div>`;
@@ -1785,7 +2298,7 @@
     function looksLikeWrongLangAudioUrl(audioUrl, expectedLang) {
       if (!audioUrl || !expectedLang || expectedLang === 'vi') return false;
       const url = String(audioUrl).toLowerCase();
-      return /[/_-]vi[/_-.]|[/_-]vie[/_-.]|vietnamese/.test(url);
+      return /[/_\-]vi[/_\-.]|[/_\-]vie[/_\-.]|vietnamese/.test(url);
     }
 
     const _translationCache = {};
@@ -2231,9 +2744,11 @@
         isGpsTracking = false;
         el.gpsDot.classList.remove('active');
         el.gpsStateText.textContent = 'Đã dừng';
+        document.getElementById('gpsCard')?.classList.remove('tracking');
+        if(el.btnLocateHeader) el.btnLocateHeader.classList.remove('active');
         if(el.iconLocateHeader) {
-          el.iconLocateHeader.classList.remove('bi-stop-fill', 'text-danger');
-          el.iconLocateHeader.classList.add('bi-play-fill', 'text-primary');
+          el.iconLocateHeader.classList.remove('bi-stop-fill');
+          el.iconLocateHeader.classList.add('bi-play-fill');
         }
         if (!currentlyPlayingPoiId && !activeDetailPoi) {
           currentActionStatus = 'idle';
@@ -2255,9 +2770,11 @@
       isGpsTracking = true;
       el.gpsDot.classList.add('active');
       el.gpsStateText.textContent = 'Đang tìm...';
+      document.getElementById('gpsCard')?.classList.add('tracking');
+      if(el.btnLocateHeader) el.btnLocateHeader.classList.add('active');
       if(el.iconLocateHeader) {
-        el.iconLocateHeader.classList.remove('bi-play-fill', 'text-primary');
-        el.iconLocateHeader.classList.add('bi-stop-fill', 'text-danger');
+        el.iconLocateHeader.classList.remove('bi-play-fill');
+        el.iconLocateHeader.classList.add('bi-stop-fill');
       }
       if (!currentlyPlayingPoiId && !activeDetailPoi) {
         currentActionStatus = 'moving';
@@ -2354,6 +2871,18 @@
       }
     }
 
+    function showDetailBackdrop() {
+      const bd = document.getElementById('detailBackdrop');
+      if (!bd) return;
+      bd.classList.remove('d-none');
+      bd.onclick = closePoiDetail;
+    }
+
+    function hideDetailBackdrop() {
+      const bd = document.getElementById('detailBackdrop');
+      if (bd) bd.classList.add('d-none');
+    }
+
     async function openPoiDetail(poiId) {
       const poi = pois.find((x) => x.id === poiId);
       if (!poi || !el.poiDetailPanel) return;
@@ -2364,18 +2893,18 @@
       updatePoiListState();
       sendActivityNow();
 
-      el.poiDetailPanel.classList.remove('d-none');
-      el.detailTitle.textContent = poi.name || 'Chi tiet dia diem';
-      el.detailLocation.textContent = poi.location || '-';
+      el.detailTitle.textContent = poi.name || 'Chi tiết địa điểm';
+      el.detailLocation.textContent = poi.location || 'Quận 1, TP.HCM';
       el.detailDescription.textContent = poi.description || poi.ttsScript || '-';
       if (poi.imageUrl) {
         el.detailImage.src = poi.imageUrl;
-        el.detailImage.classList.remove('d-none');
+        el.detailImage.style.display = 'block';
       } else {
         el.detailImage.src = '';
-        el.detailImage.classList.add('d-none');
+        el.detailImage.style.display = 'none';
       }
-      el.poiDetailPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.poiDetailPanel.classList.remove('d-none');
+      showDetailBackdrop();
       await autoPlayDetailIfPremium(poi);
     }
 
@@ -2385,10 +2914,11 @@
       if (el.poiDetailPanel) {
         el.poiDetailPanel.classList.add('d-none');
       }
+      hideDetailBackdrop();
       updatePoiListState();
       if (!currentlyPlayingPoiId) {
         currentActionStatus = isGpsTracking ? 'moving' : 'idle';
-        setCurrentAction(currentActionStatus);  // Reset action type
+        setCurrentAction(currentActionStatus);
         sendActivityNow();
       }
     }

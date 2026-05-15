@@ -5,369 +5,402 @@
         ?? new SaigonAudioTour.AdminWeb.Controllers.RevenueSummary();
 }
 
-<div class="container mt-4">
-    <div class="row mb-4">
-        <div class="col">
-            <h1>📊 Analytics Dashboard</h1>
-            <p class="text-muted">Heatmap & thống kê lượt nghe theo POI</p>
+<style>
+    .kpi-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 18px 16px 14px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.08);
+        transition: box-shadow 0.2s;
+        border-top: 4px solid transparent;
+        height: 100%;
+    }
+    .kpi-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+    .kpi-card .kpi-num  { font-size: 2rem; font-weight: 700; line-height: 1.15; }
+    .kpi-card .kpi-label{ font-size: 0.73rem; color: #6c757d; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }
+    .kpi-card .kpi-icon { font-size: 1.5rem; float: right; opacity: 0.22; }
+    .kpi-revenue  { border-top-color: #198754; } .kpi-revenue  .kpi-num { color: #198754; }
+    .kpi-tickets  { border-top-color: #0d6efd; } .kpi-tickets  .kpi-num { color: #0d6efd; }
+    .kpi-premium  { border-top-color: #6f42c1; } .kpi-premium  .kpi-num { color: #6f42c1; }
+    .kpi-conv     { border-top-color: #fd7e14; } .kpi-conv     .kpi-num { color: #fd7e14; }
+    .kpi-online   { border-top-color: #0dcaf0; } .kpi-online   .kpi-num { color: #0891b2; }
+    .kpi-listens  { border-top-color: #dc3545; } .kpi-listens  .kpi-num { color: #dc2626; }
+
+    .chart-wrap { position: relative; }
+    .chart-skeleton { height: 280px; border-radius: 6px; background: linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+    @@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    .section-header {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #0d6efd;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+    .top-poi-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+    .top-poi-item:last-child { border-bottom: none; }
+    .top-poi-rank { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .rank-1 { background: #fff8e1; color: #d97706; }
+    .rank-2 { background: #f3f4f6; color: #374151; }
+    .rank-3 { background: #fdf4ff; color: #9333ea; }
+    .rank-other { background: #f0fdf4; color: #15803d; }
+    .progress { height: 6px; border-radius: 4px; background: #f3f4f6; }
+    .progress-bar { border-radius: 4px; background: linear-gradient(90deg, #0d6efd, #0dcaf0); transition: width 0.6s ease; }
+    .online-pill { display: inline-block; font-size: 0.72rem; padding: 2px 8px; border-radius: 10px; background: #e0f2fe; color: #0369a1; font-weight: 600; }
+</style>
+
+<div class="container-fluid">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h4 class="mb-0 font-weight-bold">
+                <i class="fas fa-chart-bar text-primary mr-2"></i>Analytics Dashboard
+            </h4>
+            <small class="text-muted">Thống kê doanh thu, lượt nghe & người dùng đang hoạt động</small>
         </div>
+        <span class="badge badge-light border font-weight-normal" id="lastUpdated" style="font-size:0.78rem;">
+            <i class="fas fa-clock text-muted mr-1"></i>Đang tải...
+        </span>
     </div>
 
     @if (!string.IsNullOrEmpty(ViewBag.Error))
     {
-        <div class="alert alert-warning">
-            <strong>⚠️ Cảnh báo:</strong> @ViewBag.Error
+        <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-exclamation-triangle mr-1"></i><strong>Cảnh báo:</strong> @ViewBag.Error
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
     }
 
-    <div class="row mb-4">
-        <div class="col-md-3 mb-3">
-            <div class="card shadow-sm h-100 border-0">
-                <div class="card-body">
-                    <small class="text-muted">Doanh thu 7 ngày</small>
-                    <h4 class="text-success mb-0" id="kpiRevenue">@revenue.TotalRevenue.ToString("N0") đ</h4>
-                </div>
+    <!-- KPI Row 1: Doanh thu -->
+    <div class="row mb-3">
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="kpi-card kpi-revenue">
+                <i class="fas fa-coins kpi-icon"></i>
+                <div class="kpi-num" id="kpiRevenue">@revenue.TotalRevenue.ToString("N0")đ</div>
+                <div class="kpi-label">Doanh thu 7 ngày</div>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card shadow-sm h-100 border-0">
-                <div class="card-body">
-                    <small class="text-muted">Vé đã bán</small>
-                    <h4 class="mb-0" id="kpiTickets">@revenue.TicketsSold</h4>
-                </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="kpi-card kpi-tickets">
+                <i class="fas fa-ticket-alt kpi-icon"></i>
+                <div class="kpi-num" id="kpiTickets">@revenue.TicketsSold</div>
+                <div class="kpi-label">Vé đã bán</div>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card shadow-sm h-100 border-0">
-                <div class="card-body">
-                    <small class="text-muted">Premium hiện tại</small>
-                    <h4 class="text-primary mb-0" id="kpiPremiumUsers">@revenue.ActivePremiumUsers/@revenue.TotalUsers</h4>
-                </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="kpi-card kpi-premium">
+                <i class="fas fa-crown kpi-icon"></i>
+                <div class="kpi-num" id="kpiPremiumUsers">@revenue.ActivePremiumUsers<span style="font-size:1rem;font-weight:400;color:#9ca3af">/@revenue.TotalUsers</span></div>
+                <div class="kpi-label">Premium hiện tại</div>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card shadow-sm h-100 border-0">
-                <div class="card-body">
-                    <small class="text-muted">Tỷ lệ chuyển đổi</small>
-                    <h4 class="mb-0" id="kpiConversion">@revenue.ConversionRate.ToString("0.##")%</h4>
-                </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="kpi-card kpi-conv">
+                <i class="fas fa-percentage kpi-icon"></i>
+                <div class="kpi-num" id="kpiConversion">@revenue.ConversionRate.ToString("0.#")%</div>
+                <div class="kpi-label">Tỷ lệ chuyển đổi</div>
             </div>
         </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-md-6 mb-3">
-            <div class="card shadow-sm h-100 border-0">
-                <div class="card-body">
-                    <small class="text-muted">Thiết bị đang sử dụng (5 phút gần nhất)</small>
-                    <h4 class="text-info mb-0" id="kpiOnlineUsers">0</h4>
-                    <div class="small text-muted" id="kpiActiveAccounts">0 tài khoản</div>
-                </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="kpi-card kpi-online">
+                <i class="fas fa-wifi kpi-icon"></i>
+                <div class="kpi-num" id="kpiOnlineUsers">0</div>
+                <div class="kpi-label">Online (5 phút)</div>
             </div>
         </div>
-        <div class="col-md-6 mb-3">
-            <div class="card shadow-sm h-100 border-0">
-                <div class="card-body">
-                    <small class="text-muted">Thiết bị active gần đây</small>
-                    <div id="onlineUsersList" class="small text-muted mt-2">Đang tải...</div>
-                </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-2">
+            <div class="kpi-card kpi-listens">
+                <i class="fas fa-headphones kpi-icon"></i>
+                <div class="kpi-num" id="kpiTotalListens">-</div>
+                <div class="kpi-label">Tổng lượt nghe</div>
             </div>
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">💰 Xu hướng doanh thu & mua Premium (7 ngày)</h5>
+    <!-- Charts Row -->
+    <div class="row mb-3">
+        <div class="col-lg-7 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
+                    <span class="section-header"><i class="fas fa-chart-line mr-1"></i>Doanh thu & mua Premium (7 ngày)</span>
                 </div>
-                <div class="card-body">
-                    <canvas id="revenueTrendChart" style="max-height: 320px;"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Heatmap Chart -->
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">📈 Biểu đồ Lượt Nghe & Thời Gian TB</h5>
-                </div>
-                <div class="card-body">
-                    <canvas id="heatmapChart" style="max-height: 400px;"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Summary Stats -->
-        <div class="col-md-4">
-            <div class="card shadow-sm mb-3">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">📍 Tổng Cộng</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>Tổng lượt nghe:</strong> <span id="totalListens">-</span></p>
-                    <p><strong>Số POI hoạt động:</strong> <span id="activePois">-</span></p>
-                    <p><strong>Thời gian TB:</strong> <span id="avgDurationGlobal">-</span>s</p>
-                </div>
-            </div>
-
-            <div class="card shadow-sm">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">🏆 Top 5 POI</h5>
-                </div>
-                <div class="card-body">
-                    <div id="topPoiList">
-                        <p class="text-muted">Đang tải...</p>
+                <div class="card-body pb-3">
+                    <div class="chart-wrap" style="height:260px;">
+                        <div id="revenueSkeleton" class="chart-skeleton"></div>
+                        <canvas id="revenueTrendChart" style="display:none;"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Detailed Table -->
-    <div class="row mt-4">
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">📋 Chi tiết theo POI</h5>
+        <div class="col-lg-5 mb-3">
+            <div class="card shadow-sm border-0" style="height:100%">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
+                    <span class="section-header"><i class="fas fa-trophy mr-1"></i>Top 5 POI được nghe nhiều nhất</span>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>POI</th>
-                                <th>Lượt Nghe</th>
-                                <th>Thời gian TB (giây)</th>
-                                <th>% tổng nghe</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model?.Items != null && Model.Items.Count > 0)
-                            {
-                                var totalListens = Model.Items.Sum(x => x.VisitCount);
-                                var index = 1;
-                                @foreach (var item in Model.Items.OrderByDescending(x => x.VisitCount))
-                                {
-                                    var percentage = totalListens > 0 ? (item.VisitCount * 100 / totalListens) : 0;
-                                    <tr>
-                                        <td><strong>@index</strong></td>
-                                        <td>@item.PoiName</td>
-                                        <td><span class="badge bg-success">@item.VisitCount</span></td>
-                                        <td>@item.AvgDuration</td>
-                                        <td>
-                                            <div class="progress" style="height: 20px;">
-                                                <div class="progress-bar" role="progressbar" style="width: @percentage%;" aria-valuenow="@percentage" aria-valuemin="0" aria-valuemax="100">
-                                                    @percentage%
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    index++;
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted">Không có dữ liệu</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="card-body py-2" id="topPoiList">
+                    <p class="text-muted text-center py-4 mb-0" style="font-size:0.82rem">
+                        <i class="fas fa-spinner fa-spin mr-1"></i>Đang tải...
+                    </p>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Heatmap Chart + Summary -->
+    <div class="row mb-3">
+        <div class="col-lg-8 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-2">
+                    <span class="section-header"><i class="fas fa-map-marked-alt mr-1"></i>Lượt nghe theo POI</span>
+                </div>
+                <div class="card-body pb-3">
+                    <div class="chart-wrap" style="height:280px;">
+                        <div id="heatmapSkeleton" class="chart-skeleton"></div>
+                        <canvas id="heatmapChart" style="display:none;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-2">
+                    <span class="section-header"><i class="fas fa-users mr-1"></i>Thiết bị đang online</span>
+                </div>
+                <div class="card-body py-2">
+                    <div id="onlineUsersList" class="small text-muted">
+                        <div class="text-center py-4"><i class="fas fa-spinner fa-spin"></i></div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white py-2 border-top-0">
+                    <small class="text-muted" id="kpiActiveAccounts">0 tài khoản đã đăng nhập</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Table -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-2">
+            <span class="section-header"><i class="fas fa-table mr-1"></i>Chi tiết lượt nghe theo POI</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>Điểm tham quan</th>
+                        <th class="text-center">Lượt nghe</th>
+                        <th class="text-center">Thời gian TB</th>
+                        <th style="width:200px">Tỉ trọng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model?.Items != null && Model.Items.Count > 0)
+                    {
+                        var totalListens = Model.Items.Sum(x => x.VisitCount);
+                        var index = 1;
+                        @foreach (var item in Model.Items.OrderByDescending(x => x.VisitCount))
+                        {
+                            var pct = totalListens > 0 ? (item.VisitCount * 100 / totalListens) : 0;
+                            <tr>
+                                <td class="text-muted font-weight-bold">@index</td>
+                                <td class="font-weight-bold">@item.PoiName</td>
+                                <td class="text-center"><span class="badge badge-primary px-2">@item.VisitCount</span></td>
+                                <td class="text-center text-muted">@item.AvgDuration s</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="progress flex-grow-1">
+                                            <div class="progress-bar" style="width:@pct%"></div>
+                                        </div>
+                                        <small class="text-muted" style="min-width:30px">@pct%</small>
+                                    </div>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-5">
+                                <i class="fas fa-chart-bar fa-2x d-block mb-2 opacity-25"></i>
+                                Chưa có dữ liệu lượt nghe
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            loadRevenueSummary();
-            loadRevenueTrend();
-            loadChartData();
-            updateStats();
-            loadActiveUsers();
-            setInterval(loadActiveUsers, 30000);
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+(function () {
+    'use strict';
+
+    function stamp() {
+        document.getElementById('lastUpdated').innerHTML =
+            '<i class="fas fa-clock text-muted mr-1"></i>Cập nhật ' + new Date().toLocaleTimeString('vi-VN');
+    }
+
+    function loadActiveUsers() {
+        $.get('@Url.Action("ActiveUsers", "Analytics")?minutes=5', function (response) {
+            if (!response?.success || !response.data) return;
+            const d = response.data;
+            const activeDevices = d.activeDevices || d.activeUsers || 0;
+            const activeAccounts = d.activeAccounts || 0;
+            document.getElementById('kpiOnlineUsers').textContent = activeDevices.toLocaleString('vi-VN');
+            document.getElementById('kpiActiveAccounts').textContent = activeAccounts.toLocaleString('vi-VN') + ' tài khoản đã đăng nhập';
+
+            const items = d.items || [];
+            const listEl = document.getElementById('onlineUsersList');
+            if (items.length === 0) {
+                listEl.innerHTML = '<div class="text-center py-4 text-muted" style="font-size:0.82rem"><i class="fas fa-moon mr-1"></i>Không có thiết bị online</div>';
+                return;
+            }
+            listEl.innerHTML = items.slice(0, 8).map(x => {
+                const label = x.userEmail || x.userId || 'Khách';
+                const device = (x.deviceId || '').substring(0, 14);
+                const t = x.lastSeenAt ? new Date(x.lastSeenAt).toLocaleTimeString('vi-VN') : '-';
+                return `<div class="d-flex justify-content-between align-items-center py-1 border-bottom" style="font-size:0.79rem">
+                    <span class="text-truncate mr-2" style="max-width:140px">${label}</span>
+                    <span class="online-pill">${t}</span>
+                </div>`;
+            }).join('');
         });
+    }
 
-        function loadActiveUsers() {
-            $.get('@Url.Action("ActiveUsers", "Analytics")?minutes=5', function(response) {
-                if (!response || !response.success || !response.data) return;
+    function loadRevenueSummary() {
+        $.get('@Url.Action("RevenueSummary", "Analytics")?days=7', function (response) {
+            if (!response?.success || !response.data) return;
+            const d = response.data;
+            document.getElementById('kpiRevenue').textContent    = (d.totalRevenue || 0).toLocaleString('vi-VN') + 'đ';
+            document.getElementById('kpiTickets').textContent    = (d.ticketsSold || 0).toLocaleString('vi-VN');
+            const pu = document.getElementById('kpiPremiumUsers');
+            pu.innerHTML = (d.activePremiumUsers || 0) + '<span style="font-size:1rem;font-weight:400;color:#9ca3af">/' + (d.totalUsers || 0) + '</span>';
+            document.getElementById('kpiConversion').textContent = (d.conversionRate || 0).toFixed(1) + '%';
+        });
+    }
 
-                const d = response.data;
-                const activeDevices = d.activeDevices || d.activeUsers || 0;
-                const activeAccounts = d.activeAccounts || 0;
-                $('#kpiOnlineUsers').text(activeDevices.toLocaleString('vi-VN'));
-                $('#kpiActiveAccounts').text(`${activeAccounts.toLocaleString('vi-VN')} tài khoản`);
-
-                const items = d.items || [];
-                if (items.length === 0) {
-                    $('#onlineUsersList').text('Chưa có heartbeat trong 5 phút gần nhất.');
-                    return;
-                }
-
-                const html = items.slice(0, 8)
-                    .map(x => {
-                        const user = (x.userId || '').length > 18
-                            ? (x.userId || '').substring(0, 18) + '...'
-                            : (x.userId || 'unknown');
-                        const device = (x.deviceId || '').length > 14
-                            ? (x.deviceId || '').substring(0, 14) + '...'
-                            : (x.deviceId || 'unknown-device');
-                        const lastSeen = x.lastSeenAt ? new Date(x.lastSeenAt).toLocaleTimeString('vi-VN') : '-';
-                        return `<div>• <strong>${user}</strong> · <span>${device}</span> <span class="text-secondary">(${lastSeen})</span></div>`;
-                    })
-                    .join('');
-
-                $('#onlineUsersList').html(html);
-            });
-        }
-
-        function loadRevenueSummary() {
-            $.get('@Url.Action("RevenueSummary", "Analytics")?days=7', function(response) {
-                if (!response || !response.success || !response.data) return;
-
-                const d = response.data;
-                $('#kpiRevenue').text((d.totalRevenue || 0).toLocaleString('vi-VN') + ' đ');
-                $('#kpiTickets').text((d.ticketsSold || 0).toLocaleString('vi-VN'));
-                $('#kpiPremiumUsers').text(`${d.activePremiumUsers || 0}/${d.totalUsers || 0}`);
-                $('#kpiConversion').text(`${(d.conversionRate || 0).toLocaleString('vi-VN')}%`);
-            });
-        }
-
-        function loadRevenueTrend() {
-            $.get('@Url.Action("RevenueTrend", "Analytics")?days=7', function(response) {
-                if (!response || !response.labels || response.labels.length === 0) return;
-
-                const ctx = document.getElementById('revenueTrendChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: response.labels,
-                        datasets: [
-                            {
-                                label: 'Doanh thu (VND)',
-                                data: response.datasets[0].data,
-                                borderColor: 'rgb(34, 197, 94)',
-                                backgroundColor: 'rgba(34, 197, 94, 0.2)',
-                                yAxisID: 'yRevenue',
-                                tension: 0.3
-                            },
-                            {
-                                label: 'Mua Premium',
-                                data: response.datasets[1].data,
-                                type: 'bar',
-                                borderColor: 'rgb(59, 130, 246)',
-                                backgroundColor: 'rgba(59, 130, 246, 0.4)',
-                                yAxisID: 'yCount'
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom' }
+    function loadRevenueTrend() {
+        $.get('@Url.Action("RevenueTrend", "Analytics")?days=7', function (response) {
+            if (!response?.labels?.length) return;
+            const el = document.getElementById('revenueTrendChart');
+            document.getElementById('revenueSkeleton').style.display = 'none';
+            el.style.display = 'block';
+            new Chart(el, {
+                type: 'line',
+                data: {
+                    labels: response.labels,
+                    datasets: [
+                        {
+                            label: 'Doanh thu (VND)',
+                            data: response.datasets[0].data,
+                            borderColor: '#198754',
+                            backgroundColor: 'rgba(25,135,84,0.1)',
+                            yAxisID: 'yRevenue',
+                            tension: 0.35,
+                            fill: true,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
                         },
-                        scales: {
-                            yRevenue: {
-                                type: 'linear',
-                                position: 'left',
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toLocaleString('vi-VN');
-                                    }
-                                }
-                            },
-                            yCount: {
-                                type: 'linear',
-                                position: 'right',
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            }
+                        {
+                            label: 'Mua Premium',
+                            data: response.datasets[1].data,
+                            type: 'bar',
+                            backgroundColor: 'rgba(13,110,253,0.5)',
+                            borderColor: '#0d6efd',
+                            yAxisID: 'yCount',
+                            borderRadius: 4
                         }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    scales: {
+                        yRevenue: { type: 'linear', position: 'left', beginAtZero: true, ticks: { callback: v => v.toLocaleString('vi-VN') } },
+                        yCount:   { type: 'linear', position: 'right', beginAtZero: true, grid: { drawOnChartArea: false } }
                     }
-                });
-            });
-        }
-
-        function loadChartData() {
-            $.get('@Url.Action("ChartData", "Analytics")', function(response) {
-                if (response && response.labels && response.labels.length > 0) {
-                    const ctx = document.getElementById('heatmapChart').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: response.labels,
-                            datasets: [
-                                {
-                                    label: 'Lượt nghe',
-                                    data: response.datasets[0].data,
-                                    borderColor: 'rgb(75, 192, 192)',
-                                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                                    order: 1
-                                },
-                                {
-                                    label: 'Thời gian TB (giây)',
-                                    data: response.datasets[1].data,
-                                    type: 'line',
-                                    borderColor: 'rgb(255, 99, 132)',
-                                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
-                                    order: 2
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: { position: 'bottom' }
-                            },
-                            scales: {
-                                y: { beginAtZero: true }
-                            }
-                        }
-                    });
                 }
             });
-        }
+        });
+    }
 
-        function updateStats() {
-            $.get('@Url.Action("TopPois", "Analytics")', function(response) {
-                if (response.success && response.data) {
-                    const totalListens = response.data.reduce((sum, item) => sum + item.visitCount, 0);
-                    const avgDuration = response.data.length > 0 
-                        ? Math.round(response.data.reduce((sum, item) => sum + item.avgDuration, 0) / response.data.length)
-                        : 0;
-
-                    $('#totalListens').text(totalListens.toLocaleString('vi-VN'));
-                    $('#activePois').text(response.data.length);
-                    $('#avgDurationGlobal').text(avgDuration);
-
-                    let topList = '<ol>';
-                    response.data.slice(0, 5).forEach((item, idx) => {
-                        topList += `<li><strong>${item.poiName}</strong><br/><small>${item.visitCount} lượt nghe</small></li>`;
-                    });
-                    topList += '</ol>';
-                    $('#topPoiList').html(topList);
+    function loadHeatmap() {
+        $.get('@Url.Action("ChartData", "Analytics")', function (response) {
+            if (!response?.labels?.length) return;
+            const el = document.getElementById('heatmapChart');
+            document.getElementById('heatmapSkeleton').style.display = 'none';
+            el.style.display = 'block';
+            new Chart(el, {
+                type: 'bar',
+                data: {
+                    labels: response.labels,
+                    datasets: [
+                        { label: 'Lượt nghe', data: response.datasets[0].data, backgroundColor: 'rgba(13,110,253,0.6)', borderColor: '#0d6efd', borderRadius: 4 },
+                        { label: 'Thời gian TB (giây)', data: response.datasets[1].data, type: 'line', borderColor: '#dc3545', backgroundColor: 'rgba(220,53,69,0.1)', tension: 0.3, yAxisID: 'y2', fill: false, pointRadius: 3 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    scales: {
+                        y:  { beginAtZero: true, grid: { color: 'rgba(0,0,0,.04)' } },
+                        y2: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false } }
+                    }
                 }
             });
-        }
-    </script>
+        });
+    }
 
-    <style>
-        .progress { background-color: #e9ecef; }
-        .progress-bar { background-color: #28a745; }
-        .card { border: none; }
-        .card-header { font-weight: 600; }
-        .badge { padding: 0.5rem 0.75rem; }
-    </style>
+    function loadTopPois() {
+        $.get('@Url.Action("TopPois", "Analytics")', function (response) {
+            if (!response?.success || !response.data) return;
+            const data = response.data;
+            const total = data.reduce((s, x) => s + x.visitCount, 0);
+            document.getElementById('kpiTotalListens').textContent = total.toLocaleString('vi-VN');
+
+            const rankClass = (i) => ['rank-1','rank-2','rank-3','rank-other','rank-other'][Math.min(i, 4)];
+            const listEl = document.getElementById('topPoiList');
+            if (!data.length) {
+                listEl.innerHTML = '<p class="text-muted text-center py-3 mb-0" style="font-size:0.82rem">Chưa có dữ liệu</p>';
+                return;
+            }
+            listEl.innerHTML = data.slice(0, 5).map((item, i) => {
+                const pct = total > 0 ? Math.round(item.visitCount * 100 / total) : 0;
+                return `<div class="top-poi-item">
+                    <div class="top-poi-rank ${rankClass(i)}">${i + 1}</div>
+                    <div style="flex:1;min-width:0">
+                        <div class="font-weight-bold text-truncate" style="font-size:0.82rem">${item.poiName}</div>
+                        <div class="d-flex align-items-center gap-2 mt-1">
+                            <div class="progress" style="flex:1;height:5px">
+                                <div class="progress-bar" style="width:${pct}%"></div>
+                            </div>
+                            <small class="text-muted" style="white-space:nowrap">${item.visitCount} lượt</small>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        });
+    }
+
+    $(document).ready(function () {
+        loadRevenueSummary();
+        loadRevenueTrend();
+        loadHeatmap();
+        loadTopPois();
+        loadActiveUsers();
+        stamp();
+        setInterval(loadActiveUsers, 30000);
+        setInterval(stamp, 60000);
+    });
+})();
+</script>
 }

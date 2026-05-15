@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SaigonAudioTour — Product Design v1.0</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --primary: #1a237e; --primary-dark: #0d1b6e; --primary-light: #5c6bc0;
+      --accent: #ff6f00; --bg: #f5f7fb; --surface: #fff;
+      --text: #1a202c; --muted: #6b7280; --border: #dde3ef;
+      --ok: #2e7d32; --warn: #e65100; --risk: #b71c1c; --info: #01579b;
+      --tag-bg: #e8eaf6; --tag-text: #283593;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; scroll-behavior: smooth; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 54px; background: var(--primary-dark); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 1.2rem; box-shadow: 0 2px 10px rgba(0,0,0,.25); }
+    .logo { font-weight: 700; font-size: .9rem; white-space: nowrap; }
+    .nav-links { list-style: none; display: flex; gap: .2rem; flex-wrap: wrap; }
+    .nav-links a { color: #c5cae9; text-decoration: none; font-size: .72rem; padding: .22rem .45rem; border-radius: 4px; transition: .15s; }
+    .nav-links a:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+    /* HERO */
+    .hero { margin-top: 54px; text-align: center; padding: 3.5rem 1.5rem 2.5rem; background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 55%, var(--primary-light) 100%); color: #fff; }
+    .hero h1 { font-size: 2.1rem; font-weight: 800; margin-bottom: .5rem; }
+    .hero-sub { max-width: 860px; margin: 0 auto .5rem; opacity: .9; font-size: 1rem; }
+    .hero-meta { font-size: .8rem; opacity: .75; margin-bottom: 1rem; }
+    .badges { display: flex; justify-content: center; flex-wrap: wrap; gap: .4rem; }
+    .badge { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.25); border-radius: 20px; padding: .18rem .7rem; font-size: .75rem; }
+
+    /* SECTIONS */
+    section { max-width: 1300px; margin: 0 auto; padding: 2.5rem 1.2rem 1.5rem; }
+    .section-head { display: flex; align-items: center; gap: .8rem; margin-bottom: 1.1rem; padding-bottom: .6rem; border-bottom: 2px solid var(--border); }
+    .sec-num { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; }
+    .sec-meta { font-size: .7rem; text-transform: uppercase; letter-spacing: 1.2px; color: var(--primary-light); font-weight: 700; }
+    .sec-title { font-size: 1.45rem; font-weight: 800; color: var(--primary-dark); }
+    .lead { color: var(--muted); margin: .5rem 0 1rem; font-size: .95rem; }
+
+    /* CARDS */
+    .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .grid-2 { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; }
+    .card h3 { color: var(--primary-dark); font-size: .95rem; margin-bottom: .4rem; display: flex; align-items: center; gap: .4rem; }
+    .card p, .card li { color: var(--muted); font-size: .88rem; line-height: 1.6; }
+    .card ul { padding-left: 1.1rem; }
+    .card-accent { border-left: 4px solid var(--primary); }
+    .card-ok { border-left: 4px solid var(--ok); }
+    .card-warn { border-left: 4px solid var(--warn); }
+
+    /* DIAGRAM */
+    .diagram { margin: .8rem 0; border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 1.2rem; overflow-x: auto; }
+    .diagram-title { font-size: .78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 700; margin-bottom: .6rem; }
+    .caption { margin-top: .4rem; color: var(--muted); font-size: .8rem; font-style: italic; }
+
+    /* TABLE */
+    .table-wrap { margin: .8rem 0; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    th { background: var(--primary); color: #fff; text-align: left; padding: .55rem .75rem; font-weight: 600; }
+    td { border-bottom: 1px solid var(--border); padding: .5rem .75rem; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0f4ff; }
+    .ok { color: var(--ok); font-weight: 700; }
+    .warn { color: var(--warn); font-weight: 700; }
+    .risk { color: var(--risk); font-weight: 700; }
+    code { background: var(--tag-bg); color: var(--tag-text); padding: .1rem .35rem; border-radius: 4px; font-size: .82rem; font-family: "Cascadia Code", "Fira Code", monospace; }
+    .tag { display: inline-block; background: var(--tag-bg); color: var(--tag-text); border-radius: 10px; padding: .1rem .5rem; font-size: .75rem; font-weight: 600; }
+    .method { display: inline-block; border-radius: 4px; padding: .1rem .45rem; font-size: .75rem; font-weight: 700; font-family: monospace; margin-right: .3rem; }
+    .get { background: #e3f2fd; color: #0277bd; }
+    .post { background: #e8f5e9; color: #1b5e20; }
+    .put { background: #fff8e1; color: #e65100; }
+    .delete { background: #fce4ec; color: #b71c1c; }
+    .note { border-left: 4px solid var(--warn); background: #fff8f0; padding: .7rem 1rem; border-radius: 4px; margin: .8rem 0; font-size: .88rem; }
+    .info-box { border-left: 4px solid var(--info); background: #e8f4fd; padding: .7rem 1rem; border-radius: 4px; margin: .8rem 0; font-size: .88rem; }
+    footer { margin-top: 2rem; background: var(--primary-dark); color: #c5cae9; text-align: center; padding: 2rem 1rem; font-size: .85rem; }
+    footer strong { color: #fff; }
+    @media (max-width: 600px) { .hero h1 { font-size: 1.5rem; } .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">SaigonAudioTour — Design v1.0</div>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#actors">Actors</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#datamodel">Data Model</a></li>
+      <li><a href="#requirements">Requirements</a></li>
+      <li><a href="#sequences">Sequences</a></li>
+      <li><a href="#activities">Activities</a></li>
+      <li><a href="#states">States</a></li>
+      <li><a href="#nfr">NFR</a></li>
+      <li><a href="#api">API</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <h1>SaigonAudioTour — Product Design Document</h1>
+    <p class="hero-sub">Thiết kế hệ thống thuyết minh du lịch tự động cho tuyến xe buýt 2 tầng Hop-on Hop-off tại Quận 1, TP.HCM. Tài liệu bao gồm toàn bộ use case, kiến trúc, data model, sequence diagrams, activity diagrams, state diagrams và API spec.</p>
+    <p class="hero-meta">Version 1.0 — Thiết kế từ đầu (Greenfield) | Ngày: 2026-05-13</p>
+    <div class="badges">
+      <span class="badge">ASP.NET Core 10</span>
+      <span class="badge">EF Core + SQL Server</span>
+      <span class="badge">SignalR Realtime</span>
+      <span class="badge">PWA + MAUI</span>
+      <span class="badge">VNPay Payment</span>
+      <span class="badge">RBAC + 2FA</span>
+      <span class="badge">OpenAPI 3.0</span>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 1: OVERVIEW ===== -->
+  <section id="overview">
+    <div class="section-head">
+      <div class="sec-num">1</div>
+      <div><div class="sec-meta">Product Scope</div><h2 class="sec-title">Tổng quan & Mục tiêu sản phẩm</h2></div>
+    </div>
+    <p class="lead">Hệ thống tự động phát thuyết minh âm thanh khi du khách đến gần điểm tham quan (POI), kết hợp quản trị nội dung (CMS), thanh toán subscription, và giám sát realtime.</p>
+    <div class="grid">
+      <div class="card card-accent">
+        <h3>🎯 Business Goals</h3>
+        <ul>
+          <li>Tăng mức độ tương tác audio tại từng POI (target: >70% playback rate)</li>
+          <li>Tăng tỷ lệ chuyển đổi Free → Premium (target: >15%)</li>
+          <li>Giảm thao tác thủ công của đội vận hành tour</li>
+          <li>Cung cấp dữ liệu analytics để tối ưu nội dung & tuyến đường</li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <h3>✅ Success Metrics</h3>
+        <ul>
+          <li>Narration auto-play trigger thành công trong &lt;1s sau khi enter geofence</li>
+          <li>Webhook VNPay xử lý thành công &gt;99.9%</li>
+          <li>Activity event lan truyền tới Admin dashboard &lt;200ms (SignalR)</li>
+          <li>API response P95 &lt;300ms</li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <h3>📍 Phạm vi vận hành</h3>
+        <ul>
+          <li>Tuyến xe buýt 2 tầng Hop-on Hop-off, Quận 1</li>
+          <li>15–20 POI điểm dừng & điểm tham quan</li>
+          <li>Hỗ trợ đa ngôn ngữ: Tiếng Việt (vi) và Tiếng Anh (en)</li>
+          <li>Client: PWA (trình duyệt di động), MAUI mobile app</li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <h3>🚫 Ngoài phạm vi</h3>
+        <ul>
+          <li>Đặt vé tàu/xe trực tuyến</li>
+          <li>Tích hợp bản đồ bên thứ 3 (Google Maps)</li>
+          <li>Chat / support trong app</li>
+          <li>Multi-tenant (nhiều công ty tour)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2: ACTORS & USE CASES ===== -->
+  <section id="actors">
+    <div class="section-head">
+      <div class="sec-num">2</div>
+      <div><div class="sec-meta">Actors & Use Cases</div><h2 class="sec-title">Tác nhân và ca sử dụng</h2></div>
+    </div>
+    <p class="lead">Hệ thống có 3 nhóm tác nhân chính: Du khách (Free/Premium), Nhân viên quản trị (theo phân quyền), và Hệ thống tích hợp.</p>
+    <div class="grid">
+      <div class="card"><h3>👤 Tourist (Free)</h3><ul><li>Đăng ký / đăng nhập</li><li>Xem danh sách tour & POI</li><li>Phát narration cơ bản (giới hạn)</li><li>QR login trên thiết bị khác</li><li>Kích hoạt 2FA</li></ul></div>
+      <div class="card"><h3>👑 Tourist (Premium)</h3><ul><li>Tất cả quyền Free</li><li>Auto-play narration không giới hạn</li><li>Truy cập nội dung premium</li><li>Multi-language narration</li><li>Offline mode (cached audio)</li></ul></div>
+      <div class="card"><h3>✏️ Admin (Editor)</h3><ul><li>CRUD POI, Tour, Narration</li><li>Upload ảnh & audio</li><li>Giám sát activity realtime</li></ul></div>
+      <div class="card"><h3>⚙️ Admin (Super)</h3><ul><li>Tất cả quyền Editor</li><li>Xem analytics dashboard</li><li>Quản lý users & roles</li><li>Cấu hình hệ thống</li></ul></div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Use Case Diagram — Toàn hệ thống</div>
+      <pre class="mermaid">
+flowchart LR
+  subgraph Tourists["👤 Tourists"]
+    TF[Tourist Free]
+    TP[Tourist Premium]
+  end
+  subgraph Admins["🛡️ Admins"]
+    AE[Admin Editor]
+    AS[Admin SuperAdmin]
+  end
+  subgraph SYS["🤖 External Systems"]
+    VNP[VNPay Gateway]
+    GPS[Browser GPS API]
+  end
+
+  subgraph UC_Tourist["Use Cases — Tourist"]
+    UC01[Đăng ký / Đăng nhập]
+    UC02[Xem danh sách Tour & POI]
+    UC03[Phát narration thủ công]
+    UC04[Auto-play narration via GPS]
+    UC05[Mua subscription Premium]
+    UC06[QR Code Login]
+    UC07[Bật 2FA]
+    UC08[Xem lịch sử hoạt động]
+  end
+
+  subgraph UC_Admin["Use Cases — Admin"]
+    UC10[Quản lý POI - CRUD]
+    UC11[Quản lý Tour - CRUD + POI ordering]
+    UC12[Quản lý Narration + Audio/TTS]
+    UC13[Giám sát realtime - Activity Radar]
+    UC14[Xem Analytics Dashboard]
+    UC15[Quản lý Users & Roles]
+    UC16[Xem Audit Log]
+  end
+
+  subgraph UC_Sys["Use Cases — Hệ thống"]
+    UC20[Xử lý VNPay Webhook]
+    UC21[Geofencing trigger]
+    UC22[Refresh JWT token]
+  end
+
+  TF --> UC01
+  TF --> UC02
+  TF --> UC03
+  TF --> UC05
+  TF --> UC06
+  TF --> UC07
+  TP --> UC04
+  TP --> UC08
+  TP -.->|extends| TF
+
+  AE --> UC10
+  AE --> UC11
+  AE --> UC12
+  AE --> UC13
+  AS --> UC14
+  AS --> UC15
+  AS --> UC16
+  AS -.->|extends| AE
+
+  GPS --> UC21
+  VNP --> UC20
+      </pre>
+      <p class="caption">Hình 2.1 — Use Case Diagram. Mũi tên đứt biểu thị quan hệ extends (kế thừa quyền).</p>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: ARCHITECTURE ===== -->
+  <section id="architecture">
+    <div class="section-head">
+      <div class="sec-num">3</div>
+      <div><div class="sec-meta">System Architecture</div><h2 class="sec-title">Kiến trúc hệ thống</h2></div>
+    </div>
+    <p class="lead">API-first architecture: ASP.NET Core API là backend thuần, hai frontend React + Vite (webapp & admin) là SPA độc lập consume API qua REST/SignalR. DB schema và migration scripts quản lý tập trung trong thư mục <code>/database</code>.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">Component Diagram — Deployment Overview (New Architecture)</div>
+      <pre class="mermaid">
+graph TB
+  subgraph FE["Frontend Layer (Node.js / React + Vite)"]
+    WA["frontend/webapp\nReact + Vite PWA\n(Tourist — GPS, Audio, Sub)"]
+    ADM["frontend/admin\nReact + Vite SPA\n(Admin Dashboard — CMS, Analytics)"]
+    MAUI["SaigonAudioTour.Mobile\n.NET MAUI (iOS / Android)"]
+  end
+
+  subgraph API["backend/SaigonAudioTour.Api  :5117"]
+    RC["REST Controllers\n/api/*"]
+    AH["ActivityHub\n/hubs/activity"]
+    TH["TelemetryHub\n/hubs/telemetry"]
+    MW["Middlewares\n(CORS, JWT, RBAC, RateLimit)"]
+    SVC["Services Layer"]
+    EF["EF Core DbContext"]
+  end
+
+  subgraph DB_LAYER["database/"]
+    MIG["migrations/\n001_init.sql\n002_add_roles.sql ..."]
+    SCH["schema.sql\n(full snapshot)"]
+    SEED["seed.sql\n(POIs, Tours, Plans)"]
+  end
+
+  subgraph Infra["Infrastructure"]
+    DB[("SQL Server\n/ SQLite")]
+    FS["File Storage\n(uploads/)"]
+    RD[("Redis\noptional")]
+  end
+
+  subgraph Ext["External"]
+    VN["VNPay Gateway"]
+    GPS2["Browser\nGeolocation API"]
+  end
+
+  WA -->|"REST (CORS) + WS"| RC
+  WA -->|SignalR| AH
+  ADM -->|"REST (CORS)"| RC
+  ADM -->|SignalR| AH
+  ADM -->|SignalR| TH
+  MAUI -->|REST| RC
+  MAUI -->|SignalR| AH
+  RC --> MW --> SVC
+  SVC --> EF --> DB
+  SVC --> FS
+  SVC --> RD
+  SVC --> VN
+  GPS2 -->|coords| WA
+  MIG -.->|"applied by\nEF Core / script"| DB
+      </pre>
+      <p class="caption">Hình 3.1 — Kiến trúc mới: API headless, 2 SPA độc lập, DB scripts quản lý tập trung.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Repo Folder Structure</div>
+      <pre class="mermaid">
+flowchart TD
+  ROOT["SaigonAudioTour/ (repo root)"]
+
+  ROOT --> BE["backend/"]
+  ROOT --> FEF["frontend/"]
+  ROOT --> DBF["database/"]
+  ROOT --> DOCS["docs/\n(PRD, openapi.yaml)"]
+
+  BE --> API["SaigonAudioTour.Api/\nASP.NET Core 10\nControllers, Services, Hubs, EF Core"]
+  BE --> MOB["SaigonAudioTour.Mobile/\n.NET MAUI"]
+
+  FEF --> WEBAPP["webapp/\nReact 19 + Vite 6 + TypeScript\nPWA — Tourist experience"]
+  FEF --> ADMFE["admin/\nReact 19 + Vite 6 + TypeScript\nAdmin Dashboard"]
+
+  DBF --> MIG2["migrations/\n001_init.sql\n002_seed_pois.sql\n003_add_payments.sql"]
+  DBF --> SCH2["schema.sql — snapshot đầy đủ"]
+  DBF --> SEED2["seed.sql — dữ liệu mẫu dev"]
+  DBF --> README["README.md — hướng dẫn setup"]
+
+  WEBAPP --> W1["src/components/ — UI components"]
+  WEBAPP --> W2["src/hooks/ — useGPS, useAudio, useSignalR"]
+  WEBAPP --> W3["src/stores/ — Zustand state"]
+  WEBAPP --> W4["public/sw.js — Service Worker PWA"]
+
+  ADMFE --> A1["src/pages/ — Dashboard, POIs, Tours..."]
+  ADMFE --> A2["src/components/ — Tables, Charts, Forms"]
+  ADMFE --> A3["src/api/ — API client (axios + openapi)"]
+      </pre>
+      <p class="caption">Hình 3.2 — Cấu trúc repo đầy đủ. Mỗi layer nằm trong thư mục riêng biệt, rõ trách nhiệm.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Request Pipeline — API Middleware Chain</div>
+      <pre class="mermaid">
+flowchart LR
+  Req["Incoming\nHTTP Request"] --> CORS2["CORS Policy\n(allow SPA origins)"]
+  CORS2 --> RL["Rate Limiter\n(per IP)"]
+  RL --> Auth["JWT Authentication"]
+  Auth --> Az["Authorization\n(RBAC Policies)"]
+  Az --> AL["Audit Logging"]
+  AL --> Ctrl["Controller Action"]
+  Ctrl --> Svc["Service Layer"]
+  Svc --> Resp["HTTP Response\n(JSON)"]
+      </pre>
+      <p class="caption">Hình 3.3 — CORS được đặt trước Rate Limiter để preflight requests hoạt động đúng.</p>
+    </div>
+
+    <div class="grid" style="margin-top:1rem">
+      <div class="card card-accent">
+        <h3>⚙️ Backend — ASP.NET Core 10</h3>
+        <ul>
+          <li><code>backend/SaigonAudioTour.Api</code> — REST API + SignalR</li>
+          <li><code>backend/SaigonAudioTour.Mobile</code> — .NET MAUI</li>
+          <li>EF Core Code-First, migrations apply từ <code>/database</code></li>
+          <li>CORS mở cho <code>localhost:5173</code> (dev) và domain prod</li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <h3>⚛️ Frontend — React + Vite</h3>
+        <ul>
+          <li><code>frontend/webapp</code> — React 19, Vite 6, TypeScript, PWA</li>
+          <li><code>frontend/admin</code> — React 19, Vite 6, TypeScript, Ant Design / shadcn</li>
+          <li>Zustand cho state, Axios + React Query cho API calls</li>
+          <li>SignalR client: <code>@microsoft/signalr</code></li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <h3>🗄️ Database Folder</h3>
+        <ul>
+          <li><code>database/migrations/</code> — SQL scripts đánh số thứ tự</li>
+          <li><code>database/schema.sql</code> — Full schema snapshot (auto-gen)</li>
+          <li><code>database/seed.sql</code> — 15 POIs mẫu, 2 Tours, 3 Plans</li>
+          <li><code>database/README.md</code> — Setup: <code>dotnet ef database update</code></li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <h3>🔐 Security Layers</h3>
+        <ul>
+          <li>JWT Bearer (Access 15 phút, Refresh 7 ngày, rotation)</li>
+          <li>TOTP 2FA (RFC 6238) — Google Authenticator</li>
+          <li>QR Login (token 5 phút, single-use, SignalR push)</li>
+          <li>RBAC: SuperAdmin / Editor / Viewer</li>
+          <li>HMAC-SHA512 VNPay webhook verification</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4: DATA MODEL ===== -->
+  <section id="datamodel">
+    <div class="section-head">
+      <div class="sec-num">4</div>
+      <div><div class="sec-meta">Data Model</div><h2 class="sec-title">Mô hình dữ liệu (ER Diagram)</h2></div>
+    </div>
+    <p class="lead">Entities map bằng EF Core Code-First. Schema và migration scripts được export ra <code>database/</code> để dễ review, reset dev, và deploy lên môi trường mới không cần .NET toolchain. SQLite cho dev, SQL Server cho production.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">ER Diagram — Entity Relationships</div>
+      <pre class="mermaid">
+erDiagram
+  AppUser {
+    uuid id PK
+    string email UK
+    string passwordHash
+    string fullName
+    string phone
+    enum subscriptionStatus "Free|Premium|Expired"
+    datetime premiumUntil
+    bool twoFactorEnabled
+    string twoFactorSecret
+    datetime createdAt
+    datetime updatedAt
+  }
+  PaymentTransaction {
+    uuid id PK
+    uuid userId FK
+    uuid planId FK
+    string vnpayOrderId UK
+    decimal amount
+    string currency
+    enum status "Pending|Success|Failed|Expired|Refunded"
+    string provider
+    string rawResponse
+    datetime createdAt
+    datetime updatedAt
+  }
+  SubscriptionPlan {
+    uuid id PK
+    string name
+    decimal price
+    int durationDays
+    string description
+    bool isActive
+  }
+  UserLog {
+    uuid id PK
+    uuid userId FK
+    uuid poiId FK "nullable"
+    decimal latitude
+    decimal longitude
+    enum eventType "GpsUpdate|PoiEntered|PoiExited|NarrationPlay|NarrationStop"
+    datetime timestamp
+  }
+  QrLoginToken {
+    uuid id PK
+    string token UK
+    uuid userId FK "nullable - set after scan"
+    enum status "Pending|Scanned|Confirmed|Expired"
+    datetime expiresAt
+    datetime createdAt
+  }
+  POI {
+    uuid id PK
+    string name
+    string description
+    decimal latitude
+    decimal longitude
+    int radiusMeters
+    int priority
+    bool isStopStation
+    string imageUrl
+    bool isActive
+    datetime createdAt
+    datetime updatedAt
+  }
+  Tour {
+    uuid id PK
+    string name
+    string description
+    int estimatedMinutes
+    decimal totalDistanceKm
+    decimal ticketPrice
+    string coverImageUrl
+    bool isActive
+    datetime createdAt
+  }
+  TourPOI {
+    uuid tourId FK
+    uuid poiId FK
+    int orderIndex
+  }
+  Narration {
+    uuid id PK
+    uuid poiId FK
+    string languageCode "vi|en"
+    string voiceType "male|female"
+    string contentText
+    string audioUrl
+    int durationSeconds
+    bool isPremium
+    datetime createdAt
+  }
+  Admin {
+    uuid id PK
+    string username UK
+    string email UK
+    string passwordHash
+    uuid roleId FK
+    bool isActive
+    bool twoFactorEnabled
+    string twoFactorSecret
+    datetime createdAt
+  }
+  Role {
+    uuid id PK
+    string name "SuperAdmin|Editor|Viewer"
+    string description
+  }
+  RolePermission {
+    uuid roleId FK
+    string permission "pois:write|tours:write|narrations:write|analytics:read|users:manage"
+  }
+
+  AppUser ||--o{ PaymentTransaction : "makes"
+  AppUser ||--o{ UserLog : "generates"
+  AppUser ||--o| QrLoginToken : "authenticates via"
+  PaymentTransaction }o--|| SubscriptionPlan : "for plan"
+  POI ||--|{ TourPOI : "included in"
+  Tour ||--|{ TourPOI : "orders"
+  POI ||--|{ Narration : "has narrations"
+  POI ||--o{ UserLog : "triggers"
+  Admin }o--|| Role : "assigned to"
+  Role ||--|{ RolePermission : "grants"
+      </pre>
+      <p class="caption">Hình 4.1 — ER Diagram đầy đủ. PK = Primary Key, FK = Foreign Key, UK = Unique Key.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Entity</th><th>Rows (est.)</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><code>POI</code></td><td>15–30</td><td>Điểm tham quan, có radius geofencing</td></tr>
+          <tr><td><code>Tour</code></td><td>3–10</td><td>Tuyến du lịch, tham chiếu POIs qua TourPOI</td></tr>
+          <tr><td><code>Narration</code></td><td>30–120</td><td>Mỗi POI có thể có 2 ngôn ngữ × 2 giọng = 4 narrations</td></tr>
+          <tr><td><code>AppUser</code></td><td>1k–100k</td><td>Index trên email, subscriptionStatus</td></tr>
+          <tr><td><code>PaymentTransaction</code></td><td>1k–50k</td><td>Index trên userId, vnpayOrderId</td></tr>
+          <tr><td><code>UserLog</code></td><td>1M+</td><td>Cần partition theo tháng hoặc dùng TTL archive</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5: FUNCTIONAL REQUIREMENTS ===== -->
+  <section id="requirements">
+    <div class="section-head">
+      <div class="sec-num">5</div>
+      <div><div class="sec-meta">Functional Requirements</div><h2 class="sec-title">Yêu cầu chức năng</h2></div>
+    </div>
+    <p class="lead">Phân theo domain, mỗi feature được gắn mức độ ưu tiên: <span class="tag">P0</span> bắt buộc, <span class="tag" style="background:#fff3e0;color:#bf360c">P1</span> quan trọng, <span class="tag" style="background:#f3e5f5;color:#4a148c">P2</span> nice-to-have.</p>
+
+    <h3 style="margin:.8rem 0 .5rem;color:var(--primary-dark)">5.1 — Domain: Tourist Experience</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>ID</th><th>Feature</th><th>Mô tả</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>TE-01</td><td>GPS Geofencing</td><td>PWA liên tục gửi tọa độ mỗi 5s. API kiểm tra POI nào có <code>distance(user, poi) &lt;= poi.radiusMeters</code>. Nếu match → trả về narration auto-play.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>TE-02</td><td>Narration Auto-play</td><td>Client tự phát audio khi nhận narration trigger. Phát 1 lần/POI/session. Hỗ trợ vi & en.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>TE-03</td><td>Manual Narration</td><td>Du khách bấm nút phát thủ công. Free: tối đa 3 POI/ngày. Premium: không giới hạn.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>TE-04</td><td>Tour Browsing</td><td>Danh sách tour, chi tiết POI (tên, mô tả, ảnh, vị trí trên map). Không cần login.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>TE-05</td><td>Multi-language</td><td>Người dùng chọn ngôn ngữ (vi/en). API trả đúng narration theo languageCode.</td><td><span class="tag">P1</span></td></tr>
+        <tr><td>TE-06</td><td>Offline Cache</td><td>PWA cache audio narration vào Service Worker sau lần phát đầu tiên.</td><td><span class="tag" style="background:#f3e5f5;color:#4a148c">P2</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 style="margin:1rem 0 .5rem;color:var(--primary-dark)">5.2 — Domain: Authentication & Users</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>ID</th><th>Feature</th><th>Mô tả</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>AU-01</td><td>Register / Login</td><td>Email + password. Trả JWT accessToken (15 min) + refreshToken (7 ngày).</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>AU-02</td><td>Token Refresh</td><td>Client tự động refresh khi accessToken hết hạn dùng refreshToken.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>AU-03</td><td>2FA (TOTP)</td><td>Setup: API trả secret + QR code URI. Verify: client gửi 6-digit code. Dùng Google Authenticator / Authy.</td><td><span class="tag">P1</span></td></tr>
+        <tr><td>AU-04</td><td>QR Login</td><td>Trình duyệt tạo QR token → Mobile scan → Confirm → Trình duyệt nhận JWT qua SignalR.</td><td><span class="tag">P1</span></td></tr>
+        <tr><td>AU-05</td><td>Admin Login (RBAC)</td><td>Admin đăng nhập riêng. Phân quyền theo Role: SuperAdmin / Editor / Viewer.</td><td><span class="tag">P0</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 style="margin:1rem 0 .5rem;color:var(--primary-dark)">5.3 — Domain: Subscription & Payment</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>ID</th><th>Feature</th><th>Mô tả</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>SP-01</td><td>Subscription Plans</td><td>Danh sách gói: 1 tháng, 3 tháng, 1 năm. Mỗi gói có giá VND và số ngày.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>SP-02</td><td>VNPay Integration</td><td>Tạo payment URL (HMAC-SHA512). Redirect người dùng. Nhận callback.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>SP-03</td><td>VNPay Webhook</td><td>Webhook endpoint xác minh chữ ký → update PaymentTransaction + AppUser subscription.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>SP-04</td><td>Subscription Status</td><td>API trả trạng thái subscription hiện tại của user (Free/Premium + ngày hết hạn).</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>SP-05</td><td>Payment History</td><td>User xem lịch sử giao dịch của mình. Admin xem tất cả.</td><td><span class="tag">P1</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 style="margin:1rem 0 .5rem;color:var(--primary-dark)">5.4 — Domain: Content Management (Admin)</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>ID</th><th>Feature</th><th>Mô tả</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>CM-01</td><td>POI Management</td><td>CRUD POI: tên, mô tả, tọa độ, bán kính geofence, ảnh đại diện. Editor+.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>CM-02</td><td>Tour Management</td><td>CRUD Tour + sắp xếp thứ tự POI trong tour (drag-and-drop hoặc index). Editor+.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>CM-03</td><td>Narration Management</td><td>CRUD narration: text content, upload audio file, chọn ngôn ngữ, giọng. Editor+.</td><td><span class="tag">P0</span></td></tr>
+        <tr><td>CM-04</td><td>TTS Generation</td><td>Tự động generate audio từ text bằng TTS provider. Lưu vào FS + audioUrl trong DB.</td><td><span class="tag" style="background:#f3e5f5;color:#4a148c">P2</span></td></tr>
+        <tr><td>CM-05</td><td>Image Upload</td><td>Upload ảnh POI/Tour. Lưu local hoặc cloud storage. Trả URL.</td><td><span class="tag">P0</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 style="margin:1rem 0 .5rem;color:var(--primary-dark)">5.5 — Domain: Realtime & Analytics</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>ID</th><th>Feature</th><th>Mô tả</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>RA-01</td><td>Activity Radar</td><td>Admin xem vị trí user realtime trên bản đồ POI qua SignalR (ActivityHub).</td><td><span class="tag">P1</span></td></tr>
+        <tr><td>RA-02</td><td>Heatmap Analytics</td><td>Dashboard hiển thị tần suất kích hoạt theo POI, theo giờ/ngày. SuperAdmin only.</td><td><span class="tag">P1</span></td></tr>
+        <tr><td>RA-03</td><td>Revenue Dashboard</td><td>Doanh thu theo ngày/tháng. Số lượng subscription. SuperAdmin only.</td><td><span class="tag">P1</span></td></tr>
+        <tr><td>RA-04</td><td>Popular POIs</td><td>Top POI có tần suất trigger cao nhất. Dùng để tối ưu nội dung.</td><td><span class="tag" style="background:#fff3e0;color:#bf360c">P1</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ===== SECTION 6: SEQUENCE DIAGRAMS ===== -->
+  <section id="sequences">
+    <div class="section-head">
+      <div class="sec-num">6</div>
+      <div><div class="sec-meta">Sequence Diagrams</div><h2 class="sec-title">Biểu đồ tuần tự — Key Flows</h2></div>
+    </div>
+    <p class="lead">9 luồng nghiệp vụ quan trọng nhất được mô tả chi tiết theo thứ tự thực thi.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">Seq 6.1 — GPS Geofencing → Auto-play Narration</div>
+      <pre class="mermaid">
+sequenceDiagram
+  participant U as Tourist (PWA)
+  participant GPS as Browser GPS API
+  participant API as API Server
+  participant DB as Database
+  participant Hub as ActivityHub (SignalR)
+  participant Adm as Admin Dashboard
+
+  GPS-->>U: watchPosition callback (lat, lng)
+  U->>U: debounce 5 seconds
+  U->>API: POST /api/activity/location {lat, lng, userId, timestamp}
+  API->>DB: SELECT pois WHERE isActive=true
+  DB-->>API: All active POIs
+  API->>API: Calculate distance(user, each POI)
+  API->>DB: INSERT UserLog {type: GpsUpdate, lat, lng}
+
+  alt POI match found (distance <= radius)
+    API->>DB: SELECT narration WHERE poiId=? AND lang=? AND isPremium<=userTier
+    DB-->>API: Narration record
+    API->>DB: INSERT UserLog {type: PoiEntered, poiId}
+    API-->>U: 200 { triggered: true, poi, narration }
+    U->>U: HTML5 Audio.play(narration.audioUrl)
+    U->>Hub: SignalR emit("UserAtPoi", {userId, poiId, timestamp})
+    Hub->>Hub: Broadcast to "admin" group
+    Hub->>Adm: Push event UserAtPoi
+    Adm->>Adm: Update radar map marker
+  else No POI match
+    API-->>U: 200 { triggered: false }
+  end
+      </pre>
+      <p class="caption">Hình 6.1 — Luồng chính của hệ thống: GPS → API → Narration trigger → Admin realtime update.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Seq 6.2 — User Register & Login (với 2FA)</div>
+      <pre class="mermaid">
+sequenceDiagram
+  participant C as Client
+  participant API as API Server
+  participant DB as Database
+
+  rect rgb(230, 240, 255)
+    Note over C,DB: Registration Flow
+    C->>API: POST /api/auth/register {email, password, fullName}
+    API->>DB: SELECT AppUser WHERE email=?
+    DB-->>API: null (not exists)
+    API->>API: BCrypt.HashPassword(password)
+    API->>DB: INSERT AppUser {email, hash, status: Free}
+    DB-->>API: Created user
+    API->>API: GenerateJWT(userId) + GenerateRefreshToken()
+    API-->>C: 201 { userId, accessToken, refreshToken }
+  end
+
+  rect rgb(230, 255, 235)
+    Note over C,DB: Login Flow (2FA Enabled)
+    C->>API: POST /api/auth/login {email, password}
+    API->>DB: SELECT AppUser WHERE email=?
+    DB-->>API: User record
+    API->>API: BCrypt.Verify(password, hash)
+    alt Password invalid
+      API-->>C: 401 { error: "Invalid credentials" }
+    else Password valid & 2FA enabled
+      API->>API: Generate tempToken (short-lived 3min)
+      API-->>C: 200 { requiresTwoFactor: true, tempToken }
+      C->>API: POST /api/auth/2fa/verify {tempToken, totpCode}
+      API->>API: VerifyTOTP(user.twoFactorSecret, totpCode)
+      alt TOTP valid
+        API->>API: GenerateJWT + RefreshToken
+        API-->>C: 200 { accessToken, refreshToken }
+      else TOTP invalid
+        API-->>C: 401 { error: "Invalid 2FA code" }
+      end
+    else Password valid & 2FA disabled
+      API->>API: GenerateJWT + RefreshToken
+      API-->>C: 200 { accessToken, refreshToken }
+    end
+  end
+      </pre>
+      <p class="caption">Hình 6.2 — Register/Login với 2FA TOTP. tempToken chỉ sống 3 phút để tránh timing attack.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Seq 6.3 — VNPay Subscription Payment</div>
+      <pre class="mermaid">
+sequenceDiagram
+  participant U as Tourist
+  participant API as API Server
+  participant DB as Database
+  participant VN as VNPay Gateway
+
+  U->>API: POST /api/payments/vnpay/create {planId}
+  API->>DB: SELECT SubscriptionPlan WHERE id=planId
+  DB-->>API: Plan {price, durationDays}
+  API->>DB: INSERT PaymentTransaction {status: Pending, orderId: uuid}
+  API->>API: Build VNPay params + HMAC-SHA512 sign
+  API-->>U: 200 { paymentUrl: "https://sandbox.vnpayment.vn/..." }
+
+  U->>VN: Browser redirect to paymentUrl
+  U->>VN: User enters card/banking details
+  VN->>VN: Process payment
+
+  par VNPay IPN (Webhook)
+    VN->>API: POST /api/payments/vnpay/webhook {vnp_ResponseCode, vnp_SecureHash, ...}
+    API->>API: Recalculate HMAC-SHA512, compare with vnp_SecureHash
+    alt Signature valid & ResponseCode = "00"
+      API->>DB: UPDATE PaymentTransaction SET status=Success
+      API->>DB: UPDATE AppUser SET subscriptionStatus=Premium, premiumUntil=now+days
+      API-->>VN: 200 { RspCode: "00", Message: "Confirm Success" }
+    else Invalid signature
+      API-->>VN: 200 { RspCode: "97", Message: "Invalid signature" }
+    else Payment failed
+      API->>DB: UPDATE PaymentTransaction SET status=Failed
+      API-->>VN: 200 { RspCode: "00", Message: "Confirm Success" }
+    end
+  and VNPay Return (User redirect)
+    VN->>U: Redirect to /payments/vnpay/return?vnp_ResponseCode=00&...
+    U->>API: GET /api/payments/vnpay/return {vnp_TxnRef, vnp_ResponseCode}
+    API->>DB: SELECT PaymentTransaction WHERE orderId=vnp_TxnRef
+    DB-->>API: Transaction record
+    API-->>U: 200 { success: true, message: "Thanh toán thành công!" }
+  end
+      </pre>
+      <p class="caption">Hình 6.3 — VNPay flow với 2 luồng song song: IPN webhook (server-to-server) và Return URL (redirect người dùng).</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Seq 6.4 — QR Code Login</div>
+      <pre class="mermaid">
+sequenceDiagram
+  participant B as Browser / TV Screen
+  participant API as API Server
+  participant DB as Database
+  participant Hub as SignalR Hub
+  participant M as Mobile App (Tourist)
+
+  B->>API: POST /api/qr/generate
+  API->>DB: INSERT QrLoginToken {token: uuid, status: Pending, expiresAt: now+5min}
+  DB-->>API: Token record
+  API-->>B: 200 { token, qrData: "saigontour://qr/{token}" }
+  B->>B: Render QR code from qrData
+  B->>Hub: SignalR subscribe channel "qr.{token}"
+
+  loop Poll every 2s (or wait for SignalR push)
+    B->>API: GET /api/qr/status/{token}
+    API-->>B: { status: "Pending" }
+  end
+
+  M->>M: Camera scan QR code
+  M->>API: POST /api/qr/scan/{token} {Authorization: Bearer userJwt}
+  API->>API: Verify user JWT, extract userId
+  API->>DB: UPDATE QrLoginToken SET status=Scanned, userId=userId
+  API-->>M: 200 { message: "Confirmed. Browser will log in." }
+  API->>API: Generate new JWT pair for this session
+  API->>Hub: Publish to "qr.{token}" { event: "LoginConfirmed", accessToken, refreshToken }
+  Hub->>B: Push { event: "LoginConfirmed", accessToken, refreshToken }
+  B->>B: Store tokens in localStorage, redirect to home
+      </pre>
+      <p class="caption">Hình 6.4 — QR Login: Token sống 5 phút, single-use. Browser đợi SignalR push để tránh polling liên tục.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Seq 6.5 — Admin Login + JWT Refresh (AdminWeb)</div>
+      <pre class="mermaid">
+sequenceDiagram
+  participant A as Admin Browser
+  participant MW as AdminWeb MVC
+  participant API as API Server
+  participant DB as Database
+
+  A->>MW: POST /auth/login {username, password}
+  MW->>API: POST /api/admin/auth/login {username, password}
+  API->>DB: SELECT Admin WHERE username=?
+  DB-->>API: Admin + Role
+  API->>API: VerifyPassword()
+  API->>API: GenerateJWT(adminId, role) + RefreshToken
+  API-->>MW: 200 { accessToken, refreshToken }
+  MW->>MW: Store tokens in encrypted cookie
+  MW-->>A: 302 Redirect to /dashboard
+
+  Note over A,DB: Later: JWT nearing expiry
+  A->>MW: GET /pois (normal request)
+  MW->>MW: AdminJwtRefreshMiddleware: check token expiry
+  alt Token expires within 2 minutes
+    MW->>API: POST /api/admin/auth/refresh {refreshToken}
+    API->>API: Verify refresh token
+    API-->>MW: 200 { newAccessToken, newRefreshToken }
+    MW->>MW: Update cookie silently
+  end
+  MW->>API: GET /api/pois (with valid JWT)
+  API-->>MW: 200 [POI[]]
+  MW-->>A: Render view
+      </pre>
+      <p class="caption">Hình 6.5 — AdminWeb dùng middleware tự động refresh JWT, Admin không bị logout giữa chừng.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Seq 6.6 — Admin CRUD POI (qua AdminWeb)</div>
+      <pre class="mermaid">
+sequenceDiagram
+  participant A as Admin Browser
+  participant MW as AdminWeb MVC
+  participant API as API Server
+  participant DB as Database
+  participant FS as File Storage
+
+  rect rgb(235, 245, 255)
+    Note over A,FS: Create POI with image
+    A->>MW: POST /pois/create {name, lat, lng, radius, description, imageFile}
+    MW->>API: POST /api/pois/image (multipart, imageFile)
+    API->>FS: Save image file
+    FS-->>API: imageUrl
+    API-->>MW: 200 { imageUrl }
+    MW->>API: POST /api/pois {name, lat, lng, radius, imageUrl, ...}
+    API->>API: Authorize: require pois:write permission
+    API->>DB: INSERT POI
+    DB-->>API: New POI
+    API-->>MW: 201 { id, ... }
+    MW-->>A: Redirect /pois + success toast
+  end
+
+  rect rgb(240, 255, 240)
+    Note over A,FS: Update POI
+    A->>MW: PUT /pois/{id} {updated fields}
+    MW->>API: PUT /api/pois/{id} {updated fields}
+    API->>API: Authorize: pois:write
+    API->>DB: UPDATE POI WHERE id=?
+    DB-->>API: Updated POI
+    API-->>MW: 200 { updated POI }
+    MW-->>A: 200 OK + toast
+  end
+      </pre>
+      <p class="caption">Hình 6.6 — AdminWeb là MVC proxy, mọi mutation đều qua API. Phân quyền được enforce ở API layer.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Seq 6.7 — Token Refresh (Tourist Client)</div>
+      <pre class="mermaid">
+sequenceDiagram
+  participant C as Client (PWA / MAUI)
+  participant API as API Server
+  participant DB as Database
+
+  C->>API: GET /api/pois (accessToken expired)
+  API-->>C: 401 Unauthorized
+
+  C->>C: Interceptor: detect 401
+  C->>API: POST /api/auth/refresh {refreshToken}
+  API->>DB: SELECT RefreshToken WHERE token=? AND expiresAt > now
+  DB-->>API: Valid token + userId
+  API->>API: Rotate: invalidate old refreshToken
+  API->>DB: INSERT new RefreshToken
+  API->>API: GenerateJWT(userId)
+  API-->>C: 200 { accessToken, refreshToken }
+
+  C->>C: Update stored tokens
+  C->>API: GET /api/pois (retry with new accessToken)
+  API-->>C: 200 [POI[]]
+      </pre>
+      <p class="caption">Hình 6.7 — Refresh token rotation: mỗi refresh tạo refreshToken mới, invalidate cái cũ (sliding window).</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Seq 6.8 — Admin Activity Radar (SignalR Realtime Monitor)</div>
+      <pre class="mermaid">
+sequenceDiagram
+  participant A as Admin Browser
+  participant MW as AdminWeb MVC
+  participant API as API Server
+  participant Hub as ActivityHub (SignalR)
+  participant DB as Database
+  participant T as Tourist (PWA/MAUI)
+
+  A->>MW: GET /activity (load Activity Radar page)
+  MW-->>A: Render radar page (map + event table)
+  A->>Hub: SignalR connect /hubs/activity (JWT cookie)
+  Hub->>Hub: Authorize: require Admin role
+  Hub-->>A: Connected, join group "admins"
+
+  A->>API: GET /api/activity/online-users
+  API->>DB: SELECT UserLogs (type=GpsUpdate, last 5 min)
+  DB-->>API: Active user list + last coordinates
+  API-->>A: 200 [{ userId, lat, lng, lastSeen }]
+  A->>A: Render initial markers on radar map
+
+  Note over T,A: Real-time events từ du khách đang tour
+  T->>Hub: SignalR send "UserAtPoi" { userId, poiId, poiName, lat, lng }
+  Hub->>Hub: Broadcast to group "admins"
+  Hub->>A: Push "UserAtPoi" event
+  A->>A: Highlight marker + append event row in table
+
+  T->>Hub: SignalR send "LocationUpdate" { userId, lat, lng }
+  Hub->>Hub: Broadcast to group "admins"
+  Hub->>A: Push "LocationUpdate"
+  A->>A: Animate marker to new position on map
+      </pre>
+      <p class="caption">Hình 6.8 — Admin Activity Radar: SignalR push-based, không cần polling. Admin thấy realtime vị trí du khách &lt;200ms.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Seq 6.9 — MAUI Mobile: GPS Tracking + Auto-play Audio</div>
+      <pre class="mermaid">
+sequenceDiagram
+  participant U as Tourist (MAUI App)
+  participant GPS as Platform GPS (iOS/Android)
+  participant API as API Server
+  participant Hub as ActivityHub (SignalR)
+  participant MP as MediaElement (Native)
+  participant DB as Database
+
+  U->>U: App khởi động, restore JWT từ SecureStorage
+  U->>GPS: StartListening(accuracy: Best, interval: 5s)
+  U->>Hub: SignalR ConnectAsync /hubs/activity
+
+  loop Mỗi khi GPS cập nhật (~5 giây)
+    GPS-->>U: OnPositionChanged(lat, lng)
+    U->>API: GET /api/pois/nearby?lat=&lng=&lang=vi
+    API->>API: Haversine distance check (in-memory)
+    alt POI nằm trong radius
+      API-->>U: 200 { poiId, poiName, audioUrl }
+      U->>U: Check cooldown (30 min / POI / session)
+      alt Chưa trigger trong session
+        U->>MP: MediaElement.Source = audioUrl
+        MP-->>U: Audio phát (native platform player)
+        U->>Hub: SendAsync("UserAtPoi", { userId, poiId, lat, lng })
+        U->>API: POST /api/activity/event { type: PoiEntered, poiId }
+        API->>DB: INSERT UserLog
+      end
+    else Không có POI nào gần
+      API-->>U: 200 { poiId: null }
+    end
+  end
+
+  Note over U,GPS: App chuyển sang background (Android)
+  U->>GPS: ForegroundService tiếp tục GPS tracking
+  GPS-->>U: Vẫn nhận location updates
+      </pre>
+      <p class="caption">Hình 6.9 — MAUI dùng platform-native GPS và MediaElement thay vì Browser API. Foreground Service (Android) duy trì tracking khi app background.</p>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 7: ACTIVITY DIAGRAMS ===== -->
+  <section id="activities">
+    <div class="section-head">
+      <div class="sec-num">7</div>
+      <div><div class="sec-meta">Activity Diagrams</div><h2 class="sec-title">Biểu đồ hoạt động — Workflows</h2></div>
+    </div>
+    <p class="lead">5 workflow cốt lõi của hệ thống mô tả từ góc nhìn người dùng.</p>
+
+    <div class="grid-2">
+      <div>
+        <div class="diagram">
+          <div class="diagram-title">Activity 7.1 — Tourist Tour Experience</div>
+          <pre class="mermaid">
+flowchart TD
+  A([Mở ứng dụng]) --> B[Load danh sách Tour]
+  B --> C{Đã đăng nhập?}
+  C -->|Chưa| D[Xem tour - Read only]
+  C -->|Rồi| E[Chọn tour]
+  D --> E
+  E --> F[Bật GPS tracking]
+  F --> G{Nhận tọa độ GPS}
+  G --> H[POST /api/activity/location]
+  H --> I{Gần POI?}
+  I -->|Không| G
+  I -->|Có| J{Narration premium?}
+  J -->|Không| K[Auto-play narration]
+  J -->|Có| L{User là Premium?}
+  L -->|Có| K
+  L -->|Không| M[Hiện prompt mua subscription]
+  M --> N{User quyết định}
+  N -->|Mua| O[VNPay payment flow]
+  O --> K
+  N -->|Bỏ qua| G
+  K --> P[Log PoiEntered event]
+  P --> Q[Gửi SignalR to AdminHub]
+  Q --> R{Tour kết thúc?}
+  R -->|Chưa| G
+  R -->|Xong| S([Kết thúc tour])
+          </pre>
+          <p class="caption">Hình 7.1 — Workflow chính của du khách trong một chuyến tour.</p>
+        </div>
+      </div>
+      <div>
+        <div class="diagram">
+          <div class="diagram-title">Activity 7.2 — VNPay Payment Process</div>
+          <pre class="mermaid">
+flowchart TD
+  A([Chọn gói subscription]) --> B[Gọi POST /api/payments/vnpay/create]
+  B --> C[API tạo PaymentTransaction - Pending]
+  C --> D[Tạo VNPay URL + ký HMAC-SHA512]
+  D --> E[Redirect đến VNPay]
+  E --> F{Hành động người dùng}
+  F -->|Huỷ| G([Return - Đã huỷ])
+  F -->|Nhập thông tin| H[VNPay xử lý giao dịch]
+  H --> I{IPN Webhook đến}
+  I --> J[Xác minh HMAC-SHA512]
+  J --> K{Chữ ký hợp lệ?}
+  K -->|Không| L[Log invalid - Bỏ qua]
+  K -->|Có| M{ResponseCode = 00?}
+  M -->|Không| N[Mark Failed]
+  M -->|Có| O[Mark Success]
+  O --> P[Set Premium + premiumUntil]
+  P --> Q[Return URL redirect]
+  N --> Q
+  Q --> R{ResponseCode = 00?}
+  R -->|Có| S([Thành công - Hiện thông báo])
+  R -->|Không| T([Thất bại - Thử lại?])
+          </pre>
+          <p class="caption">Hình 7.2 — Luồng thanh toán VNPay. IPN và Return URL là 2 luồng độc lập.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Activity 7.3 — Admin Content Management</div>
+      <pre class="mermaid">
+flowchart TD
+  A([Admin truy cập AdminWeb]) --> B[POST /auth/login]
+  B --> C{Xác thực RBAC}
+  C -->|Thất bại| D([Redirect Login])
+  C -->|Viewer| E[Chỉ xem dashboard & reports]
+  C -->|Editor| F[Truy cập CMS đầy đủ]
+  C -->|SuperAdmin| G[CMS + Users + Analytics + Config]
+
+  F --> H{Chọn hành động}
+  G --> H
+
+  H -->|Quản lý POI| I[CRUD POI + Upload ảnh]
+  H -->|Quản lý Tour| J[CRUD Tour + Sắp xếp POI]
+  H -->|Quản lý Narration| K[CRUD Narration + Upload/TTS audio]
+  H -->|Monitor realtime| L[Activity Radar - SignalR live]
+  H -->|Analytics| M{Có quyền analytics?}
+  M -->|SuperAdmin| N[Dashboard: heatmap + revenue]
+  M -->|Editor| O[403 Forbidden]
+
+  I --> P[API call → DB persist]
+  J --> P
+  K --> P
+  P --> Q{Thành công?}
+  Q -->|Có| R[Toast success + Audit log]
+  Q -->|Validation Error| S[Hiện lỗi inline]
+  Q -->|403| T[Hiện thông báo không đủ quyền]
+  R --> H
+  S --> H
+      </pre>
+      <p class="caption">Hình 7.3 — Workflow quản trị nội dung. RBAC enforce ở cả AdminWeb và API layer.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Activity 7.4 — MAUI Mobile App Lifecycle</div>
+      <pre class="mermaid">
+flowchart TD
+  A([Khởi động MAUI app]) --> B{SecureStorage có token?}
+  B -->|Không| C[Màn hình Login / Register]
+  B -->|Có - còn hạn| D[Restore session]
+  B -->|Có - hết hạn| E[POST /api/auth/refresh]
+  E --> F{Refresh OK?}
+  F -->|Không| C
+  F -->|Có| D
+  C --> G[Đăng nhập / Đăng ký]
+  G --> D
+  D --> H[Load POI list từ /api/pois]
+  H --> I[Kết nối SignalR ActivityHub]
+  I --> J{GPS permission granted?}
+  J -->|Chưa| K[Xin quyền location]
+  K --> L{Người dùng quyết định}
+  L -->|Từ chối| M[Chế độ xem bản đồ tĩnh - không auto-play]
+  L -->|Chấp nhận| N[Bật Platform GPS StartListening]
+  J -->|Đã có| N
+  N --> O[Foreground loop: GPS poll 5s → /api/pois/nearby]
+  O --> P{Trạng thái app}
+  P -->|Foreground| O
+  P -->|Background - Android| Q[ForegroundService giữ GPS hoạt động]
+  P -->|Background - iOS| R[Significant Location Change limited]
+  Q --> S{App resume?}
+  R --> S
+  S -->|Foreground lại| O
+  S -->|System kill| T([App kết thúc - GPS dừng])
+  M --> U{Người dùng thao tác thủ công}
+  U -->|Chọn POI| V[Play audio thủ công]
+  V --> U
+      </pre>
+      <p class="caption">Hình 7.4 — MAUI lifecycle khác PWA: dùng SecureStorage thay localStorage, Platform GPS thay Browser API, Foreground Service (Android) duy trì tracking khi background.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Activity 7.5 — Admin Upload Audio cho Narration</div>
+      <pre class="mermaid">
+flowchart TD
+  A([Admin chọn POI → mở tab Narrations]) --> B[Nhấn Thêm Narration mới]
+  B --> C[Điền: LanguageCode, TranslatedName, ContentText]
+  C --> D[POST /api/narrations {poiId, lang, translatedName, contentText}]
+  D --> E{API validation}
+  E -->|Lỗi - thiếu trường| F[Hiển thị lỗi inline]
+  F --> C
+  E -->|OK| G[Nhận narrationId mới tạo]
+  G --> H{Admin có file audio sẵn?}
+  H -->|Không| I[Lưu không có audio - khi phát sẽ dùng TTS fallback]
+  H -->|Có| J[Chọn file MP3 / WAV từ máy]
+  J --> K[POST /api/narrations/id/audio - multipart form]
+  K --> L{Validate file}
+  L -->|Sai định dạng - không phải mp3 wav| M[Lỗi: Only .mp3/.wav allowed]
+  L -->|Quá 50MB| N[Lỗi: File too large]
+  M --> J
+  N --> J
+  L -->|Hợp lệ| O[API lưu file → wwwroot/audios/uuid.mp3]
+  O --> P[UPDATE Audios SET AudioUrl = /audios/uuid.mp3]
+  P --> Q[Toast: Upload thành công]
+  Q --> R{Tiếp tục?}
+  R -->|Thêm ngôn ngữ khác| B
+  R -->|Xong| S([Narration audio sẵn sàng phát cho du khách])
+      </pre>
+      <p class="caption">Hình 7.5 — Upload audio narration. File lưu trong wwwroot/audios/ với tên UUID để tránh collision. TTS là fallback khi chưa có file.</p>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 8: STATE DIAGRAMS ===== -->
+  <section id="states">
+    <div class="section-head">
+      <div class="sec-num">8</div>
+      <div><div class="sec-meta">State Diagrams</div><h2 class="sec-title">Biểu đồ trạng thái</h2></div>
+    </div>
+    <p class="lead">3 state machines quan trọng trong hệ thống.</p>
+
+    <div class="grid-2">
+      <div>
+        <div class="diagram">
+          <div class="diagram-title">State 8.1 — User Subscription</div>
+          <pre class="mermaid">
+stateDiagram-v2
+  [*] --> Free : Đăng ký tài khoản
+  Free --> PendingPayment : Khởi tạo mua gói
+  PendingPayment --> Premium : Webhook thành công
+  PendingPayment --> Free : Thanh toán thất bại / Huỷ
+  PendingPayment --> Free : Timeout 15 phút
+  Premium --> Expired : premiumUntil &lt; now (cron job)
+  Premium --> PendingPayment : Gia hạn trước khi hết
+  Expired --> PendingPayment : Mua lại
+  Expired --> Free : Không gia hạn
+          </pre>
+          <p class="caption">Hình 8.1 — State machine subscription. Cron job chạy hàng giờ để check expiry.</p>
+        </div>
+      </div>
+      <div>
+        <div class="diagram">
+          <div class="diagram-title">State 8.2 — Payment Transaction</div>
+          <pre class="mermaid">
+stateDiagram-v2
+  [*] --> Pending : Tạo order
+  Pending --> Success : IPN webhook OK
+  Pending --> Failed : IPN webhook FAIL
+  Pending --> Expired : Timeout 15 phút
+  Failed --> [*] : Kết thúc
+  Expired --> [*] : Kết thúc
+  Success --> Refunded : Admin hoàn tiền
+  Refunded --> [*] : Kết thúc
+          </pre>
+          <p class="caption">Hình 8.2 — State machine giao dịch thanh toán. Timeout là 15 phút theo quy định VNPay.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">State 8.3 — POI Proximity (GPS Tracking)</div>
+      <pre class="mermaid">
+stateDiagram-v2
+  [*] --> Idle : GPS được bật
+  Idle --> Approaching : Khoảng cách &lt; 2× radius
+  Approaching --> Inside : Khoảng cách ≤ radius
+  Inside --> Triggered : Auto-play khởi động
+  Triggered --> Playing : Audio đang phát
+  Playing --> Inside : Phát xong
+  Inside --> Exiting : Khoảng cách &gt; radius
+  Exiting --> Idle : Khoảng cách &gt; 2× radius
+  Approaching --> Idle : User đi ngược lại
+  Idle --> [*] : GPS tắt
+  note right of Triggered
+    Chỉ trigger 1 lần/POI/session
+    Không trigger lại nếu vào lại
+    trong cùng session
+  end note
+      </pre>
+      <p class="caption">Hình 8.3 — State machine theo dõi khoảng cách user–POI. Hysteresis zone (2×radius) tránh trigger liên tục khi user ở ranh giới.</p>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 9: NFR ===== -->
+  <section id="nfr">
+    <div class="section-head">
+      <div class="sec-num">9</div>
+      <div><div class="sec-meta">Non-Functional Requirements</div><h2 class="sec-title">Yêu cầu phi chức năng</h2></div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Category</th><th>Yêu cầu</th><th>Target</th><th>Cách đo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Performance</strong></td><td>API response time</td><td>P95 &lt; 300ms, P99 &lt; 800ms</td><td>APM / Application Insights</td></tr>
+        <tr><td><strong>Performance</strong></td><td>GPS location check</td><td>&lt; 100ms (in-memory distance calc)</td><td>API trace logs</td></tr>
+        <tr><td><strong>Performance</strong></td><td>SignalR broadcast latency</td><td>&lt; 200ms end-to-end</td><td>Client-side timestamp diff</td></tr>
+        <tr><td><strong>Scalability</strong></td><td>Concurrent users</td><td>500 concurrent (horizontal scale ready)</td><td>Load test (k6)</td></tr>
+        <tr><td><strong>Availability</strong></td><td>Uptime SLA</td><td>99.5% monthly</td><td>Uptime Robot</td></tr>
+        <tr><td><strong>Security</strong></td><td>JWT expiry</td><td>Access: 15 min, Refresh: 7 ngày</td><td>Token decode check</td></tr>
+        <tr><td><strong>Security</strong></td><td>VNPay webhook verify</td><td>100% xác minh HMAC trước xử lý</td><td>Code review + integration test</td></tr>
+        <tr><td><strong>Security</strong></td><td>Rate limiting</td><td>100 req/min/IP (200 cho auth endpoints)</td><td>Load test + logs</td></tr>
+        <tr><td><strong>Security</strong></td><td>Password hashing</td><td>BCrypt work factor ≥ 12</td><td>Code audit</td></tr>
+        <tr><td><strong>Data</strong></td><td>UserLog retention</td><td>12 tháng, sau đó archive/delete</td><td>Cron job kiểm tra hàng tuần</td></tr>
+        <tr><td><strong>Compatibility</strong></td><td>Browser support</td><td>Chrome 90+, Safari 14+, Firefox 90+</td><td>BrowserStack</td></tr>
+        <tr><td><strong>Compatibility</strong></td><td>GPS accuracy</td><td>Chấp nhận sai số GPS ±15m</td><td>Field test thực tế</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ===== SECTION 10: API OVERVIEW ===== -->
+  <section id="api">
+    <div class="section-head">
+      <div class="sec-num">10</div>
+      <div><div class="sec-meta">API Design</div><h2 class="sec-title">Thiết kế API — Overview</h2></div>
+    </div>
+    <p class="lead">API tuân theo RESTful conventions. Spec đầy đủ trong file <code>openapi.yaml</code> (OpenAPI 3.0). Dưới đây là tổng hợp endpoints theo domain.</p>
+
+    <div class="info-box">
+      Base URL: <code>http://localhost:5117/api</code> (dev) &nbsp;|&nbsp; <code>https://api.saigonaudiotour.vn/api</code> (prod)<br/>
+      Auth: <code>Authorization: Bearer {accessToken}</code> &nbsp;|&nbsp; Content-Type: <code>application/json</code>
+    </div>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Domain</th><th>Method</th><th>Endpoint</th><th>Auth</th><th>Mô tả</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="5"><strong>Auth</strong></td><td><span class="method post">POST</span></td><td><code>/auth/register</code></td><td>—</td><td>Đăng ký tài khoản</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/auth/login</code></td><td>—</td><td>Đăng nhập, nhận JWT</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/auth/2fa/verify</code></td><td>TempToken</td><td>Xác minh TOTP code</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/auth/refresh</code></td><td>RefreshToken</td><td>Refresh JWT pair</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/auth/logout</code></td><td>JWT</td><td>Revoke refresh token</td></tr>
+        <tr><td rowspan="5"><strong>POIs</strong></td><td><span class="method get">GET</span></td><td><code>/pois</code></td><td>—</td><td>Danh sách POI (public)</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/pois/{id}</code></td><td>—</td><td>Chi tiết POI</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/pois</code></td><td>Admin (Editor+)</td><td>Tạo POI mới</td></tr>
+        <tr><td><span class="method put">PUT</span></td><td><code>/pois/{id}</code></td><td>Admin (Editor+)</td><td>Cập nhật POI</td></tr>
+        <tr><td><span class="method delete">DELETE</span></td><td><code>/pois/{id}</code></td><td>Admin (Editor+)</td><td>Xoá POI</td></tr>
+        <tr><td rowspan="4"><strong>Tours</strong></td><td><span class="method get">GET</span></td><td><code>/tours</code></td><td>—</td><td>Danh sách Tour (public)</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/tours/{id}</code></td><td>—</td><td>Chi tiết Tour + POIs</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/tours</code></td><td>Admin (Editor+)</td><td>Tạo Tour</td></tr>
+        <tr><td><span class="method put">PUT</span></td><td><code>/tours/{id}/pois</code></td><td>Admin (Editor+)</td><td>Cập nhật thứ tự POI trong Tour</td></tr>
+        <tr><td rowspan="3"><strong>Narrations</strong></td><td><span class="method get">GET</span></td><td><code>/narrations?poiId=&amp;lang=</code></td><td>JWT (User)</td><td>Lấy narration cho POI</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/narrations</code></td><td>Admin (Editor+)</td><td>Tạo narration mới</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/narrations/{id}/audio</code></td><td>Admin (Editor+)</td><td>Upload audio file</td></tr>
+        <tr><td rowspan="3"><strong>Payments</strong></td><td><span class="method post">POST</span></td><td><code>/payments/vnpay/create</code></td><td>JWT (User)</td><td>Tạo VNPay order</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/payments/vnpay/webhook</code></td><td>IP whitelist</td><td>VNPay IPN webhook</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/payments/vnpay/return</code></td><td>—</td><td>Redirect sau thanh toán</td></tr>
+        <tr><td rowspan="2"><strong>Subscriptions</strong></td><td><span class="method get">GET</span></td><td><code>/subscriptions/plans</code></td><td>—</td><td>Danh sách gói subscription</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/subscriptions/status</code></td><td>JWT (User)</td><td>Trạng thái subscription hiện tại</td></tr>
+        <tr><td rowspan="2"><strong>Activity</strong></td><td><span class="method post">POST</span></td><td><code>/activity/location</code></td><td>JWT (User)</td><td>Gửi GPS location, nhận trigger</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/activity/event</code></td><td>JWT (User)</td><td>Gửi custom event (play, stop, ...)</td></tr>
+        <tr><td rowspan="3"><strong>Analytics</strong></td><td><span class="method get">GET</span></td><td><code>/analytics/overview</code></td><td>Admin (Super)</td><td>Tổng quan: users, revenue, plays</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/analytics/heatmap</code></td><td>Admin (Super)</td><td>Heatmap POI triggers theo thời gian</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/analytics/pois/popular</code></td><td>Admin (Super)</td><td>Top POI theo lượt trigger</td></tr>
+        <tr><td rowspan="2"><strong>QR Login</strong></td><td><span class="method post">POST</span></td><td><code>/qr/generate</code></td><td>—</td><td>Tạo QR login token</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/qr/scan/{token}</code></td><td>JWT (User)</td><td>Mobile xác nhận QR token</td></tr>
+        <tr><td rowspan="3"><strong>Admin</strong></td><td><span class="method post">POST</span></td><td><code>/admin/auth/login</code></td><td>—</td><td>Admin đăng nhập</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/admin/users</code></td><td>Admin (Super)</td><td>Danh sách user</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/admin/roles</code></td><td>Admin (Super)</td><td>Danh sách roles + permissions</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="note">
+      <strong>Lưu ý thiết kế:</strong> Endpoint <code>POST /payments/vnpay/webhook</code> phải được bảo vệ bằng IP whitelist (chỉ accept từ VNPay IP) <em>thêm vào</em> HMAC-SHA512 verification — không nên public hoàn toàn.
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">API Error Response Convention</div>
+      <pre class="mermaid">
+flowchart LR
+  E[API Error] --> C{HTTP Status}
+  C -->|400| V["400 Bad Request\n{ errors: { field: ['msg'] } }\nValidation failure"]
+  C -->|401| A["401 Unauthorized\n{ error: 'token_expired' }\nJWT invalid/expired"]
+  C -->|403| F["403 Forbidden\n{ error: 'insufficient_permissions' }\nRBAC deny"]
+  C -->|404| N["404 Not Found\n{ error: 'resource_not_found' }"]
+  C -->|409| X["409 Conflict\n{ error: 'email_already_exists' }"]
+  C -->|422| U["422 Unprocessable\n{ error: 'payment_already_pending' }\nBusiness rule violation"]
+  C -->|500| S["500 Internal Error\n{ error: 'internal_error', traceId }\nNever expose stack trace"]
+      </pre>
+      <p class="caption">Hình 10.1 — Error response convention thống nhất. traceId để correlate với server logs.</p>
+    </div>
+  </section>
+
+  <footer>
+    <strong>SaigonAudioTour — Product Design Document v1.0</strong><br/>
+    Ngày tạo: 2026-05-13 &nbsp;|&nbsp; Phiên bản: Greenfield Design<br/>
+    API Specification: xem file <code>openapi.yaml</code> (OpenAPI 3.0.3)<br/>
+    Mọi thay đổi cần cập nhật cả PRD và openapi.yaml để đảm bảo consistency.
+  </footer>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        /* Node fills — light so dark text stays readable */
+        primaryColor: '#dde6f9',
+        primaryTextColor: '#0d1b6e',
+        primaryBorderColor: '#5c6bc0',
+        secondaryColor: '#e8f5e9',
+        tertiaryColor: '#fff8e1',
+        /* Lines & labels */
+        lineColor: '#374151',
+        edgeLabelBackground: '#f0f4ff',
+        /* Sequence diagram specifics */
+        actorBkg: '#dde6f9',
+        actorTextColor: '#0d1b6e',
+        actorBorder: '#5c6bc0',
+        activationBkgColor: '#c5cae9',
+        activationBorderColor: '#3949ab',
+        noteBkgColor: '#fff8e1',
+        noteTextColor: '#1a202c',
+        noteBorderColor: '#f9a825',
+        labelBoxBkgColor: '#e8eaf6',
+        labelTextColor: '#1a202c',
+        labelBoxBorderColor: '#9fa8da',
+        loopTextColor: '#1a202c',
+        /* ER diagram */
+        attributeBackgroundColorEven: '#f5f7fb',
+        attributeBackgroundColorOdd: '#dde6f9',
+        /* State diagram */
+        fillType0: '#dde6f9',
+        fillType1: '#e8f5e9',
+        /* General text */
+        fontFamily: '"Segoe UI", sans-serif',
+        fontSize: '13px',
+        titleColor: '#0d1b6e',
+        clusterBkg: '#f0f4ff',
+        clusterBorder: '#9fa8da',
+      },
+      securityLevel: 'loose',
+      er: { diagramPadding: 30 }
+    });
+  </script>
+</body>
+</html>
